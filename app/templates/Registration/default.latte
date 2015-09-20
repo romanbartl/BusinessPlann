@@ -1,0 +1,40 @@
+{block title}Registrace{/block}
+
+{block content}
+
+<main>
+	<div id="logo_icon">
+		<img class="logo_icon_img" src="{$basePath}/images/logo.png">
+	</div>
+
+	<div id="registration" class="form_main">
+		<div id="reg_form" class="form">
+			{form regForm}
+				<div id="name" class="form_input">
+					<span class="glyphicon glyphicon-user"></span>
+					{input name}
+					{input surname}
+				</div>
+							
+				<div id="email" class="form_input">
+					<span class="glyphicon glyphicon-envelope"></span>
+					{input email}
+				</div>
+
+				<div id="passwd" class="form_input">
+					<span class="glyphicon glyphicon-lock"></span>
+					{input passwd}
+				</div>
+
+				<div id="passwd" class="form_input">
+					<span class="glyphicon glyphicon-lock"></span>
+					{input passwdA}
+				</div>
+
+				<div id="login_button" class="form_button">
+					{input regBut}
+				</div>
+			{/form}
+		</div>
+	</div>
+</main>
