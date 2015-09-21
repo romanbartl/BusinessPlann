@@ -6,9 +6,19 @@ use Nette,
     Nette\Application\UI\Form,
     App\Model\UserManager;
 
+/**
+ * RegistrationPresenter
+ * 
+ */
 
 class RegistrationPresenter extends BasePresenter
 {
+    /**
+     * 
+     * @return $form
+     *
+     * TODO set form to required!
+     */
 	protected function createComponentRegForm()
     {
         $form = new Form;
