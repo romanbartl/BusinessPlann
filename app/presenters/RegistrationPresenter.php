@@ -3,18 +3,31 @@
 namespace App\Presenters;
 
 use Nette,
+    Nette\Application\UI\Presenter,
     Nette\Application\UI\Form,
     App\Model\UserManager;
 
 /**
- * RegistrationPresenter
- * 
+ * Registration Presenter
  */
 
 class RegistrationPresenter extends BasePresenter
 {
+    // @var UserManager $userManager - instance of class Model for work with users
+    private $userManager;
+
     /**
-     * 
+     * Contruct
+     * @param UserManager $userManager
+     */
+    public function __construct(UserManager $userManager)
+    {
+        parent::__construct();
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * Creates form for registration template
      * @return $form
      *
      * TODO set form to required!
@@ -52,6 +65,11 @@ class RegistrationPresenter extends BasePresenter
         return $form;
     }
 
+    /**
+     * Calls this function after succesfull form send 
+     * @param Form $form
+     * @param Array $values - sent values from form
+     */
     public function regFormSucceeded($form, $values)
     {
         
