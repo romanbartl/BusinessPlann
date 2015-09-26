@@ -72,6 +72,10 @@ class RegistrationPresenter extends BasePresenter
      */
     public function regFormSucceeded($form, $values)
     {
-        
+        $this->userManager->register($values['name'], 
+                               $values['surname'],
+                               $values['email'],
+                               $values['passwd'],
+                               'ahoj', 1);
     }
 }
