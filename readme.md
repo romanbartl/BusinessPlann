@@ -9,7 +9,12 @@ skupin konetovat.
 
 Registrace do BusinessPlann projektu je bezplatná.
 
-Jedná se o maturitní práci [Romana Bártla](https://facebook.com/23seth)
+Jedná se o moji maturitní práci 
+
+Kontakt
+-------
+
+[Roman Bártl](https://facebook.com/23seth)
 
 Verze
 -----
