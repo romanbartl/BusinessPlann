@@ -10,7 +10,7 @@ input[type="text"]{
 	border: 1px solid #898989;
 	height: 28px;
 	width: 250px;
-	padding: 0px 10px 0px 10px;
+	padding: 0 10 0 10px;
 	outline: 0;
 }
 
@@ -66,7 +66,7 @@ header{
 	height: 100%;
 	float: left;
 	position: relative;
-	padding: 0px 20px 0px 20px;
+	padding: 0 20 0 20px;
 }
 
 .menu-button .menu-heading{
@@ -167,7 +167,7 @@ input[type=text].search-input{
 }
 
 #user-preferences #user-photo-big{
-	margin: 15px 0px 0px 8px;
+	margin: 15 0 0 8px;
 	left: calc(50% - 45px);
 	position: absolute;
 }
@@ -188,7 +188,7 @@ input[type=text].search-input{
 }
 
 #user-preferences #user-info #user-info-email{
-	padding: 5px 0px 5px 0px;
+	padding: 5 0 5 0px;
 }
 
 #user-preferences #user-info .email{
@@ -211,7 +211,7 @@ input[type=text].search-input{
 
 #user-preferences #user-buttons .user-button{
 	transition-duration: 0.05s;
-	padding: 11px 0px 11px 15px;
+	padding: 11 0 11 15px;
 	font-size: 14px;
 	width: 230px;
 	text-decoration: none;
@@ -244,7 +244,7 @@ nav{
 }
 
 .heading{
-	padding: 10px 0px 10px 20px;
+	padding: 10 0 10 20px;
 	position: relative;
 	width: 250px;
 	cursor: pointer;
@@ -288,7 +288,7 @@ nav{
 }
 
 #menu .list .item{
-	padding: 7px 0px 7px 50px;
+	padding: 7 0 7 50px;
 }
 
 #menu .list .item .color{
@@ -296,7 +296,7 @@ nav{
 	height: 15px;
 	border: 1px solid #535353;
 	float: left;
-	margin: 2px 10px 0px 0px;
+	margin: 2 10 0 0px;
 }
 
 #menu .item:hover{
@@ -331,7 +331,7 @@ nav{
 footer{
 	bottom: 0;
 	position: absolute;
-	padding: 10px 0px 15px 20px;
+	padding: 10 0 15 20px;
 	border-top: 1px solid #9f9f9f;
 	width: 250px;
 }
@@ -350,7 +350,7 @@ main{
 	width: 100%;
 	background: #F8F8F8;
 	height: 100%;
-	padding: 50px 0px 0px 0px;
+	padding: 50 0 0 0px;
 	position: absolute;
 	top:0; bottom:0; left:0; right:0;
 }
@@ -404,14 +404,14 @@ main{
 .form_main{
 	position: absolute;
 	right: calc(50% - 150px);
-	margin-top: 190px;
+	margin-top: 200px;
 }
 
 .form{
-	padding: 10px 20px 5px 20px;
 	background: white;
 	box-shadow: black 0px 1px 5px;
 	border-radius: 3px;
+	padding: 10 20 5 20px;
 	width: 300px;
 }
 
@@ -436,7 +436,7 @@ main{
 }
 
 .form .form_button{
-	margin: 20px 0px 10px 0px;
+	margin: 20 0 10 0px;
 }
 
 .form .form_button .submit_button{
@@ -446,13 +446,17 @@ main{
 }
 
 #new_account{
-	margin-top: 20px;
+	position: absolute;
+	bottom: 0;
+	width: 400px;
+	right: calc(50% - 200px);
+	margin-bottom: 60px;
 	text-align: center;
 }
 
 #forgotten_passwd_instructions{
 	text-align: center;
-	margin: 10px 0px 10px 0px
+	margin: 10 0 10 0px
 }
 
 #forgotten_passwd #email{
@@ -473,6 +477,29 @@ main{
 
 #reg_form #name .input{
 	width: 100px;
+}
+
+
+/* Registration */
+
+#registration{
+	position: absolute;
+	width: 500px;
+	right: calc(50% - 500px);
+	margin-top: 200px;
+}
+
+#reg_information{
+	position: absolute;
+	margin-left: -300px;
+	padding-right: 10px;
+	border-right: 1px solid black;
+	width: 300px;
+}
+
+#reg_form{
+	position: absolute;
+	margin-left: 45px;
 }
 
 /* Settings */
@@ -555,7 +582,7 @@ main{
 	width: calc(100% - 250px);
 	height: 100%;
 	margin-left: 250px; 
-	padding: 30px 0px 0px 60px;
+	padding: 30 0 0 60px;
 }
 
 .settings_heading .text{
@@ -568,7 +595,7 @@ main{
 }
 
 .heading_smaller{
-	margin: 10px 0px 10px 0px;
+	margin: 10 0 10 0px;
 }
 
 .heading_smaller .text{
@@ -614,7 +641,7 @@ main{
 #colors_tab .active, #colors_tab .cell:hover{
 	width: 77px;
 	height: 77px;
-	margin: 1px 1px 1px 1px;
+	margin: 1 1 1 1px;
 	border: 2px solid #444444;
 }
 
@@ -707,4 +734,3 @@ main{
 	text-align: justify;
 	margin-top: 15px;
 }
-
