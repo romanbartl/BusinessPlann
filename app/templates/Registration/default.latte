@@ -2,39 +2,88 @@
 
 {block content}
 
+
 <main>
 	<div id="logo_icon">
 		<img class="logo_icon_img" src="{$basePath}/images/app/logo.png">
 	</div>
 
-	<div id="registration" class="form_main">
-		<div id="reg_form" class="form">
-			{form regForm}
-				<div id="name" class="form_input">
-					<span class="glyphicon glyphicon-user"></span>
-					{input name}
-					{input surname}
-				</div>
-							
-				<div id="email" class="form_input">
-					<span class="glyphicon glyphicon-envelope"></span>
-					{input email}
+	<div id="registration">
+		<div id="reg">
+			<div id="reg_form" class="form">
+				{form regForm}
+					<div id="name" class="form_input">
+						<span class="glyphicon glyphicon-user"></span>
+						{input name}
+						{input surname}
+					</div>
+								
+					<div id="email" class="form_input">
+						<span class="glyphicon glyphicon-envelope"></span>
+						{input email}
+					</div>
+
+					<div id="passwd" class="form_input">
+						<span class="glyphicon glyphicon-lock"></span>
+						{input passwd}
+					</div>
+
+					<div id="passwd" class="form_input">
+						<span class="glyphicon glyphicon-lock"></span>
+						{input passwdA}
+					</div>
+
+					<div id="login_button" class="form_button">
+						{input regBut}
+					</div>
+				{/form}
+			</div>
+
+			<div id="reg_information">
+				<div id="reg_icons">
+					<div id="managing_ico" class="info_ico">
+						<span class="glyphicon glyphicon-calendar"></span>	
+					</div>
+
+					<div id="labeling_ico" class="info_ico">
+						<span class="glyphicon glyphicon-tags"></span>	
+					</div>
+
+					<div id="sharing_ico" class="info_ico">
+						<span class="glyphicon glyphicon-share"></span>	
+					</div>
 				</div>
 
-				<div id="passwd" class="form_input">
-					<span class="glyphicon glyphicon-lock"></span>
-					{input passwd}
-				</div>
+				<div id="reg_text">
+					<div id="managing_text" class="info_text">
+						<div><span class="info_heading">Události</span></div>
+								
+						<div>
+							<span>Všechny vaše události na jednom místě</span>
+						</div>
+					</div>
 
-				<div id="passwd" class="form_input">
-					<span class="glyphicon glyphicon-lock"></span>
-					{input passwdA}
-				</div>
+					<div id="labeling_text" class="info_text">
+						<span class="info_heading">Štítkování</span>
+								
+						<div>
+							<span>Přehlednost ve vašich událostech prostřednictvím štítků</span>
+						</div>
+					</div>
 
-				<div id="login_button" class="form_button">
-					{input regBut}
+					<div id="sharing_text" class="info_text">
+						<span class="info_heading">Sdílení</span>
+						
+						<div>
+							<span>Sdílení vašich událostí s rodinou, přáteli a kolegy</span>
+						</div>
+					</div>
 				</div>
-			{/form}
+			</div>
 		</div>
+	</div>
+
+	<div id="new_account" class="account">
+		Máte již účet? <a href="prihlaseni.html">Přihlaste se</a>
 	</div>
 </main>
