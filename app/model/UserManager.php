@@ -18,14 +18,26 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		COLUMN_EMAIL = 'email',
 		COLUMN_PASSWORD_HASH = 'password',
 		COLUMN_PROFILE_PHOTO = 'profile_photo',
-		COLUMN_ID_SETTINGS = 'id_settings';
-		// TODO COLUMN role
+		COLUMN_BG_COLOR = 'bg_color',
+		COLUMN_ROLE = 'role_id_role';		
 
 
 	/** @var Nette\Database\Context */
 	private $database;
+	private $user_salt = '2R3x5m7W';
+
+	private $name;
+	private $surname;
+	private $email;
+	private $password;
+	private $profile_photo = 1;
+	private $bg_color = 1;
+	private $role = 2;
 
 
+	/** @var Nette\Database\Context $database
+	  * contructor inicializace local var $database
+	  */
 	public function __construct(Nette\Database\Context $database)
 	{
 		$this->database = $database;
@@ -63,29 +75,37 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 
 	/**
 	 * Adds new user.
-	 * @param  string $name - name of user
-	 * @param  string $surname - surname of user
-	 * @param  string $email - email of user
-	 * @param  string $password - 
-	 * @param  
-	 * @return void
+	 * @param  string $name - user's real name
+	 * @param  string $surname - user's real surname
+	 * @param  string $email - user's email
+	 * @param  string $password - user's password
+	 *
+	 * @return void or failure message 
 	 */
-	public function register($name, $surname, $email, $password, $profile_photo, $id_settings)
+	public function register($name, $surname, $email, $password, $passwordControl)
 	{
-		
+		$this->name = trim(strip_tags($name));
+		$this->surname = trim(strip_tags($surname));
+		$this->email = trim(strip_tags($email));
+		$this->password = $this->hash($password);
+
 		try {
-			// TODO Passwords::hash($password)
 			$this->database->table(self::TABLE_NAME)->insert(array(
-				self::COLUMN_NAME => $name,
-				self::COLUMN_SURNAME => $surname, 
-				self::COLUMN_EMAIL => $email,
-				self::COLUMN_PASSWORD_HASH => $password,
-				self::COLUMN_PROFILE_PHOTO => $profile_photo,
-				self::COLUMN_ID_SETTINGS => $id_settings
+				self::COLUMN_NAME => $this->name,
+				self::COLUMN_SURNAME => $this->surname,
+				self::COLUMN_EMAIL => $this->email,
+				self::COLUMN_PASSWORD_HASH => $this->password,
+				self::COLUMN_PROFILE_PHOTO => $this->profile_photo,
+				self::COLUMN_BG_COLOR => $this->bg_color,
+				self::COLUMN_ROLE => $this->role
 			));
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException;
 		}
 	}
 
+	private function hash($password)
+	{
+		return hash('md5', $password . $this->user_salt);
+	}
 }
