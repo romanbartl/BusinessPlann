@@ -6,6 +6,10 @@
 	-webkit-touch-callout: none;
 }
 
+.required{
+	border: 1px solid red;
+}
+
 input[type="text"]{
 	border: 1px solid #898989;
 	height: 28px;
@@ -389,7 +393,7 @@ main{
 	height: 90px;
 	position: absolute;
 	right: calc(50% - 45px);
-	margin-top: 60px;
+	margin-top: 30px;
 }
 
 #logo_icon .logo_icon_img{
@@ -451,7 +455,7 @@ main{
 }
 
 #new_account{
-	margin-top: 525px;
+	margin-top: 490px;
 }
 
 #have_account{
@@ -489,15 +493,14 @@ main{
 #registration{
 	position: absolute;
 	left: calc(50% - 340px);
-	margin-top: 200px;
+	margin-top: 160px;
 }
-
 
 #reg_information{
 	float: right; 
 	padding-left: 40px;
 	border-left: 1px solid #9f9f9f;
-	width: 300px;
+	width: 275px;
 }
 
 #reg_form{
@@ -512,9 +515,6 @@ main{
 
 #reg_text{
 	margin-left: 60px;
-}
-
-#ico{
 
 }
 
@@ -535,6 +535,10 @@ main{
 	font-weight: bold;
 	color: #6048f3;
 	font-size: 17px;
+}
+
+.info_text .text{
+	text-align: justify;
 }
 
 /* Settings */
@@ -690,10 +694,6 @@ main{
 
 #colors_tab #c{
 	background: #3f51b5;
-}
-
-#colors_tab #d{
-	background: #009788;
 }
 
 #colors_tab #d{
