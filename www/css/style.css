@@ -438,7 +438,7 @@ main{
 }
 
 .form .form_button{
-	margin: 20px 0px 10px 0px;
+	margin: 10px 0px 10px 0px;
 }
 
 .form .form_button .submit_button{
@@ -462,6 +462,10 @@ main{
 	margin-top: 450px;
 }
 
+#forgotten_passwd{
+	margin: 10px 0px 10px 0px;
+}
+
 #forgotten_passwd_instructions{
 	text-align: center;
 	margin: 10px 0px 10px 0px
@@ -481,6 +485,14 @@ main{
 .insctructions_smaller{
 	color: #767676;
 	font-size: 14px;
+}
+
+#stay_logged label{
+	font-weight: normal;
+}
+
+#stay_logged label input{
+	margin-right: 10px; 
 }
 
 #reg_form #name .input{
@@ -768,4 +780,10 @@ main{
 	width: 500px;
 	text-align: justify;
 	margin-top: 15px;
+}
+
+/* HOME */
+
+#header_home{
+	background: white;
 }
