@@ -40,5 +40,6 @@ class SigninPresenter extends BasePresenter
 	public function signInFormSucceeded($form, $values) {
 		$user = $this->getUser();
 		$user->login($values['email'], $values['passwd']);
+		//$this->redirect('Home:default');
 	}	
 }

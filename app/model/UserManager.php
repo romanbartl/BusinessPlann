@@ -42,8 +42,6 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 	  */
 	public function __construct(Nette\Database\Context $database) {
 		$this->database = $database;
-		$this->options['cost'] = 23;
-		$this->options['salt'] = 'Ry\X234121566m97w5*de78a5d2vx3';
 	}
 
 
@@ -57,13 +55,13 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 
 		$row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_EMAIL, $email)->fetch();
 
-		/*if (!$row) {
+		if (!$row) {
 			throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
 
 		} elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD])) {
 			throw new Nette\Security\AuthenticationException('The password is incorrect.' . Passwords::hash($password), self::INVALID_CREDENTIAL);
 
-		} elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD])) {
+		} /*TODO elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD])) {
 			$row->update(array(
 				self::COLUMN_PASSWORD => Passwords::hash($password),
 			));
@@ -102,6 +100,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 				self::COLUMN_BG_COLOR => $this->bg_color,
 				self::COLUMN_ROLE => $this->role
 			));
+			//TODO look at this class
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException;
 		}
@@ -110,7 +109,6 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 	public function userExists($email) {
 		if($this->database->table(self::TABLE_NAME)->where(array('email' => $email))->limit(1)->fetch())
 			return FALSE;
-
 		return TRUE;
 	}
 }
