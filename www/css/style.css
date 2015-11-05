@@ -346,11 +346,14 @@ footer .copyright{
 	color: #8b8b8b;
 }
 
-main{
+main{	
 	width: 100%;
 	background: #F8F8F8;
 	height: 100%;
 	padding: 50px 0px 0px 0px;
+}
+
+#main2{
 	position: absolute;
 	top:0; bottom:0; left:0; right:0;
 }
@@ -438,7 +441,7 @@ main{
 }
 
 .form .form_button{
-	margin: 20px 0px 10px 0px;
+	margin: 10px 0px 10px 0px;
 }
 
 .form .form_button .submit_button{
@@ -462,6 +465,10 @@ main{
 	margin-top: 450px;
 }
 
+#forgotten_passwd{
+	margin: 10px 0px 10px 0px;
+}
+
 #forgotten_passwd_instructions{
 	text-align: center;
 	margin: 10px 0px 10px 0px
@@ -481,6 +488,15 @@ main{
 .insctructions_smaller{
 	color: #767676;
 	font-size: 14px;
+}
+
+#stay_logged label{
+	font-weight: normal;
+}
+
+#stay_logged label input{
+	margin-right: 10px; 
+	margin-top: 15px;
 }
 
 #reg_form #name .input{
@@ -768,4 +784,76 @@ main{
 	width: 500px;
 	text-align: justify;
 	margin-top: 15px;
+}
+
+/* HOME */
+
+#header_home{
+	background: white;
+}
+
+#header_home #left_container .header_logo{
+	width: 40px;
+	height: 40px;
+}
+
+#header_home .menu-icon{
+	margin-top: 5px;
+}
+
+#header_home .menu-text{
+	color: #3d3d3d;
+}
+
+#home_poster{
+	height: 450px;
+	width: 100%;
+	position: absolute;
+	background: #6048f3;
+}
+
+#right_container{
+	float: right;
+	margin-top: 14px;
+	margin-right: 10px; 
+}
+
+.menu_link{
+	transition-duration: 0.1s;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 8px 20px 8px 20px;
+	background: black;
+	font-size: 15px;
+}
+
+.menu_link:hover{
+	transition-duration: 0.1s;
+	text-decoration: none;
+}
+
+#signin_link{
+	transition-duration: 0.1s;
+	color: #3d3d3d;
+	background: #e6e6e6;
+	border: 1px solid #a3a3a3;
+
+}
+
+#signin_link:hover{
+	transition-duration: 0.1s;
+	background: #bdbdbd;
+}
+
+#registration_link{
+	transition-duration: 0.1s;
+	color: white;
+	background: #6048f3;
+	border: 1px solid #3D2DA1;
+}
+
+#registration_link:hover{
+	transition-duration: 0.1s;
+	color: white;
+	background: #4935C4;
 }

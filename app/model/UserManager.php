@@ -18,7 +18,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		COLUMN_EMAIL = 'email',
 		COLUMN_PASSWORD_HASH = 'password',
 		COLUMN_PROFILE_PHOTO = 'profile_photo',
-		COLUMN_BG_COLOR = 'bg_color',
+		COLUMN_BG_COLOR = 'bg_color_id_bg_color',
 		COLUMN_ROLE = 'role_id_role';		
 
 
@@ -32,14 +32,13 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 	private $password;
 	private $profile_photo = 1;
 	private $bg_color = 1;
-	private $role = 2;
+	private $role;
 
 
 	/** @var Nette\Database\Context $database
 	  * contructor inicializace local var $database
 	  */
-	public function __construct(Nette\Database\Context $database)
-	{
+	public function __construct(Nette\Database\Context $database) {
 		$this->database = $database;
 	}
 
@@ -49,8 +48,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 	 * @return Nette\Security\Identity
 	 * @throws Nette\Security\AuthenticationException
 	 */
-	public function authenticate(array $credentials)
-	{
+	public function authenticate(array $credentials) {
 		list($username, $password) = $credentials;
 
 		$row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $username)->fetch();
@@ -79,15 +77,16 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 	 * @param  string $surname - user's real surname
 	 * @param  string $email - user's email
 	 * @param  string $password - user's password
+	 * @param  int $role - default is set on 2 (standard user)
 	 *
 	 * @return void or failure message 
 	 */
-	public function register($name, $surname, $email, $password, $passwordControl)
-	{
+	public function register($name, $surname, $email, $password, $role = 2) {
 		$this->name = trim(strip_tags($name));
 		$this->surname = trim(strip_tags($surname));
 		$this->email = trim(strip_tags($email));
 		$this->password = $this->hash($password);
+		$this->role = $role;
 
 		try {
 			$this->database->table(self::TABLE_NAME)->insert(array(
@@ -104,8 +103,14 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		}
 	}
 
-	private function hash($password)
-	{
+	private function hash($password) {
 		return hash('md5', $password . $this->user_salt);
+	}
+
+	public function userExists($email) {
+		if($this->database->table(self::TABLE_NAME)->where(array('email' => $email))->limit(1)->fetch())
+			return FALSE;
+
+		return TRUE;
 	}
 }

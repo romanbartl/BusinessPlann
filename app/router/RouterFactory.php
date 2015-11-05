@@ -16,7 +16,8 @@ class RouterFactory
 	public static function createRouter()
 	{
 		$router = new RouteList;
-		$router[] = new Route('<presenter>/<action>[/<id>]', 'BusinessPlann:default');
+		// TODO - když nebude uživatel přihlášen, bude jako výchozí stránka HOME; jinak to bude aplikace
+		$router[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
 		return $router;
 	}
 
