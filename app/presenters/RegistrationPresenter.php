@@ -40,14 +40,14 @@ class RegistrationPresenter extends BasePresenter
                  ->setAttribute('placeholder', 'Jméno')
                  ->addRule(Form::FILLED, 'Vyplňte své jméno.')
                  ->addRule(Form::PATTERN, 'Jméno není ve správném tvaru!', 
-                    '^[a-zěščřžýáíéťňďó]{1,}$');
+                    '^[a-zěščřžýáíéťňďó]{1,}$'); // TODO nebude vadit, že není za začátku velké písmeno
 
         $form->addText('surname')
                  ->setAttribute('class', 'input')
                  ->setAttribute('placeholder', 'Příjmení')
                  ->addRule(Form::FILLED, 'Vyplňte své příjmení.')
                  ->addRule(Form::PATTERN, 'Příjmení není ve správném tvaru!', 
-                    '^[a-zěščřžýáíéťňďó]{1,}$');
+                    '^[a-zěščřžýáíéťňďó]{1,}$'); // TODO nebude vadit, že není za začátku velké písmeno
 
         $form->addText('email')
                  ->setAttribute('class', 'input')

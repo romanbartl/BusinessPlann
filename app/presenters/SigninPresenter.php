@@ -5,7 +5,7 @@ namespace App\Presenters;
 use Nette,
     Nette\Application\UI\Presenter,
     Nette\Application\UI\Form,
-    App\Model\UserManager;
+    Nette\Security\User;
 
 /**
  * Signin Presenter
@@ -23,7 +23,7 @@ class SigninPresenter extends BasePresenter
                 ->addRule(Form::PATTERN, 'Email není ve správném tvaru!', 
                     '^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$');;
 
-		$form->addText('passwd')
+		$form->addPassword('passwd')
 		     ->setAttribute('class', 'input')
 		     ->setAttribute('placeholder', 'Heslo');
 
@@ -38,6 +38,7 @@ class SigninPresenter extends BasePresenter
 	}
 
 	public function signInFormSucceeded($form, $values) {
-		
-	}
+		$user = $this->getUser();
+		$user->login($values['email'], $values['passwd']);
+	}	
 }
