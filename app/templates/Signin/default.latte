@@ -2,9 +2,11 @@
 
 {block content}
 
-<main>
+<main id="main2">
 	<div id="logo_icon">
-		<img class="logo_icon_img" src="{$basePath}/images/app/logo.png">
+		<a n:href="Home:default">
+			<img class="logo_icon_img" src="{$basePath}/images/app/logo.png">
+		</a>
 	</div>
 
 	<div id="login" class="form_main">
@@ -19,13 +21,13 @@
 					<span class="glyphicon glyphicon-lock"></span>
 					{input passwd}
 				</div>
-				
-				<div id="login_button" class="form_button">
-					{input signInBut}
-				</div>
 
 				<div id="stay_logged">
 					{input stay_logged}
+				</div>
+				
+				<div id="login_button" class="form_button">
+					{input signInBut}
 				</div>
 
 				<div id="forgotten_passwd">
