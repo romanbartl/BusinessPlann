@@ -1,4 +1,5 @@
 {block content}
+
 <header id="header_main">
 	<div id="menu-button-index" class="menu-button">
 		<div id="menu-icon-index" class="menu-icon">
@@ -71,8 +72,12 @@
 				
 				<div id="groups_list" class="list-div">
 					<ul class="list">
-						<a href="#"><li class="item"><div class="color" style="background: #33CC33;"></div>1. skupina</li><a/>
-						<a href="#"><li class="item"><div class="color" style="background: #FFFF00;"></div>2. skupina</li></a>
+						<a href="#">
+							<li class="item">
+								<div class="color" style="background: #33CC33;"></div>
+								<span>1. skupina</span>
+							</li>
+						<a/>
 					</ul>
 				</div>
 			</div>
@@ -91,7 +96,7 @@
 
 		<footer>
 			<div><span class="name">BusinessPlan, v.0.1</span></div>
-					<div><span class="copyright">© Roman Bártl, V4A (2015)</span></div>
+			<div><span class="copyright">© Roman Bártl, V4A (2015)</span></div>
 		</footer>
 	</nav>
 
@@ -123,12 +128,12 @@
 			<div id="user-info">
 			<div id="user-info-name">
 				<span class="name">
-					{$user->identity->data['name'] . " " . $user->identity->data['surname']}
+					{$name}
 				</span>
 			</div>
 			<div id="user-info-email">
 				<span class="email">
-					{$user->identity->data['email']}
+					{$email}
 				</span>
 			</div>
 		</div>
@@ -141,7 +146,7 @@
 			</div>
 
 			<div class="last-button">
-				<a href="#" class="user-button">
+				<a href="?logout" class="user-button">
 					<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 					Odhlásit se
 				</a>
