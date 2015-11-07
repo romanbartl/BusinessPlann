@@ -59,7 +59,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 			throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
 
 		} elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD])) {
-			throw new Nette\Security\AuthenticationException('The password is incorrect.' . Passwords::hash($password), self::INVALID_CREDENTIAL);
+			throw new Nette\Security\AuthenticationException('The password is incorrect. ' . Passwords::hash($password), self::INVALID_CREDENTIAL);
 
 		} /*TODO elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD])) {
 			$row->update(array(
@@ -111,9 +111,9 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		}
 	}
 
-	public function userExists($email) {
+	/*public function userExists($email) {
 		if($this->database->table(self::TABLE_NAME)->where(array('email' => $email))->limit(1)->fetch())
 			return FALSE;
 		return TRUE;
-	}
+	}*/
 }
