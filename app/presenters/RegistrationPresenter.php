@@ -14,7 +14,6 @@ class RegistrationPresenter extends BasePresenter
 {
     // @var UserManager $userManager - instance of class Model for work with users
     private $userManager;
-
     public $factory;
 
     /**
@@ -87,5 +86,11 @@ class RegistrationPresenter extends BasePresenter
                                      $values['surname'],
                                      $values['email'],
                                      $values['passwd']);
+    }
+
+    public function actionDefault() {
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Businessplann:default');
+        }
     }
 }
