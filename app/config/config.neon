@@ -20,5 +20,6 @@ session:
 
 
 services:
+	- App\Model\BusinessplannModel
 	- App\Model\UserManager
 	router: App\RouterFactory::createRouter
