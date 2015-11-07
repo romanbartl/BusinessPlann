@@ -1,5 +1,4 @@
 {block content}
-
 <header id="header_main">
 	<div id="menu-button-index" class="menu-button">
 		<div id="menu-icon-index" class="menu-icon">
@@ -122,8 +121,16 @@
 			<img src="pictures/profile.png">
 		</div>
 			<div id="user-info">
-			<div id="user-info-name"><span class="name">Roman Bártl</span></div>
-			<div id="user-info-email"><span class="email">bbartl.roman@gmail.com</span></div>
+			<div id="user-info-name">
+				<span class="name">
+					{$user->identity->data['name'] . " " . $user->identity->data['surname']}
+				</span>
+			</div>
+			<div id="user-info-email">
+				<span class="email">
+					{$user->identity->data['email']}
+				</span>
+			</div>
 		</div>
 			<div id="user-buttons">
 			<div>
