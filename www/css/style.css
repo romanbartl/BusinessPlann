@@ -814,8 +814,7 @@ main{
 
 #right_container{
 	float: right;
-	margin-top: 14px;
-	margin-right: 10px; 
+	margin-top: 5px; 
 }
 
 .menu_link{
@@ -825,6 +824,8 @@ main{
 	padding: 8px 20px 8px 20px;
 	background: black;
 	font-size: 15px;
+	float: left;
+	margin-right: 10px;
 }
 
 .menu_link:hover{
@@ -857,3 +858,22 @@ main{
 	color: white;
 	background: #4935C4;
 }
+
+#links{
+	float: left;
+	margin-left: 10px;
+}
+
+.link{
+	transition-duration: 0.1s;
+	float: left;
+	padding: 13px 20px 10px 20px; 
+	font-size: 17px;
+	color: #3d3d3d;
+}
+
+.link:hover{
+	transition-duration: 0.1s;
+	color: #6048f3;
+}
+
