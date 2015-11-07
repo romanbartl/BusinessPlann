@@ -38,8 +38,17 @@ class SigninPresenter extends BasePresenter
 	}
 
 	public function signInFormSucceeded($form, $values) {
-		$user = $this->getUser();
-		$user->login($values['email'], $values['passwd']);
-		//$this->redirect('Home:default');
+		try {
+	        $this->getUser()->login($values['email'], $values['passwd']);
+			$this->redirect('Businessplann:default');
+
+    	} catch (Nette\Security\AuthenticationException $e) {
+       		$form->addError('Nesprávné přihlašovací jméno nebo heslo.');
+    	}
 	}	
+
+	public function actionDefault() {
+		if ($this->getUser()->isLoggedIn())
+	        $this->redirect('Businessplann:default');
+	}
 }
