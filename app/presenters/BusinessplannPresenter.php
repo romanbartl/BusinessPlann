@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use Nette;
 use App\Model;
+use Nette\Security\User;
 
 
 /**
@@ -12,5 +13,4 @@ use App\Model;
 class BusinessplannPresenter extends BasePresenter
 {
 	
-
 }
