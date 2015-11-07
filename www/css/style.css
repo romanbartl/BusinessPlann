@@ -857,3 +857,14 @@ main{
 	color: white;
 	background: #4935C4;
 }
+
+#links{
+	float: left;
+}
+
+.link{
+	float: left;
+	padding: 13px 20px 13px 20px; 
+	font-size: 17px;
+	background: black;
+}
