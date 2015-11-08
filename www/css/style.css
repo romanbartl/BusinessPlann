@@ -10,6 +10,10 @@
 	border: 1px solid red;
 }
 
+body{
+	font-family: 'Bree Serif', serif;
+}
+
 input[type="text"]{
 	border: 1px solid #898989;
 	height: 28px;
