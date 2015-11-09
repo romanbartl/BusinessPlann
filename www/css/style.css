@@ -75,7 +75,7 @@ header{
 
 .menu-button .menu-heading{
 	float: left;
-	margin-top: 11px;
+	margin-top: 9px;
 	margin-left: 15px;
 }
 
@@ -87,7 +87,7 @@ header{
 
 .menu-icon{	
 	transition-duration: 0.2s;
-	margin-top: 15px;
+	margin-top: 13px;
 	float: left;
 	color: white;
 	font-size: 18px;
@@ -226,6 +226,10 @@ input[type=text].search-input{
 #user-preferences #user-buttons .user-button:hover{
 	transition-duration: 0.05s;
 	background: rgba(0,0,0,0.1);
+}
+
+.user-button .glyphicon{
+	padding-right: 10px;
 }
 
 nav{
