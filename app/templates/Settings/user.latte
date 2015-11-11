@@ -1,0 +1,258 @@
+{block title}User settings{/block}
+
+{block content}
+
+<header id="header_settings">
+	<div id="menu-button-settings" class="menu-button">
+		<a n:href="Businessplann:default">
+			<div id="menu-icon-settings" class="menu-icon">
+				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+			</div>
+		</a>
+
+		<div class="menu-heading">
+			<span class="menu-text">Nastavení</span>
+		</div>
+	</div>
+
+	<div id="preferences">
+		<div id="user-photo-small">
+			<img class="profile-photo-small" src="pictures/profile.png">
+		</div>
+	</div>
+</header>
+
+		
+<main id="main2">
+	<nav class="settings_nav">
+		<div id="menu">
+			<a href="#">
+				<div id="nav_settings_user" class="heading active">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-user"></span>
+						<span class="text">Uživatel</span>
+					</span>
+				</div>
+			</a>
+
+			<a href="nastaveni_stitky.html">
+				<div id="nav_settings_labels" class="heading">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-tags"></span>
+						<span class="text">Štítky</span>
+					</span>
+				</div>
+			</a>
+
+			<a href="nastaveni_skupiny.html">
+				<div id="nav_settings_labels" class="heading">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-user"></span>
+						<span class="text">Skupiny</span>
+					</span>
+				</div>
+			</a>
+
+			<a href="nastaveni_o.html">						
+				<div id="nav_about" class="heading">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-info-sign"></span>
+						<span class="text">O BusinessPlan</span>
+					</span>
+				</div>
+			</a>
+		</div>
+	</nav>
+
+	<div id="settings_body" class="body">
+			
+		<div id="settings_user">
+			<div id="user_heading" class="settings_heading">
+				<span class="text">Uživatel</span>
+			</div>
+
+			<div id="user_profile" class="settings_container">
+				<div id="profile_heading_smaller" class="heading_smaller">
+					<span class="text">Obrázek profilu</span>
+				</div>
+
+				<div id="profile">
+					<img src="pictures/profile.png">
+				</div>
+			</div>
+
+			<div id="user_data" class="settings_container">
+				<div id="data_heading_smaller" class="heading_smaller">
+					<span class="text">Údaje</span>
+				</div>
+
+				<table id="change_data_tab">
+					<tr id="change_name" class="data">
+						<td class="description"><span class="text">Jméno</span></td>
+						<td><input id="name_input" type="text" value="Roman Bártl" disabled></td>
+						<td class="button_td"><input id="change_name_but" type="button" value="Změnit jméno" class="button"></td>
+					</tr>
+
+					<tr style="display: none;">
+						<td>Heslo</td>
+						<td><input type="text"></td>
+					</tr>	
+
+					<tr style="display: none;">
+						<td>&nbsp;</td>
+						<td>
+							<input type="button" value="Storno" class="button">
+							<input type="submit" value="Uložit" class="button" disabled>
+						<td>
+					</tr>
+
+					<tr id="change_email" class="data">
+						<td class="description"><span class="text">E-mail</span></td>
+						<td><input id="email_input" type="text" value="bbartl.roman@gmail.com" disabled></td>
+						<td class="button_td"><input id="change_email_but" type="button" value="Zmenit e-mail" class="button"></td>
+					</tr>
+
+					<tr id="change_passwd" class="data">
+						<td class="description"><span class="text">Heslo</span></td>
+						<td><input id="change_passwd_but" type="submit" value="Změnit heslo" class="button" style="width: 200px;"></td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+
+			</div>
+
+			<div id="user_sent_reminds" class="settings_container">
+				<div id="reminds_heading_smaller" class="heading_smaller">
+					<span class="text">Upozorění</span>
+				</div>
+
+				<div id="sent">
+					<label><input type="checkbox" checked />&nbsp;&nbsp;&nbsp;Zasílat informace e-mailem</label>
+				</div>
+			</div>
+
+			<div id="user_color-scheme" class="settings_container">
+				<div id="color-scheme_heading_smaller" class="heading_smaller">
+					<span class="text">Vzhled</span>
+				</div>
+
+				<div id="color-scheme">
+					Vyberte si barevné schéma
+				</div>
+
+				<div id="colors">
+					<table id="colors_tab">
+						<tr>
+							<td>
+								<div id="a" class="cell active"></div>
+							</td>
+							<td>
+								<div id="b" class="cell"></div>
+							</td>
+							<td>
+								<div id="c" class="cell"></div>
+							</td>
+							<td>
+								<div id="d" class="cell"></div>
+							</td>
+							<td>
+								<div id="e" class="cell"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div id="f" class="cell"></div>
+							</td>
+									<td>
+										<div id="g" class="cell"></div>
+									</td>
+									<td>
+										<div id="h" class="cell"></div>
+									</td>
+									<td>
+										<div id="i" class="cell"></div>
+									</td>
+									<td>
+										<div id="j" class="cell"></div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id="k" class="cell"></div>
+									</td>
+									<td>
+										<div id="l" class="cell"></div>
+									</td>
+									<td>
+										<div id="m" class="cell"></div>
+									</td>
+									<td>
+										<div id="n" class="cell"></div>
+									</td>
+									<td>
+										<div id="o" class="cell"></div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id="p" class="cell"></div>
+									</td>
+									<td>
+										<div id="q" class="cell"></div>
+									</td>
+									<td>
+										<div id="r" class="cell"></div>
+									</td>
+									<td>
+										<div id="s" class="cell"></div>
+									</td>
+									<td>
+										<div id="t" class="cell"></div>
+									</td>
+								</tr>															
+							</table>
+						</div>
+					</div>
+
+			<div id="user_backup" class="settings_container">
+				<div id="backup_heading_smaller" class="heading_smaller">
+					<span class="text">Záloha účtu</span>
+				</div>
+
+				<div>
+					<input id="create_backup_but" type="submit" value="Vytvořit zálohu" class="button">
+					<input id="import_backup_but" type="submit" value="Importovat zálohu" class="button">
+				</div>
+
+				<div id="description">
+					Záloha zahrnuje veškeré události, štítky, skupiny, kterých je uživatel součástí a také osobní nastavení účtu.
+					<br>Prosím kontaktujte spávce, nefunguje-li záloha správně.
+				</div>
+			</div>
+
+		</div>
+		
+		
+	</div>
+
+
+	<div id="user-preferences">
+		<div id="user-photo-big">
+			<img src="pictures/profile.png">
+		</div>
+
+		<div id="user-info">
+			<div id="user-info-name"><span class="name">Roman Bártl</span></div>
+			<div id="user-info-email"><span class="email">bbartl.roman@gmail.com</span></div>
+		</div>
+
+		<div id="user-buttons">
+			<div class="last-button">
+				<a href="#" class="user-button">
+					<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+					Odhlásit se
+				</a>
+			</div>
+		</div>
+	</div>
+</main>
