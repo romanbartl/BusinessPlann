@@ -52,15 +52,6 @@
 					</span>
 				</div>
 			</a>
-
-			<a href="nastaveni_o.html">						
-				<div id="nav_about" class="heading">
-					<span class="heading_text">
-						<span class="glyphicon glyphicon-info-sign"></span>
-						<span class="text">O BusinessPlan</span>
-					</span>
-				</div>
-			</a>
 		</div>
 	</nav>
 
@@ -86,38 +77,40 @@
 					<span class="text">Údaje</span>
 				</div>
 
-				<table id="change_data_tab">
-					<tr id="change_name" class="data">
-						<td class="description"><span class="text">Jméno</span></td>
-						<td><input id="name_input" type="text" value="Roman Bártl" disabled></td>
-						<td class="button_td"><input id="change_name_but" type="button" value="Změnit jméno" class="button"></td>
-					</tr>
+				{form dataForm}
+					<table id="change_data_tab">
+						<tr id="change_name" class="data">
+							<td class="description"><span class="text">Jméno</span></td>
+							<td>{input name}</td>
+							<td class="button_td">{input name_but}</td>
+						</tr>
 
-					<tr style="display: none;">
-						<td>Heslo</td>
-						<td><input type="text"></td>
-					</tr>	
+						<tr style="display: none;">
+							<td>Heslo</td>
+							<td><input type="text"></td>
+						</tr>	
 
-					<tr style="display: none;">
-						<td>&nbsp;</td>
-						<td>
-							<input type="button" value="Storno" class="button">
-							<input type="submit" value="Uložit" class="button" disabled>
-						<td>
-					</tr>
+						<tr style="display: none;">
+							<td>&nbsp;</td>
+							<td>
+								<input type="button" value="Storno" class="button">
+								<input type="submit" value="Uložit" class="button" disabled>
+							<td>
+						</tr>
 
-					<tr id="change_email" class="data">
-						<td class="description"><span class="text">E-mail</span></td>
-						<td><input id="email_input" type="text" value="bbartl.roman@gmail.com" disabled></td>
-						<td class="button_td"><input id="change_email_but" type="button" value="Zmenit e-mail" class="button"></td>
-					</tr>
+						<tr id="change_email" class="data">
+							<td class="description"><span class="text">E-mail</span></td>
+							<td>{input email}</td>
+							<td class="button_td">{input email_but}</td>
+						</tr>
 
-					<tr id="change_passwd" class="data">
-						<td class="description"><span class="text">Heslo</span></td>
-						<td><input id="change_passwd_but" type="submit" value="Změnit heslo" class="button" style="width: 200px;"></td>
-						<td>&nbsp;</td>
-					</tr>
-				</table>
+						<tr id="change_passwd" class="data">
+							<td class="description"><span class="text">Heslo</span></td>
+							<td>{input passwd_but}</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				{/form}
 
 			</div>
 
@@ -127,7 +120,7 @@
 				</div>
 
 				<div id="sent">
-					<label><input type="checkbox" checked />&nbsp;&nbsp;&nbsp;Zasílat informace e-mailem</label>
+					<label><input type="checkbox" checked />&nbsp;&nbsp;&nbsp;Zasílat informace z blogu na e-mail</label>
 				</div>
 			</div>
 
@@ -140,79 +133,17 @@
 					Vyberte si barevné schéma
 				</div>
 
-				<div id="colors">
+				<!-- TODO <div id="colors">
 					<table id="colors_tab">
-						<tr>
-							<td>
-								<div id="a" class="cell active"></div>
-							</td>
-							<td>
-								<div id="b" class="cell"></div>
-							</td>
-							<td>
-								<div id="c" class="cell"></div>
-							</td>
-							<td>
-								<div id="d" class="cell"></div>
-							</td>
-							<td>
-								<div id="e" class="cell"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div id="f" class="cell"></div>
-							</td>
-									<td>
-										<div id="g" class="cell"></div>
-									</td>
-									<td>
-										<div id="h" class="cell"></div>
-									</td>
-									<td>
-										<div id="i" class="cell"></div>
-									</td>
-									<td>
-										<div id="j" class="cell"></div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div id="k" class="cell"></div>
-									</td>
-									<td>
-										<div id="l" class="cell"></div>
-									</td>
-									<td>
-										<div id="m" class="cell"></div>
-									</td>
-									<td>
-										<div id="n" class="cell"></div>
-									</td>
-									<td>
-										<div id="o" class="cell"></div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div id="p" class="cell"></div>
-									</td>
-									<td>
-										<div id="q" class="cell"></div>
-									</td>
-									<td>
-										<div id="r" class="cell"></div>
-									</td>
-									<td>
-										<div id="s" class="cell"></div>
-									</td>
-									<td>
-										<div id="t" class="cell"></div>
-									</td>
-								</tr>															
-							</table>
-						</div>
-					</div>
+						{foreach $bg_colors as $color}
+							<tr>
+								<td>
+									<div id="{$color}" class="cell" style="background: {$color->hash};"></div>
+								</td>
+							</tr>
+						{/foreach}
+					</table>
+				</div>-->
 
 			<div id="user_backup" class="settings_container">
 				<div id="backup_heading_smaller" class="heading_smaller">
@@ -248,7 +179,7 @@
 
 		<div id="user-buttons">
 			<div class="last-button">
-				<a href="#" class="user-button">
+				<a href="?logout" class="user-button">
 					<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 					Odhlásit se
 				</a>
