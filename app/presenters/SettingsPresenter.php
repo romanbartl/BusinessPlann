@@ -56,10 +56,6 @@ class SettingsPresenter extends BasePresenter
 		return $form;
 	}
 
-	public function actionUser() {
-		$this->action();
-	}
-
 	public function actionLabels() {
 		$this->action();
 	}
@@ -69,9 +65,6 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	private function action() {
-		if(isset($_GET['logout']))
-	    	$this->getUser()->logout();
-
 	    if (!$this->getUser()->isLoggedIn()) {
 	        $this->redirect('Home:default');
 	    }
