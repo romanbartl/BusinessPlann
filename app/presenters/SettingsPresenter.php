@@ -56,8 +56,19 @@ class SettingsPresenter extends BasePresenter
 		return $form;
 	}
 
-	// TODO make tihs redirect same for all templates action
 	public function actionUser() {
+		$this->action();
+	}
+
+	public function actionLabels() {
+		$this->action();
+	}
+
+	public function actionGroups() {
+		$this->action();
+	}
+
+	private function action() {
 		if(isset($_GET['logout']))
 	    	$this->getUser()->logout();
 
