@@ -1,189 +1,112 @@
-{block title}User settings{/block}
+{layout './@settingsLayout.latte'}
+{define #describtion}User{/define}
 
-{block content}
+{define #area}
 
-<header id="header_settings">
-	<div id="menu-button-settings" class="menu-button">
-		<a n:href="Businessplann:default">
-			<div id="menu-icon-settings" class="menu-icon">
-				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
-			</div>
-		</a>
-
-		<div class="menu-heading">
-			<span class="menu-text">Nastavení</span>
-		</div>
-	</div>
-
-	<div id="preferences">
-		<div id="user-photo-small">
-			<img class="profile-photo-small" src="pictures/profile.png">
-		</div>
-	</div>
-</header>
-
-		
-<main id="main2">
-	<nav class="settings_nav">
-		<div id="menu">
-			<a href="#">
-				<div id="nav_settings_user" class="heading active">
-					<span class="heading_text">
-						<span class="glyphicon glyphicon-user"></span>
-						<span class="text">Uživatel</span>
-					</span>
-				</div>
-			</a>
-
-			<a href="nastaveni_stitky.html">
-				<div id="nav_settings_labels" class="heading">
-					<span class="heading_text">
-						<span class="glyphicon glyphicon-tags"></span>
-						<span class="text">Štítky</span>
-					</span>
-				</div>
-			</a>
-
-			<a href="nastaveni_skupiny.html">
-				<div id="nav_settings_labels" class="heading">
-					<span class="heading_text">
-						<span class="glyphicon glyphicon-user"></span>
-						<span class="text">Skupiny</span>
-					</span>
-				</div>
-			</a>
-		</div>
-	</nav>
-
-	<div id="settings_body" class="body">
 			
-		<div id="settings_user">
-			<div id="user_heading" class="settings_heading">
-				<span class="text">Uživatel</span>
-			</div>
-
-			<div id="user_profile" class="settings_container">
-				<div id="profile_heading_smaller" class="heading_smaller">
-					<span class="text">Obrázek profilu</span>
-				</div>
-
-				<div id="profile">
-					<img src="pictures/profile.png">
-				</div>
-			</div>
-
-			<div id="user_data" class="settings_container">
-				<div id="data_heading_smaller" class="heading_smaller">
-					<span class="text">Údaje</span>
-				</div>
-
-				{form dataForm}
-					<table id="change_data_tab">
-						<tr id="change_name" class="data">
-							<td class="description"><span class="text">Jméno</span></td>
-							<td>{input name}</td>
-							<td class="button_td">{input name_but}</td>
-						</tr>
-
-						<tr style="display: none;">
-							<td>Heslo</td>
-							<td><input type="text"></td>
-						</tr>	
-
-						<tr style="display: none;">
-							<td>&nbsp;</td>
-							<td>
-								<input type="button" value="Storno" class="button">
-								<input type="submit" value="Uložit" class="button" disabled>
-							<td>
-						</tr>
-
-						<tr id="change_email" class="data">
-							<td class="description"><span class="text">E-mail</span></td>
-							<td>{input email}</td>
-							<td class="button_td">{input email_but}</td>
-						</tr>
-
-						<tr id="change_passwd" class="data">
-							<td class="description"><span class="text">Heslo</span></td>
-							<td>{input passwd_but}</td>
-							<td>&nbsp;</td>
-						</tr>
-					</table>
-				{/form}
-
-			</div>
-
-			<div id="user_sent_reminds" class="settings_container">
-				<div id="reminds_heading_smaller" class="heading_smaller">
-					<span class="text">Upozorění</span>
-				</div>
-
-				<div id="sent">
-					<label><input type="checkbox" checked />&nbsp;&nbsp;&nbsp;Zasílat informace z blogu na e-mail</label>
-				</div>
-			</div>
-
-			<div id="user_color-scheme" class="settings_container">
-				<div id="color-scheme_heading_smaller" class="heading_smaller">
-					<span class="text">Vzhled</span>
-				</div>
-
-				<div id="color-scheme">
-					Vyberte si barevné schéma
-				</div>
-
-				<!-- TODO <div id="colors">
-					<table id="colors_tab">
-						{foreach $bg_colors as $color}
-							<tr>
-								<td>
-									<div id="{$color}" class="cell" style="background: {$color->hash};"></div>
-								</td>
-							</tr>
-						{/foreach}
-					</table>
-				</div>-->
-
-			<div id="user_backup" class="settings_container">
-				<div id="backup_heading_smaller" class="heading_smaller">
-					<span class="text">Záloha účtu</span>
-				</div>
-
-				<div>
-					<input id="create_backup_but" type="submit" value="Vytvořit zálohu" class="button">
-					<input id="import_backup_but" type="submit" value="Importovat zálohu" class="button">
-				</div>
-
-				<div id="description">
-					Záloha zahrnuje veškeré události, štítky, skupiny, kterých je uživatel součástí a také osobní nastavení účtu.
-					<br>Prosím kontaktujte spávce, nefunguje-li záloha správně.
-				</div>
-			</div>
-
-		</div>
-		
-		
+<div id="settings_user">
+	<div id="user_heading" class="settings_heading">
+		<span class="text">Uživatel</span>
 	</div>
 
+	<div id="user_profile" class="settings_container">
+		<div id="profile_heading_smaller" class="heading_smaller">
+			<span class="text">Obrázek profilu</span>
+		</div>
 
-	<div id="user-preferences">
-		<div id="user-photo-big">
+		<div id="profile">
 			<img src="pictures/profile.png">
 		</div>
+	</div>
 
-		<div id="user-info">
-			<div id="user-info-name"><span class="name">Roman Bártl</span></div>
-			<div id="user-info-email"><span class="email">bbartl.roman@gmail.com</span></div>
+	<div id="user_data" class="settings_container">
+		<div id="data_heading_smaller" class="heading_smaller">
+			<span class="text">Údaje</span>
 		</div>
 
-		<div id="user-buttons">
-			<div class="last-button">
-				<a href="?logout" class="user-button">
-					<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-					Odhlásit se
-				</a>
-			</div>
+		{form dataForm}
+			<table id="change_data_tab">
+				<tr id="change_name" class="data">
+					<td class="description"><span class="text">Jméno</span></td>
+					<td>{input name}</td>
+					<td class="button_td">{input name_but}</td>
+				</tr>
+
+				<tr style="display: none;">
+					<td>Heslo</td>
+					<td><input type="text"></td>
+				</tr>	
+
+				<tr style="display: none;">
+					<td>&nbsp;</td>
+					<td>
+						<input type="button" value="Storno" class="button">
+						<input type="submit" value="Uložit" class="button" disabled>
+					<td>
+				</tr>
+
+				<tr id="change_email" class="data">
+					<td class="description"><span class="text">E-mail</span></td>
+					<td>{input email}</td>
+					<td class="button_td">{input email_but}</td>
+				</tr>
+
+				<tr id="change_passwd" class="data">
+					<td class="description"><span class="text">Heslo</span></td>
+					<td>{input passwd_but}</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table>
+		{/form}
+
+	</div>
+
+	<div id="user_sent_reminds" class="settings_container">
+		<div id="reminds_heading_smaller" class="heading_smaller">
+			<span class="text">Upozorění</span>
+		</div>
+
+		<div id="sent">
+			<label><input type="checkbox" checked />&nbsp;&nbsp;&nbsp;Zasílat informace z blogu na e-mail</label>
 		</div>
 	</div>
-</main>
+
+	<div id="user_color-scheme" class="settings_container">
+		<div id="color-scheme_heading_smaller" class="heading_smaller">
+			<span class="text">Vzhled</span>
+		</div>
+
+		<div id="color-scheme">
+			Vyberte si barevné schéma
+		</div>
+
+		<!-- TODO <div id="colors">
+			<table id="colors_tab">
+				{foreach $bg_colors as $color}
+					<tr>
+						<td>
+							<div id="{$color}" class="cell" style="background: {$color->hash};"></div>
+						</td>
+					</tr>
+				{/foreach}
+			</table>
+		</div>-->
+
+	<div id="user_backup" class="settings_container">
+		<div id="backup_heading_smaller" class="heading_smaller">
+			<span class="text">Záloha účtu</span>
+		</div>
+
+		<div>
+			<input id="create_backup_but" type="submit" value="Vytvořit zálohu" class="button">
+			<input id="import_backup_but" type="submit" value="Importovat zálohu" class="button">
+		</div>
+
+		<div id="description">
+			Záloha zahrnuje veškeré události, štítky, skupiny, kterých je uživatel součástí a také osobní nastavení účtu.
+			<br>Prosím kontaktujte spávce, nefunguje-li záloha správně.
+		</div>
+	</div>
+</div>		
+
+{/define}
