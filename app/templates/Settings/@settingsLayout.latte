@@ -1,0 +1,67 @@
+{layout '../@layout.latte'}
+{block title}{include #describtion|striptags} settings{/block}
+
+{block content}
+
+<header id="header_settings">
+	<div id="menu-button-settings" class="menu-button">
+		<a n:href="Businessplann:default">
+			<div id="menu-icon-settings" class="menu-icon">
+				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+			</div>
+		</a>
+
+		<div class="menu-heading">
+			<span class="menu-text">Nastavení</span>
+		</div>
+	</div>
+
+	<div id="right_container">		
+		<a href="?logout">
+			<div id="registration_link" class="menu_link">
+				Odhlásit se
+			</div>
+		</a>
+	</div>
+</header>
+
+		
+<main id="main2">
+	<nav class="settings_nav">
+		<div id="menu">
+			<a n:href="Settings:user">
+				<div id="nav_settings_user" class="heading{if link == "Settings:user"} active{/if}">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-user"></span>
+						<span class="text">Uživatel</span>
+					</span>
+				</div>
+			</a>
+
+			<a n:href="Settings:labels">
+				<div id="nav_settings_labels" class="heading">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-tags"></span>
+						<span class="text">Štítky</span>
+					</span>
+				</div>
+			</a>
+
+			<a n:href="Settings:groups">
+				<div id="nav_settings_labels" class="heading">
+					<span class="heading_text">
+						<span class="glyphicon glyphicon-user"></span>
+						<span class="text">Skupiny</span>
+					</span>
+				</div>
+			</a>
+		</div>
+	</nav>
+
+	<div id="settings_body" class="body">
+		{include #area}
+	</div>
+
+</main>
+
+{/block}
