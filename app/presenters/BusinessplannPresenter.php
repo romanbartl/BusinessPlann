@@ -26,9 +26,6 @@ class BusinessplannPresenter extends BasePresenter
 	}
 
 	public function actionDefault() {
-		if(isset($_GET['logout']))
-	    	$this->getUser()->logout();
-
 	    if (!$this->getUser()->isLoggedIn()) {
 	        $this->redirect('Home:default');
 	    }
