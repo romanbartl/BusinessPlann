@@ -5,7 +5,7 @@ namespace App\Model;
 use Nette,
 	Nette\Security\User;
 
-class BusinessplannModel extends Nette\Object
+class BusinessplannManager extends Nette\Object
 {
 	private $database;
 

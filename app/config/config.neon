@@ -20,6 +20,7 @@ session:
 
 
 services:
-	- App\Model\BusinessplannModel
+	- App\Model\BusinessplannManager
 	- App\Model\UserManager
 	router: App\RouterFactory::createRouter
+	authenticate: App\Model\AuthenticateManager

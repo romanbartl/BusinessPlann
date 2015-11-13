@@ -8,10 +8,12 @@
 			<img class="logo_icon_img" src="{$basePath}/images/app/logo.png">
 		</a>
 	</div>
-
-	<div id="login" class="form_main">
-		<div id="login_form" class="form">
-			{form signInForm}
+	{form signInForm}
+		<div class="errors" n:if="$form->hasErrors()">
+	        <span n:foreach="$form->errors as $error">{$error}</span>
+		</div>
+		<div id="login" class="form_main">
+			<div id="login_form" class="form">
 				<div id="email" class="form_input">
 					<span class="glyphicon glyphicon-envelope"></span>
 					{input email}
@@ -25,7 +27,7 @@
 				<div id="stay_logged">
 					{input stay_logged}
 				</div>
-				
+					
 				<div id="login_button" class="form_button">
 					{input signInBut}
 				</div>
@@ -33,9 +35,9 @@
 				<div id="forgotten_passwd">
 					<a>Zapoměli jste heslo?</a>
 				</div>
-			{/form}
+			</div>
 		</div>
-	</div>
+	{/form}
 
 	<div id="new_account" class="account">
 		Nemáte účet? <a n:href="Registration:default">Vytvořte si bezplatný účet</a>

@@ -43,7 +43,7 @@ class SigninPresenter extends BasePresenter
 			$this->redirect('Businessplann:default');
 
     	} catch (Nette\Security\AuthenticationException $e) {
-       		$form->addError('Nesprávné přihlašovací jméno nebo heslo.');
+       		$form->addError($e->getMessage());
     	}
 	}	
 

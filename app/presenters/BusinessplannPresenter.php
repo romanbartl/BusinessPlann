@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 use Nette,
     Nette\Security\User,
-    App\Model\BusinessplannModel;
+    App\Model\BusinessplannManager;
 
 
 /**
@@ -12,11 +12,11 @@ use Nette,
  */
 class BusinessplannPresenter extends BasePresenter
 {
-	private $plannerModel;
+	private $plannerManager;
 
-	public function __construct(BusinessplannModel $plannerModel) {
+	public function __construct(BusinessplannManager $plannerManager) {
         parent::__construct();
-        $this->plannerModel = $plannerModel;
+        $this->plannerManager = $plannerManager;
     }
 
 	public function renderDefault() {
