@@ -28,7 +28,7 @@ class UserManager extends BaseManager
 	/** @var Nette\Database\Context $database
 	  * contructor inicializace local var $database
 	  */
-	public function __construct() {
+	public function __construct(Nette\Database\Context $database) {
 		$this->database = $database;
 	}
 
@@ -51,18 +51,18 @@ class UserManager extends BaseManager
 		$this->role = $role;
 
 		try {
-			$this->database->table(self::TABLE_NAME)->insert(array(
-				self::COLUMN_NAME => $this->name,
-				self::COLUMN_SURNAME => $this->surname,
-				self::COLUMN_EMAIL => $this->email,
-				self::COLUMN_PASSWORD => $this->password,
-				self::COLUMN_PROFILE_PHOTO => $this->profile_photo,
-				self::COLUMN_BG_COLOR => $this->bg_color,
-				self::COLUMN_ROLE => $this->role
+			$this->database->table(self::USER_TABLE_NAME)->insert(array(
+				self::USER_COLUMN_NAME => $this->name,
+				self::USER_COLUMN_SURNAME => $this->surname,
+				self::USER_COLUMN_EMAIL => $this->email,
+				self::USER_COLUMN_PASSWORD => $this->password,
+				self::USER_COLUMN_PROFILE_PHOTO => $this->profile_photo,
+				self::USER_COLUMN_BG_COLOR => $this->bg_color,
+				self::USER_COLUMN_ROLE => $this->role
 			));
 			//TODO look at this class
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
-			throw new DuplicateNameException;
+			throw new DuplicateNameException('Uživatel pod tímto emailem je již registrován!');
 		}
 	}
 

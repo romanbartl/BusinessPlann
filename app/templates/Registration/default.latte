@@ -11,15 +11,20 @@
 	</div>
 
 	<div id="registration">
+	{form regForm}
 		<div id="reg">
-			<div id="reg_form" class="form">
-				{form regForm}
+			
+				<div class="errors" n:if="$form->hasErrors()">
+	        		<span n:foreach="$form->errors as $error">{$error}</span>
+				</div>
+
+				<div id="reg_form" class="form">
 					<div id="name" class="form_input">
 						<span class="glyphicon glyphicon-user"></span>
 						{input name}
 						{input surname}
 					</div>
-								
+									
 					<div id="email" class="form_input">
 						<span class="glyphicon glyphicon-envelope"></span>
 						{input email}
@@ -38,8 +43,8 @@
 					<div id="login_button" class="form_button">
 						{input regBut}
 					</div>
-				{/form}
-			</div>
+				</div>
+			
 
 			<div id="reg_information">
 				<div id="reg_icons">
@@ -83,6 +88,7 @@
 				</div>
 			</div>
 		</div>
+		{/form}
 	</div>
 
 	<div id="new_account" class="account">

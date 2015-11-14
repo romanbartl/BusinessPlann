@@ -24,12 +24,12 @@ class AuthenticateManager extends BaseManager implements Nette\Security\IAuthent
 	public function authenticate(array $credentials) {
 		list($email, $password) = $credentials;
 
-		$row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_EMAIL, $email)->fetch();
+		$row = $this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_EMAIL, $email)->fetch();
 
 		if (!$row) {
-			throw new Nette\Security\AuthenticationException('Nesprávné přihlašovací jméno!', self::IDENTITY_NOT_FOUND);
+			throw new Nette\Security\AuthenticationException('Uživatel pod tímto emailem není zaregistrován!', self::IDENTITY_NOT_FOUND);
 
-		} elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD])) {
+		} elseif (!Passwords::verify($password, $row[self::USER_COLUMN_PASSWORD])) {
 			throw new Nette\Security\AuthenticationException('Nesprávné heslo!', self::INVALID_CREDENTIAL);
 
 		}/* TODO elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD])) {
@@ -39,7 +39,7 @@ class AuthenticateManager extends BaseManager implements Nette\Security\IAuthent
 		}*/
 
 		$arr = $row->toArray();
-		unset($arr[self::COLUMN_ID], $arr[self::COLUMN_PASSWORD], $arr[self::COLUMN_ROLE]);
-		return new Nette\Security\Identity($row[self::COLUMN_ID], $row->role[self::COLUMN_ROLE], $arr);
+		unset($arr[self::USER_COLUMN_ID], $arr[self::USER_COLUMN_PASSWORD], $arr[self::USER_COLUMN_ROLE]);
+		return new Nette\Security\Identity($row[self::USER_COLUMN_ID], $row->role[self::ROLE_COLUMN_ROLE], $arr);
 	}
 } 
