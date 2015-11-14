@@ -27,6 +27,18 @@ input[type="text"]:disabled{
 	color: #999999;
 }
 
+.errors{
+	position: absolute;
+	right: calc(50% - 175px);
+	margin-top:  140px;
+	background: #F2686F;
+	border: 1px solid #F2303A;
+	border-radius: 5px;
+	padding: 10px;
+	width: 350px;
+	text-align: center;
+}
+
 .submit_button{
 	transition-duration: 0.1s;
 	background-color: #6048f3;
