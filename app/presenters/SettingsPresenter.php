@@ -13,14 +13,8 @@ use Nette,
 
 class SettingsPresenter extends BasePresenter
 {
-	private $database;
-
-	public function __construct(Nette\Database\Context $database) {
-        $this->database = $database;
-    }
-
 	public function renderUser() {
-		$this->template->bg_colors = $this->database->table('bg_color');
+		//$this->template->bg_colors = $this->database->table('bg_color');
 	}
 
 	public function actionDefault() {
@@ -33,12 +27,16 @@ class SettingsPresenter extends BasePresenter
 
 		$form->addText('name')
 			 	->setAttribute('id', 'name_input')
-			 	->setAttribute('value', ($user['name'] . " " . $user['surname']))
+			 	->setAttribute('value', $user['name'] . " " . $user['surname'])
 				->setDisabled();
 
 		$form->addButton('name_but', 'Změnit jméno')
 				->setAttribute('class', 'button')
 				->setAttribute('id', 'change_name_but');
+
+		$form->addButton('name_but_save', 'Uložit')
+				->setAttribute('class', 'button')
+				->setAttribute('id', 'change_name_but_save');
 
 		$form->addText('email')
 			 	->setAttribute('id', 'email_input')
