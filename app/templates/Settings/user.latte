@@ -29,20 +29,7 @@
 				<tr id="change_name" class="data">
 					<td class="description"><span class="text">Jméno</span></td>
 					<td>{input name}</td>
-					<td class="button_td">{input name_but}</td>
-				</tr>
-
-				<tr style="display: none;">
-					<td>Heslo</td>
-					<td><input type="text"></td>
-				</tr>	
-
-				<tr style="display: none;">
-					<td>&nbsp;</td>
-					<td>
-						<input type="button" value="Storno" class="button">
-						<input type="submit" value="Uložit" class="button" disabled>
-					<td>
+					<td class="button_td">{input name_but}{input name_but_save style=>'display:none'}</td>
 				</tr>
 
 				<tr id="change_email" class="data">
@@ -82,13 +69,7 @@
 
 		<!-- TODO <div id="colors">
 			<table id="colors_tab">
-				{foreach $bg_colors as $color}
-					<tr>
-						<td>
-							<div id="{$color}" class="cell" style="background: {$color->hash};"></div>
-						</td>
-					</tr>
-				{/foreach}
+				
 			</table>
 		</div>-->
 

@@ -30,7 +30,7 @@
 	<nav class="settings_nav">
 		<div id="menu">
 			<a n:href="Settings:user">
-				<div id="nav_settings_user" class="heading{if link == "Settings:user"} active{/if}">
+				<div id="nav_settings_user" class="heading{if strpos($_SERVER["REQUEST_URI"], 'user')} active{/if}">
 					<span class="heading_text">
 						<span class="glyphicon glyphicon-user"></span>
 						<span class="text">Uživatel</span>
@@ -39,7 +39,7 @@
 			</a>
 
 			<a n:href="Settings:labels">
-				<div id="nav_settings_labels" class="heading">
+				<div id="nav_settings_labels" class="heading{if strpos($_SERVER["REQUEST_URI"], 'labels')} active{/if}">
 					<span class="heading_text">
 						<span class="glyphicon glyphicon-tags"></span>
 						<span class="text">Štítky</span>
@@ -48,7 +48,7 @@
 			</a>
 
 			<a n:href="Settings:groups">
-				<div id="nav_settings_labels" class="heading">
+				<div id="nav_settings_labels" class="heading{if strpos($_SERVER["REQUEST_URI"], 'groups')} active{/if}">
 					<span class="heading_text">
 						<span class="glyphicon glyphicon-user"></span>
 						<span class="text">Skupiny</span>
