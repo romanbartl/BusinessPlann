@@ -19,12 +19,6 @@ class BusinessplannPresenter extends BasePresenter
         $this->plannerManager = $plannerManager;
     }
 
-	public function renderDefault() {
-		$this->template->name = 
-			$this->getUser()->identity->data['name'] . " " . $this->getUser()->identity->data['surname'];
-		$this->template->email = $this->getUser()->identity->data['email'];
-	}
-
 	public function actionDefault() {
 	    if (!$this->getUser()->isLoggedIn()) {
 	        $this->redirect('Home:default');

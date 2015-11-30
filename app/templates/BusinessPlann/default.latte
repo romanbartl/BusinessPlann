@@ -125,20 +125,30 @@
 		<div id="user-photo-big">
 			<img src="{$basePath}/images/users/noPhoto.png">
 		</div>
-			<div id="user-info">
+		
+		<div id="user-info">
 			<div id="user-info-name">
 				<span class="name">
-					{$name}
+					{$user->identity->name . " " . $user->identity->surname}
 				</span>
 			</div>
+
 			<div id="user-info-email">
 				<span class="email">
-					{$email}
+					{$user->identity->email}
 				</span>
 			</div>
 		</div>
-			<div id="user-buttons">
+
+		<div id="user-buttons">
 			<div>
+				<a n:href="Home:default" class="user-button">
+					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+					Domovská stránka
+				</a>
+			</div>
+
+			<div class="last-button">
 				<a n:href="Settings:user" class="user-button">
 					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 					Nastavení

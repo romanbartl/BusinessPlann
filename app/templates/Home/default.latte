@@ -29,7 +29,7 @@
 		</a>
 	</div>
 
-	<div id="right_container">
+	<div n:if="!$user->isLoggedIn()" id="right_container">
 		<a n:href="Signin:default">
 			<div id="signin_link" class="menu_link">
 				Přihlášení
@@ -42,12 +42,18 @@
 			</div>
 		</a>
 	</div>
+
+	<div n:if="$user->isLoggedIn()" id="preferences">
+		<div id="user-photo-small">
+			<img class="profile-photo-small" src="{$basePath}/images/users/noPhoto.png">
+		</div>
+	</div>
 </header>
 
 <main>
 	<div id="home_poster">
-
 	</div>
+
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -57,4 +63,44 @@
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+	<div n:if="$user->isLoggedIn()" id="user-preferences">
+		<div id="user-photo-big">
+			<img src="{$basePath}/images/users/noPhoto.png">
+		</div>
+			<div id="user-info">
+			<div id="user-info-name">
+				<span class="name">
+					{$user->identity->name . " " . $user->identity->surname}
+				</span>
+			</div>
+			<div id="user-info-email">
+				<span class="email">
+					{$user->identity->email}
+				</span>
+			</div>
+		</div>
+		<div id="user-buttons">
+			<div>
+				<a n:href="Businessplann:default" class="user-button">
+					<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+					Zpět do aplikace
+				</a>
+			</div>
+
+			<div class="last-button">
+				<a n:href="Settings:user" class="user-button">
+					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+					Nastavení
+				</a>
+			</div>
+
+			<div class="last-button">
+				<a n:href="out" class="user-button">
+					<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+					Odhlásit se
+				</a>
+			</div>
+		</div>
+	</div>
 </main>
