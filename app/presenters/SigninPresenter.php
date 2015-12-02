@@ -13,6 +13,11 @@ use Nette,
 
 class SigninPresenter extends BasePresenter
 {
+	public function actionDefault() {
+		if ($this->getUser()->isLoggedIn())
+	        $this->redirect('Businessplann:default');
+	}
+
 	protected function createComponentSignInForm() {
 		$form = New Form();
 
@@ -46,9 +51,4 @@ class SigninPresenter extends BasePresenter
        		$form->addError($e->getMessage());
     	}
 	}	
-
-	public function actionDefault() {
-		if ($this->getUser()->isLoggedIn())
-	        $this->redirect('Businessplann:default');
-	}
 }

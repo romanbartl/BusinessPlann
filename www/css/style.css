@@ -14,7 +14,7 @@ body{
 	font-family: 'Bree Serif', serif;
 }
 
-input[type="text"]{
+input[type="text"], input[type="password"]{
 	border: 1px solid #898989;
 	height: 28px;
 	width: 250px;
@@ -22,9 +22,9 @@ input[type="text"]{
 	outline: 0;
 }
 
-input[type="text"]:disabled{
+input[type="text"]:disabled, input[type="password"]:disabled{
 	background: white;
-	color: #999999;
+	color: #636363;
 }
 
 .errors{
@@ -178,7 +178,7 @@ input[type=text].search-input{
 	margin-top: 60px;
 	margin-right: 22px;
 	width: 230px;
-  	min-height: 260px;
+  	min-height: 301px;
   	box-shadow: #6048f3 0px 1px 5px;
 }
 
@@ -613,7 +613,20 @@ main{
 	outline: none;
 }
 
-#change_passwd_but{
+#settings_body .last_passwd {
+	width: 120px;
+}
+
+#settings_body #change_passwd_div{
+	margin-top: 10px;
+	margin-left: 85px;
+}
+
+#settings_body #storno_passwd_but{
+	margin-left: 10px;
+}
+
+.big_button{
 	width: 260px;
 }
 
@@ -622,9 +635,8 @@ main{
 }
 
 .settings_nav{
-	background: none;
+	background: rgba(0,0,0,0.05);
 	box-shadow: none;
-	padding-top: 20px;
 }
 
 .settings_nav .active{
@@ -660,13 +672,8 @@ main{
 	padding: 30px 0px 0px 60px;
 }
 
-.settings_heading .text{
-	font-size: 28px;
-	color: #6048f3;
-}
-
 .settings_container{
-	margin-top: 25px;
+	margin-bottom: 60px;
 }
 
 .heading_smaller{
@@ -674,32 +681,40 @@ main{
 }
 
 .heading_smaller .text{
-	font-size: 22px;
-	color: #8471f3;
-}
-
-#settings_user{
-	margin-bottom: 30px;
+	font-size: 25px;
 }
 
 #user_profile img{
-	width: 100px;
-	height: 100px;	
+	width: 200px;
+	height: 200px;	
 	border-radius: 100px;
 	cursor: pointer;
 }
 
-#change_data_tab tr{
-	height: 35px;
+
+.change_data_tab tr{
+	height: 36px;
 }
 
-#change_data_tab .button_td{
-	width: 180px;
-	text-align: center;
+.change_data_tab .button_td{
+	width: 170px;
+	text-align: right;
 }
 
-#change_data_tab .description{
-	width: 60px;
+.change_data_tab .description{
+	width: 90px;
+}
+
+.change_data_tab #change_passwd_but{
+	width: 250px;
+}
+
+.change_data_tab #storno_name_but, .change_data_tab #change_name_but_save{
+	width: 120px;
+}
+
+.change_data_tab .save{
+	margin-right: 6px;
 }
 
 #colors{
@@ -710,7 +725,6 @@ main{
 	width: 75px;
 	height: 75px;
 	margin: 2px;
-	cursor: pointer;
 }
 
 #colors_tab .active, #colors_tab .cell:hover{

@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use Nette;
-use Nette\Security\Passwords;
-use Nette\Security\User;
+use Nette,
+    Nette\Security\Passwords,
+    Nette\Security\User;
 
 
 /**
@@ -24,14 +24,16 @@ class UserManager extends BaseManager
 	private $bg_color = 1;
 	private $role;
 
+	private $user;
+
 
 	/** @var Nette\Database\Context $database
 	  * contructor inicializace local var $database
 	  */
-	public function __construct(Nette\Database\Context $database) {
+	public function __construct(Nette\Database\Context $database, Nette\Security\User $user) {
 		$this->database = $database;
+		$this->user = $user;
 	}
-
 
 	/**
 	 * Adds new user.
@@ -58,17 +60,42 @@ class UserManager extends BaseManager
 				self::USER_COLUMN_PASSWORD => $this->password,
 				self::USER_COLUMN_PROFILE_PHOTO => $this->profile_photo,
 				self::USER_COLUMN_BG_COLOR => $this->bg_color,
-				self::USER_COLUMN_ROLE => $this->role
+				self::USER_COLUMN_ROLE => $this->role,
+				self::USER_COLUMN_LANGUAGE => 2
 			));
-			//TODO look at this class
+			//TODO look at this class how it works
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException('Uživatel pod tímto emailem je již registrován!');
 		}
 	}
 
-	/*public function userExists($email) {
-		if($this->database->table(self::TABLE_NAME)->where(array('email' => $email))->limit(1)->fetch())
-			return FALSE;
-		return TRUE;
-	}*/
+	public function getColors() {
+		return $this->database->table(self::COLOR_TABLE_NAME);		
+	}
+
+	public function updateUserData($itemToChange, $data) {
+		switch($itemToChange) {
+			case 'name':
+				$rowToChange = self::USER_COLUMN_NAME;
+				break;
+			case 'surname':
+				$rowToChange = self::USER_COLUMN_SURNAME;
+				break;
+			case 'email':
+				$rowToChange = self::USER_COLUMN_EMAIL;
+				break;
+		}
+
+		$this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)
+													 ->update(array($rowToChange => $data));
+
+		$this->user->identity->$itemToChange = $data;
+	}
+
+	public function updateUserColor($idColor, $hashColor) {
+		$this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)
+													 ->update(array('color_id' => $idColor));
+
+		$this->user->identity->color = $hashColor;
+	}
 }

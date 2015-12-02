@@ -1,12 +1,18 @@
 {layout '../@layout.latte'}
-{$color = $user->identity->color}
+{$layoutColor = $user->identity->color}
+
 {block title}Nastavení {include #describtion|striptags}{/block}
+
 {block head}
-	<style type="text/css">
+
+	{snippet colorStyle style}
 		.heading_smaller .text { 
-			color:#{$color}; 
+			color:#{$layoutColor}; 
 		}
-	</style>
+		.active {
+			background-color:#{$layoutColor};
+		}
+	{/snippet}
 {/block}
 
 {block content}
@@ -90,16 +96,16 @@
 
 		<div id="user-buttons">
 			<div>
-				<a n:href="Businessplann:default" class="user-button">
-					<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
-					Zpět do aplikace
-				</a>
-			</div>
-
-			<div class="last-button">
 				<a n:href="Home:default" class="user-button">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					Domovská stránka
+				</a>
+			</div>
+			
+			<div class="last-button">
+				<a n:href="Businessplann:default" class="user-button">
+					<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+					Zpět do aplikace
 				</a>
 			</div>
 

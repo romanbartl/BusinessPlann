@@ -32,14 +32,16 @@ class AuthenticateManager extends BaseManager implements Nette\Security\IAuthent
 		} elseif (!Passwords::verify($password, $row[self::USER_COLUMN_PASSWORD])) {
 			throw new Nette\Security\AuthenticationException('Nesprávné heslo!', self::INVALID_CREDENTIAL);
 
-		}/* TODO elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD])) {
+		}/* TODO look at this method elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD])) {
 			$row->update(array(
 				self::COLUMN_PASSWORD => Passwords::hash($password),
 			));
 		}*/
 
 		$arr = $row->toArray();
-		unset($arr[self::USER_COLUMN_ID], $arr[self::USER_COLUMN_PASSWORD], $arr[self::USER_COLUMN_ROLE]);
+		$arr['color'] = $row->color[self::COLOR_COLUMN_COLOR];
+
+		unset($arr[self::USER_COLUMN_ID], $arr[self::USER_COLUMN_PASSWORD], $arr[self::USER_COLUMN_ROLE], $arr[self::USER_COLUMN_COLOR]);
 		return new Nette\Security\Identity($row[self::USER_COLUMN_ID], $row->role[self::ROLE_COLUMN_ROLE], $arr);
 	}
 } 

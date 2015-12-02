@@ -18,10 +18,16 @@ abstract class BaseManager extends Nette\Object
 		USER_COLUMN_SURNAME = 'surname',
 		USER_COLUMN_EMAIL = 'email',
 		USER_COLUMN_PASSWORD = 'password',
+		USER_COLUMN_SEND_EVENTS = 'send_events',
+		USER_COLUMN_SEND_INFO = 'send_info',
 		USER_COLUMN_PROFILE_PHOTO = 'profile_photo',
-		USER_COLUMN_BG_COLOR = 'bg_color_id',
+		USER_COLUMN_COLOR = 'color_id',
 		USER_COLUMN_ROLE = 'role_id',
 		USER_COLUMN_LANGUAGE = 'language_id',
 
-		ROLE_COLUMN_ROLE = 'role';	
+		ROLE_COLUMN_ROLE = 'role',
+
+		COLOR_TABLE_NAME = 'user_color',
+		COLOR_COLUMN_ID = 'id',
+		COLOR_COLUMN_COLOR = 'color';	
 }

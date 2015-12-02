@@ -1,21 +1,18 @@
+{$section = "Uživatel"}
 {layout './@settingsLayout.latte'}
+
 {define #describtion}uživatele{/define}
 
 {define #area}
 
-			
 <div id="settings_user">
-	<div id="user_heading" class="settings_heading">
-		<span class="text">Uživatel</span>
-	</div>
-
 	<div id="user_profile" class="settings_container">
 		<div id="profile_heading_smaller" class="heading_smaller">
-			<span class="text">Obrázek profilu</span>
+			<span class="text">Profilový obrázek</span>
 		</div>
 
 		<div id="profile">
-			<img src="pictures/profile.png">
+			<img src="{$basePath}/images/users/noPhoto.png">
 		</div>
 	</div>
 
@@ -23,29 +20,92 @@
 		<div id="data_heading_smaller" class="heading_smaller">
 			<span class="text">Údaje</span>
 		</div>
+		
+		{snippet userName}
+			{form nameForm}
+				<table class="change_data_tab">
+					<tr id="change_name" class="data">
+						<td class="description"><span class="text">Jméno</span></td>
+						<td>{input name disabled=>disabled, value=>$user->identity->name}</td>
+						<td class="button_td">
+							{input name_but}
+							{input name_but_save style=>'display:none;'}
+						</td>
+						<td class="button_td">
+							{input name_storno style=>'display:none;'}
+						</td>
+					</tr>
+				</table>
+			{/form}
+		{/snippet}
 
-		{form dataForm}
-			<table id="change_data_tab">
-				<tr id="change_name" class="data">
-					<td class="description"><span class="text">Jméno</span></td>
-					<td>{input name}</td>
-					<td class="button_td">{input name_but}{input name_but_save style=>'display:none'}</td>
-				</tr>
+		{snippet userSurame}
+			{form surnameForm}
+				<table class="change_data_tab">
+					<tr id="change_surname" class="data">
+						<td class="description"><span class="text">Příjmení</span></td>
+						<td>{input surname disabled=>disabled, value=>$user->identity->surname}</td>
+						<td class="button_td">
+							{input surname_but}
+							{input surname_but_save style=>'display:none;'}
+						</td>
+						<td class="button_td">
+							{input surname_storno style=>'display:none;'}
+						</td>
+					</tr>
+				</table>
+			{/form}
+		{/snippet}
 
-				<tr id="change_email" class="data">
-					<td class="description"><span class="text">E-mail</span></td>
-					<td>{input email}</td>
-					<td class="button_td">{input email_but}</td>
-				</tr>
+		{snippet userEmail}
+			{form emailForm}
+				<table class="change_data_tab">
+					<tr id="change_email" class="data">
+						<td class="description"><span class="text">E-mail</span></td>
+						<td>{input email disabled=>disabled, value=>$user->identity->email}</td>
+						<td class="button_td">
+							{input email_but}
+							{input email_but_save style=>'display:none;'}
+						</td>
+						<td class="button_td">
+							{input email_storno style=>'display:none;'}
+						</td>
+					</tr>
+				</table>
+			{/form}
+		{/snippet}
 
-				<tr id="change_passwd" class="data">
-					<td class="description"><span class="text">Heslo</span></td>
-					<td>{input passwd_but}</td>
-					<td>&nbsp;</td>
-				</tr>
-			</table>
-		{/form}
-
+		{snippet userPasswd}
+			{form passwdForm}
+				<table class="change_data_tab">
+					<tr id="change_passwd" class="data">
+						<td class="description"><span class="text">Heslo</span></td>
+						<td>{input passwd_but}</td>
+					</tr>
+				</table>
+				
+				<div id="change_passwd_div" style="display:none">
+					<table class="change_data_tab">
+						<tr class="data">
+							<td>&nbsp;</td>
+							<td>{input new_passwd}</td>
+						</tr>
+						<tr class="data">
+							<td>&nbsp;</td>
+							<td>{input new_passwd_again}</td>
+						</tr>
+						<tr class="data">
+							<td>&nbsp;</td>
+							<td>{input current_passwd}</td>
+						</tr>
+						<tr class="data">
+							<td>&nbsp;</td>
+							<td>{input change_passwd_but_save}{input passwd_storno}</td>
+						</tr>
+					</table>
+				</div>
+			{/form}
+		{/snippet}
 	</div>
 
 	<div id="user_sent_reminds" class="settings_container">
@@ -53,9 +113,15 @@
 			<span class="text">Upozorění</span>
 		</div>
 
-		<div id="sent">
-			<label><input type="checkbox" checked />&nbsp;&nbsp;&nbsp;Zasílat informace z blogu na e-mail</label>
-		</div>
+		{form sendingForm}
+			<div id="send_events">
+				{input send_events checked}
+			</div>
+
+			<div id="send_info">
+				{input send_info}
+			</div>
+		{/form}
 	</div>
 
 	<div id="user_color-scheme" class="settings_container">
@@ -67,11 +133,22 @@
 			Vyberte si barevné schéma
 		</div>
 
-		<!-- TODO <div id="colors">
+		<div id="colors">
 			<table id="colors_tab">
+				{for $i = 0; $i < count($colors) / 5; $i++}
+					<tr>{for $j = 1; $j < (count($colors) / 4)+1; $j++ }
+						<td><a class="ajax" n:href="Color! $colors[$j+($i*5)]['id'], $colors[$j+($i*5)]['color']">
+							<div class="cell" style="background-color:#{$colors[$j+($i*5)]['color']};"></div>
+						</a></td>
+					{/for}</tr>
+				{/for}
 				
+				<tr>
+					<td><div class="cell active"></div></td>
+				</tr>
 			</table>
-		</div>-->
+		</div>
+	</div>
 
 	<div id="user_backup" class="settings_container">
 		<div id="backup_heading_smaller" class="heading_smaller">
