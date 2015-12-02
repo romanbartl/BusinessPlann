@@ -70,10 +70,6 @@ header{
   	z-index: 10;
 }
 
-#header_main{
-	background: #6048f3;
-}
-
 #menu-button-index{
 	cursor: pointer;	
 }
@@ -179,7 +175,6 @@ input[type=text].search-input{
 	margin-right: 22px;
 	width: 230px;
   	min-height: 301px;
-  	box-shadow: #6048f3 0px 1px 5px;
 }
 
 #user-preferences #user-photo-big{

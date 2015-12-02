@@ -203,6 +203,7 @@ class SettingsPresenter extends BasePresenter
 		if($this->isAjax()) {
         	$this->userManager->updateUserColor($idColor, $hashColor);
 			$this->redrawControl('colorStyle');
+			$this->redrawControl('userPrefColor');
 		}
 	}
 
