@@ -54,9 +54,7 @@ class SettingsPresenter extends BasePresenter
 		$form->getElementPrototype()->class('ajax');
 		
 		$form->addText('name')
-			 	->setAttribute('id', 'name_input')
-			 	->addRule(Form::PATTERN, 'Jméno smí obsahovat pouze písmena.', 
-                    '^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$');
+			 	->setAttribute('id', 'name_input');
 
 		$form->addButton('name_but', 'Změnit jméno')
 				->setAttribute('class', 'button')
@@ -77,8 +75,13 @@ class SettingsPresenter extends BasePresenter
 
 	public function nameFormSucceeded($form, $values) {
 		if($this->isAjax()) {
-        	$this->userManager->updateUserData('name', $values['name']);
-        	$this->redrawFormSnippets();
+			if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['name'])) {
+        		$this->userManager->updateUserData('name', $values['name']);
+        		$this->redrawFormSnippets();
+        	} else {
+        		$form->addError('Jméno smí obsahovat pouze písmena!');
+        		$this->redrawControl('userName');
+        	}
         }
     }
             
@@ -88,9 +91,7 @@ class SettingsPresenter extends BasePresenter
 
 		//Adding user surname + option for changing the surname
 		$form->addText('surname')
-			 	->setAttribute('id', 'surname_input')
-			 	->addRule(Form::PATTERN, 'Příjmení smí obsahovat pouze písmena.', 
-                    '^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$');
+			 	->setAttribute('id', 'surname_input');
 
 		$form->addButton('surname_but', 'Změnit příjmení')
 				->setAttribute('class', 'button')
@@ -111,7 +112,11 @@ class SettingsPresenter extends BasePresenter
 
 	public function surnameFormSucceeded($form, $values) {
 		if($this->isAjax()) {
-        	$this->userManager->updateUserData('surname', $values['surname']);
+        	if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['surname'])) 
+        		$this->userManager->updateUserData('surname', $values['surname']);
+        	else
+        		$form->addError('Příjmení smí obsahovat pouze písmena!');
+        	
         	$this->redrawFormSnippets();
         }
     }
@@ -122,9 +127,7 @@ class SettingsPresenter extends BasePresenter
 		$form->getElementPrototype()->class('ajax');
 
 		$form->addText('email')
-			 	->setAttribute('id', 'email_input')
-			 	->addRule(Form::PATTERN, 'Email není ve správném tvaru!', 
-                    '^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$');
+			 	->setAttribute('id', 'email_input');
 
 		$form->addButton('email_but', 'Změnit e-mail')
 				->setAttribute('class', 'button')
@@ -145,7 +148,11 @@ class SettingsPresenter extends BasePresenter
 
 	public function emailFormSucceeded($form, $values){
 		if($this->isAjax()) {
-        	$this->userManager->updateUserData('email', $values['email']);
+        	if(preg_match('!^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(.){8,}$!', $values['email'])) 
+        		$this->userManager->updateUserData('email', $values['email']);
+        	else
+        		$form->addError('Email je ve špatném tvaru!');
+        	
         	$this->redrawFormSnippets();
         }		
 	}
@@ -192,7 +199,7 @@ class SettingsPresenter extends BasePresenter
 					$form->addError('Heslo musí obsahovat nejméně 8 znaků, jedno velké písmeno a jedno číslo!');
 			} else
 				$form->addError('Hesla se musí shodovat!');
-				
+
 			$this->redrawControl('userPasswd');
 		}
 	}
