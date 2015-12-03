@@ -46,8 +46,8 @@ class UserManager extends BaseManager
 	 * @return void or failure message 
 	 */
 	public function register($name, $surname, $email, $password, $role = 2) {
-		$this->name = trim(strip_tags($name));
-		$this->surname = trim(strip_tags($surname));
+		$this->name = ucfirst(strtolower(trim(strip_tags($name))));
+		$this->surname = ucfirst(strtolower(trim(strip_tags($surname))));
 		$this->email = trim(strip_tags($email));
 		$this->password = Passwords::hash($password);
 		$this->role = $role;
@@ -59,10 +59,12 @@ class UserManager extends BaseManager
 				self::USER_COLUMN_EMAIL => $this->email,
 				self::USER_COLUMN_PASSWORD => $this->password,
 				self::USER_COLUMN_PROFILE_PHOTO => $this->profile_photo,
-				self::USER_COLUMN_BG_COLOR => $this->bg_color,
+				self::USER_COLUMN_COLOR => $this->bg_color,
 				self::USER_COLUMN_ROLE => $this->role,
 				self::USER_COLUMN_LANGUAGE => 2
 			));
+
+			$this->user->login($this->email, $password);
 			//TODO look at this class how it works
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
 			throw new DuplicateNameException('Uživatel pod tímto emailem je již registrován!');
