@@ -168,8 +168,7 @@ class SettingsPresenter extends BasePresenter
 
 		$form->addPassword('new_passwd_again')
 				->setAttribute('placeholder', 'Potvrzení nového hesla')
-				->setAttribute('id', 'new_passwd_again_input')
-				->addRule(Form::EQUAL, 'Hesla se musí shodovat!', $form['new_passwd']);;
+				->setAttribute('id', 'new_passwd_again_input');
 
 		$form->addSubmit('change_passwd_but_save', 'Uložit')
 				->setAttribute('class', 'button last_passwd');
@@ -183,10 +182,20 @@ class SettingsPresenter extends BasePresenter
 		return $form;
 	}
 
-	public function passwdFormSucceeded() {
-
+	public function passwdFormSucceeded($form, $values) {
+		if($this->isAjax()) {
+			if($values['new_passwd_again'] == $values['new_passwd']) {
+				if(preg_match('!^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(.){8,}$!', $values['new_passwd'])) {
+					if(!$this->userManager->updateUserPasswd($values['current_passwd'], $values['new_passwd']))
+						$form->addError('Pro pokračování musí být zadáno správné uživatelské heslo');
+				} else
+					$form->addError('Heslo musí obsahovat nejméně 8 znaků, jedno velké písmeno a jedno číslo!');
+			} else
+				$form->addError('Hesla se musí shodovat!');
+				
+			$this->redrawControl('userPasswd');
+		}
 	}
-
 
 	protected function createComponentSendingForm() {
 		$form = New Form();

@@ -39,6 +39,14 @@ input[type="text"]:disabled, input[type="password"]:disabled{
 	text-align: center;
 }
 
+.formErrors{
+	color: #d01715;
+	text-align: center;
+	font-size: 14px;
+	max-width: 250px;
+	padding: 20px 0px 20px 0px;	
+}
+
 .submit_button{
 	transition-duration: 0.1s;
 	background-color: #6048f3;

@@ -98,4 +98,16 @@ class UserManager extends BaseManager
 
 		$this->user->identity->color = $hashColor;
 	}
+
+	public function updateUserPasswd($curentPasswd, $newPasswd) {
+		$row = $this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)->fetch();
+
+		if(Passwords::verify($curentPasswd, $row[self::USER_COLUMN_PASSWORD])) {
+			$this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)
+													 ->update(array(self::USER_COLUMN_PASSWORD => Passwords::hash($newPasswd)));
+			return True;
+		} else {
+			return False;
+		}
+	}
 }

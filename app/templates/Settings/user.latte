@@ -35,6 +35,11 @@
 							{input name_storno style=>'display:none;'}
 						</td>
 					</tr>
+												<td class="errors" n:if="$form->hasErrors()">
+	        					<span n:foreach="$form->errors as $error">{$error}</span>
+								
+							</td>
+
 				</table>
 			{/form}
 		{/snippet}
@@ -84,8 +89,12 @@
 					</tr>
 				</table>
 				
-				<div id="change_passwd_div" style="display:none">
+				<div id="change_passwd_div">
 					<table class="change_data_tab">
+						<tr class="data">
+							<td>&nbsp;</td>
+							<td>{input current_passwd}</td>
+						</tr>
 						<tr class="data">
 							<td>&nbsp;</td>
 							<td>{input new_passwd}</td>
@@ -94,10 +103,14 @@
 							<td>&nbsp;</td>
 							<td>{input new_passwd_again}</td>
 						</tr>
-						<tr class="data">
+						<tr n:if="$form->hasErrors()">
 							<td>&nbsp;</td>
-							<td>{input current_passwd}</td>
+							
+							<td n:foreach="$form->errors as $error">
+	        					<div class="formErrors">{$error}</div>
+							</td>
 						</tr>
+
 						<tr class="data">
 							<td>&nbsp;</td>
 							<td>{input change_passwd_but_save}{input passwd_storno}</td>
