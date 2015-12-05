@@ -22,5 +22,7 @@ session:
 services:
 	- App\Model\BusinessplannManager
 	- App\Model\UserManager
+	- App\Model\LabelsManager
+	- App\Model\ColorManager
 	router: App\RouterFactory::createRouter
 	authenticate: App\Model\AuthenticateManager
