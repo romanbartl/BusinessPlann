@@ -3,6 +3,9 @@
 		#header_main {
 			background: #{$user->identity->color};
 		}
+		nav {
+			box-shadow: 3px 0 4px -1px #{$user->identity->color}, -10px 0 6px -3px #{$user->identity->color};
+		}
 	</style>
 {/block}
 
@@ -40,9 +43,9 @@
 <main id="main2">
 	<nav class="index_nav">
 		<div id="menu">
-			<div id="all">
+			<div id="all" class="group">
 				<a href="#">
-					<div id="all_heading" class="heading">
+					<div id="all_heading" class="big_button">
 						<span class="heading_text">
 							<span class="glyphicon glyphicon-calendar"></span>
 							<span class="text">Všechny události</span>
@@ -51,48 +54,61 @@
 				</a>
 			</div>
 			
-			<div id="labels">
+			<div id="labels" class="group">
 				<div id="labels_heading" class="heading">
 					<span class="heading_text">
-						<span class="glyphicon glyphicon-tags"></span>
 						<span class="text">Štítky</span>
-						<span class="glyphicon glyphicon-menu-down"></span>
 					</span>
 				</div>
-				
+						
 				<div id="labels_list" class="list-div">
 					<ul class="list">
-						<a href="#"><li class="item"><div class="color" style="background: #FF6600;"></div>Škola</li></a>
-						<a href="#"><li class="item"><div class="color" style="background: #FF0066;"></div>Rodina</li></a>
-						<a href="#"><li class="item"><div class="color" style="background: #3399FF;"></div>Osobní</li></a>
+						{foreach $labels as $key => $label}
+							<a href="#"><li class="item">
+								<span class="glyphicon glyphicon-tags" style="color:#{$label['color']}"></span>
+								<span>{$label['name']}</span>
+							</li></a>
+						{/foreach}
+						
+						<a n:href="Settings:labels">
+							<li class="item">
+								<span class="glyphicon glyphicon-cog"></span>
+								<span>Nastavení štítků</span>
+							</li>
+						</a>						
 					</ul>
 				</div>
 			</div>
 
-			<div id="groups">
+			<div id="groups" class="group">
 				<div id="groups_heading" class="heading">
 					<span class="heading_text">
-						<span class="glyphicon glyphicon-user"></span>
 						<span class="text">Skupiny</span>
-						<span class="glyphicon glyphicon-menu-down"></span>
 					</span>
 				</div>
 				
 				<div id="groups_list" class="list-div">
 					<ul class="list">
-						<a href="#">
+						<!--<a href="#">
 							<li class="item">
-								<div class="color" style="background: #33CC33;"></div>
+								<span class="glyphicon glyphicon-user" style="color: #33CC33;"></span>
 								<span>1. skupina</span>
 							</li>
-						<a/>
+						</a>-->
+
+						<a n:href="Settings:groups">
+							<li class="item">
+								<span class="glyphicon glyphicon-cog"></span>
+								<span>Nastavení skupin</span>
+							</li>
+						</a>
 					</ul>
 				</div>
 			</div>
 
 			<div id="trash">
 				<a href="#">
-					<div id="trash_heading" class="heading">
+					<div id="trash_heading" class="big_button">
 						<span class="heading_text">
 							<span class="glyphicon glyphicon-trash"></span>
 							<span class="text">Koš</span>
@@ -101,11 +117,6 @@
 				</a>
 			</div>
 		</div>
-
-		<footer>
-			<div><span class="name">BusinessPlann, v.0.1</span></div>
-			<div><span class="copyright">© Roman Bártl, V4A (2015)</span></div>
-		</footer>
 	</nav>
 
 	<div id="body">

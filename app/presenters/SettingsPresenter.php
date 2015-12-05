@@ -6,7 +6,8 @@ use Nette,
     Nette\Application\UI\Presenter,
     Nette\Application\UI\Form,
     Nette\Security\User,
-    App\Model\UserManager;
+    App\Model\UserManager,
+    App\Model\LabelsManager;
 
 /**
  * 
@@ -14,14 +15,20 @@ use Nette,
 class SettingsPresenter extends BasePresenter
 {
 	private $userManager;
+	private $labelsManager;
 
-	public function __construct(UserManager $userManager) {
+	public function __construct(UserManager $userManager, LabelsManager $labelsManager) {
         $this->userManager = $userManager;
+        $this->labelsManager = $labelsManager;
     }
 
     public function renderUser() {
     	$this->template->colors = $this->userManager->getColors();
     }
+
+    public function renderLabels() {
+    	$this->template->labels = $this->labelsManager->getLabels();
+	}
 
 	public function actionDefault() {
 		$this->redirect('Settings:user');
@@ -224,11 +231,38 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	private function redrawFormSnippets() {
-			$this->redrawControl('userName');
-        	$this->redrawControl('userSurame');
-        	$this->redrawControl('userEmail');
-        	$this->redrawControl('userPasswd');
-        	$this->redrawControl('userPref');
+		$this->redrawControl('userName');
+        $this->redrawControl('userSurame');
+        $this->redrawControl('userEmail');
+        $this->redrawControl('userPasswd');
+        $this->redrawControl('userPref');
+	}
+
+	protected function createComponentAddLabelForm() {
+		$form = new Form();
+		$form->getElementPrototype()->class('ajax');
+		
+		$form->addText('add_label_name')
+					->setAttribute('id', 'add_label_name_input')
+					->setAttribute('placeholder', 'Zadejte název štítku');
+
+		$form->onSuccess[] = array($this, 'addLabelFormSucceeded');
+
+		return $form;
+	}
+
+	public function addLabelFormSucceeded($form, $values) {
+		if($this->isAjax()) {
+			$this->labelsManager->addNewLabel($values['add_label_name']);
+			$this->redrawControl('labels');
+		}
+	}
+
+	public function handleRemoveLabel($id) {
+		if($this->isAjax()){ 
+			$this->labelsManager->removeLabel($id);
+			$this->redrawControl('labels');
+		}
 	}
 }
 

@@ -5,8 +5,36 @@
 {define #area}
 
 <div id="settings_labels">
+	<div id="edit_labels" class="settings_container">
+		<div id="edit_labels_heading_smaller" class="heading_smaller">
+			<span class="text">Správa štítků</span>
+		</div>
 
-	<!-- CONTENT -->
+		{snippet labels}
+			<ul id="labels_list_edit">
+				{foreach $labels as $key => $label}
+					<li class="label_item">
+						<div class="label_icon label_item_part">
+							<span class="glyphicon glyphicon-tags" style="color:#{$label['color']}"></span>
+						</div>
+						
+						<div class="label_name label_item_part">
+							<span class="text">{$label['name']}</span>
+						</div>
 
+						<div class="label_buttons label_item_part">
+							<span class="glyphicon glyphicon-pencil"></span>
+							<span class="glyphicon glyphicon-option-horizontal"></span>
+							<a n:href="removeLabel! $label['id']" class="ajax"><span class="glyphicon glyphicon-remove"></span></a>
+						</div>
+					</li>
+				{/foreach}
+									{form addLabelForm}
+						{input add_label_name}
+					{/form}
+			</ul>
+		{/snippet}
+	</div>
 </div>
+
 {/define}

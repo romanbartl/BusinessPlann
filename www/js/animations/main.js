@@ -19,15 +19,6 @@ $("#user-photo-small").click(function() {
 	$("#user-preferences").fadeToggle(120);
 });
 
-
-$("#labels_heading").click(function() {
-	$("#labels_list").toggle('slide', {direction: 'up'}, 200);
-});
-
-$("#groups_heading").click(function() {
-	$("#groups_list").toggle('slide', {direction: 'up'}, 200);
-});
-
 /* IDEA
 $(document).click(
 function(element) {
