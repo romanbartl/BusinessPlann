@@ -27,7 +27,7 @@ abstract class BaseManager extends Nette\Object
 
 		ROLE_COLUMN_ROLE = 'role',
 
-		COLOR_TABLE_NAME = 'user_color',
+		COLOR_TABLE_NAME = 'color',
 		COLOR_COLUMN_ID = 'id',
 		COLOR_COLUMN_COLOR = 'color';	
 }
