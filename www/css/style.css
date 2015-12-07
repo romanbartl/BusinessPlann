@@ -283,10 +283,16 @@ nav{
 }
 
 .heading{
+	transition-duration: 0.1s;
 	padding: 10px 0px 10px 20px;
 	position: relative;
 	width: 250px;
 	font-size: 15px;
+}
+
+.heading:hover{
+	transition-duration: 0.1s;
+	background: rgba(0,0,0,0.1);
 }
 
 .big_button{
@@ -770,19 +776,165 @@ main{
 }
 
 #labels_list_edit{
-	margin-left: -40px;
-		list-style-type: none;
-}
-
-.label_item_part{
-	float: left;
-	max-height: 50px;
+	margin-top: 20px;
 }
 
 .label_item{
-	
+	padding: 10px 0px 10px 0px;
+	background: rgba(0,0,0,0.05);
+	max-width: 450px;
+	margin-top: 5px;
+	min-height: 42px;
 }
 
+.label_item .tag_icon{
+	float: left;
+	padding: 4px 20px 5px 20px;
+}
+
+.label_item .label_name {
+	margin-top: -3px;
+	width: 260px;
+	float: left;
+}
+
+.label_item .label_button{
+	transition-duration: 0.05s;
+	cursor: pointer;
+}
+
+.label_item .label_button:hover{
+	transition-duration: 0.05s;
+	background: rgba(0,0,0,0.1);
+}
+
+.label_item .label_href{
+	padding: 10px 14px 11px 12px;
+	margin-left: -5px;
+}
+
+.label_item .label_icon{
+	padding: 13px;
+	margin-top: -11px;
+	margin-left: -3px;
+	margin-bottom: -11px;
+}
+
+#add_label_button{
+	tansition-duration: 0.1s;
+	width: 450px;
+	cursor: pointer;
+	position: absolute;
+	margin-top: 10px;
+}
+
+#add_label_button:hover{
+	tansition-duration: 0.1s;	
+	background: rgba(0,0,0,0.03);
+}
+
+#add_label_button .tag_icon{
+	float: left;
+	padding: 12px 10px 10px 30px;
+}
+
+#add_label_button #add_label_text{
+	float: left;
+	padding: 10px;
+}
+
+#add_label_form {
+	position: absolute;
+	width: 450px;
+	margin-top: 10px;
+	background: rgba(0,0,0,0.03); 
+}
+
+.edit_label_storno{
+	margin-top: -10px;
+}
+
+#add_label_form #storno_icon, #choose_color_button, .edit_label_storno{
+	transition-duration: 0.1s;
+	float: left;
+	padding: 14px 14px 14px 14px;
+	cursor: pointer;
+}
+
+#add_label_form #storno_icon:hover, #choose_color_button:hover, .edit_label_storno:hover {
+	transition-duration: 0.1s;
+	background: rgba(0,0,0,0.05);
+}
+
+
+#add_label_form #add_label_input_name_div{
+	margin-top: 6px;
+	margin-right: 21px;
+	margin-left: 50px;
+	float: left;
+}
+
+input.edit_label_name{
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid #dcdcdc;
+	background: none;
+}
+
+input.edit_label_name:disabled{
+	background: none;
+	border: none;
+	color: #3d3d3d;
+}
+
+.edit_label_storno{
+	margin-left: 5px;
+}
+
+
+#dark{
+	background: rgba(0,0,0,0.2);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	display: none;
+}
+
+.edit_label_submit_div{
+	display: none;
+	float: left;
+	margin-left: -20px;
+}
+
+.edit_label_submit_class{
+	transition-duration: 0.1s;
+    position: absolute;
+    margin-top: -29px;
+    margin-left: -12px;
+    width: 41px;
+    height: 41px;
+
+    background: none;
+    border: none;
+
+}
+
+.edit_label_submit_class:hover{
+	transition-duration: 0.1s;
+	background: rgba(0,0,0,0.05);
+}
+
+.glyphicon_submit{
+	display: inline-block;
+    position: absolute;
+    margin-left: 30px;
+    padding: 3px 10px 0px 0px;
+
+}
 
 /* HOME */
 

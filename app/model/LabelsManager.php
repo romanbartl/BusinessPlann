@@ -39,7 +39,12 @@ class LabelsManager extends BaseManager
 		));
 	}
 
-	public function removeLabel($id) {
-		$this->database->query('DELETE FROM ' . self::LABEL_TABLE_NAME . ' WHERE ' . self::LABEL_COLUMN_ID . ' = ' . $id);
+	public function removeLabel($labelId) {
+		$this->database->query('DELETE FROM ' . self::LABEL_TABLE_NAME . ' WHERE ' . self::LABEL_COLUMN_ID . ' = ' . $labelId);
+	}
+
+	public function editLabelName($labelId, $labelName) {
+		$this->database->table(self::LABEL_TABLE_NAME)->where(self::LABEL_COLUMN_ID, $labelId)
+													 ->update(array(self::LABEL_COLUMN_NAME => $labelName));
 	}
 }
