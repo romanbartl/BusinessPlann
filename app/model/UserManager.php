@@ -98,7 +98,7 @@ class UserManager extends BaseManager
 
 	public function updateUserColor($idColor, $hashColor) {
 		$this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)
-													 ->update(array('color_id' => $idColor));
+													 ->update(array(self::USER_COLUMN_COLOR => $idColor));
 
 		$this->user->identity->color = $hashColor;
 	}
