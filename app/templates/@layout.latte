@@ -31,7 +31,7 @@
 		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 
 		{include content}
-		
+
 		{block scripts}
 			<script type="text/javascript" src="{$basePath}/js/jquery-2.0.2.js"></script>
 			<script type="text/javascript" src="{$basePath}/js/jquery-ui.js"></script>
@@ -40,6 +40,8 @@
 			<script type="text/javascript" src="{$basePath}/js/nette.ajax.js"></script>
 			<script type="text/javascript" src="{$basePath}/js/animations/main.js"></script>
 			<script type="text/javascript" src="{$basePath}/js/animations/set_user.js"></script>
+			<script type="text/javascript" src="{$basePath}/js/animations/set_labels.js"></script>		
 		{/block}
+
 	</body>
 </html>

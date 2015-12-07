@@ -11,28 +11,69 @@
 		</div>
 
 		{snippet labels}
-			<ul id="labels_list_edit">
-				{foreach $labels as $key => $label}
-					<li class="label_item">
-						<div class="label_icon label_item_part">
-							<span class="glyphicon glyphicon-tags" style="color:#{$label['color']}"></span>
-						</div>
-						
-						<div class="label_name label_item_part">
-							<span class="text">{$label['name']}</span>
-						</div>
+			<div id="labels_list_edit">
 
-						<div class="label_buttons label_item_part">
-							<span class="glyphicon glyphicon-pencil"></span>
-							<span class="glyphicon glyphicon-option-horizontal"></span>
-							<a n:href="removeLabel! $label['id']" class="ajax"><span class="glyphicon glyphicon-remove"></span></a>
+				<div id="labels">
+					{foreach $labels as $key => $label}
+					
+					{if $labels == null}
+						<div id="zero_labels">
+							<span class="text">Doposud nemáte přidány žádné štítky</span>
 						</div>
-					</li>
-				{/foreach}
-									{form addLabelForm}
-						{input add_label_name}
-					{/form}
-			</ul>
+				
+					{else}
+						{form editLabelForm}
+							<div class="label_item" style="border-left: 8px solid #{$label['color']}">
+								<span class="glyphicon glyphicon-tags tag_icon"></span>
+							
+								<div class="label_name">
+									{input edit_label_name id=>edit_label_name_.$label['id'], value=>$label['name'], disabled=>disabled}
+								</div>
+							
+								<span id="{$label['id']}" class="glyphicon glyphicon-pencil label_button label_icon label_edit"></span>
+				
+								<span id="label_color_change_{$label['id']}" class="glyphicon glyphicon-option-horizontal label_button label_icon label_choose_color"></span>			
+								
+								<a n:href="removeLabel! $label['id']" id="label_remove_{$label['id']}" class="ajax label_button label_href">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+
+								<div id="edit_label_submit_div_{$label['id']}" class="edit_label_submit_div">
+									<span class="glyphicon glyphicon-ok glyphicon_submit">
+										{input edit_label_submit}
+									</span>
+								</div>
+
+								<span id="edit_label_storno_{$label['id']}" class="glyphicon glyphicon-remove edit_label_storno" style="display:none;"></span>
+							</div>
+
+							{input edit_label_id value=>$label['id']}
+						{/form}
+					{/if}
+					
+					{/foreach}
+
+					<div id="add_label_button">
+						<span class="glyphicon glyphicon-plus tag_icon"></span>
+						<div id="add_label_text">
+							<span class="text">Přidat nový štítek</span>
+						</div>
+					</div>
+
+					<div id="add_label_form" style="display:none;">
+						{form addLabelForm}
+							<div id="add_label_input_name_div">
+								{input add_label_name}
+							</div>
+
+							{input add_label_submit}
+						{/form}
+
+						<span id="choose_color_button" class="glyphicon glyphicon-option-horizontal"></span>
+						<span id="storno_icon" class="glyphicon glyphicon-remove"></span>
+					</div>
+				</div>
+			</div>
 		{/snippet}
 	</div>
 </div>
