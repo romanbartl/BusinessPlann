@@ -246,7 +246,8 @@ class SettingsPresenter extends BasePresenter
 					->setAttribute('id', 'add_label_name_input')
 					->setAttribute('placeholder', 'Zadejte název štítku');
 
-		$form->addSubmit('add_label_submit', 'Uložit');
+		$form->addSubmit('add_label_submit', '')
+					->setAttribute('id', 'add_label_submit');
 
 		$form->onSuccess[] = array($this, 'addLabelFormSucceeded');
 

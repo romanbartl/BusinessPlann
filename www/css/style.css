@@ -848,22 +848,41 @@ main{
 	width: 450px;
 	margin-top: 10px;
 	background: rgba(0,0,0,0.03); 
+	display:none;
 }
 
 .edit_label_storno{
 	margin-top: -10px;
 }
 
-#add_label_form #storno_icon, #choose_color_button, .edit_label_storno{
+#add_label_form #storno_icon, #choose_color_button{
 	transition-duration: 0.1s;
 	float: left;
-	padding: 14px 14px 14px 14px;
+	padding: 14px;
 	cursor: pointer;
 }
 
-#add_label_form #storno_icon:hover, #choose_color_button:hover, .edit_label_storno:hover {
+#add_label_form #storno_icon:hover, #choose_color_button:hover{
 	transition-duration: 0.1s;
 	background: rgba(0,0,0,0.05);
+}
+
+.edit_label_storno {
+	transition-duration: 0.1s;
+	padding: 12px;
+	cursor: pointer;
+	float: left;
+}
+
+.edit_label_storno:hover {
+	transition-duration: 0.1s;
+	background: rgba(0,0,0,0.05);
+}
+
+#add_label_submit_div{
+	float: left;
+	margin-top: 10px;
+	margin-left: -20px;
 }
 
 
@@ -874,7 +893,23 @@ main{
 	float: left;
 }
 
-input.edit_label_name{
+#add_label_submit{
+	transition-duration: 0.1s;
+    position: absolute;
+    margin-top: -29px;
+    margin-left: -12px;
+    width: 41px;
+    height: 41px;
+    background: none;
+    border: none;
+}
+
+#add_label_submit:hover{
+	transition-duration: 0.1s;
+	background: rgba(0,0,0,0.05);
+}
+
+input.edit_label_name, input#add_label_name_input{
 	border-top: none;
 	border-left: none;
 	border-right: none;
@@ -892,6 +927,13 @@ input.edit_label_name:disabled{
 	margin-left: 5px;
 }
 
+.label_remove{
+	color: #3d3d3d;
+}
+
+.label_remove:hover{
+	color: #3d3d3d;
+}
 
 #dark{
 	background: rgba(0,0,0,0.2);
@@ -917,10 +959,8 @@ input.edit_label_name:disabled{
     margin-left: -12px;
     width: 41px;
     height: 41px;
-
     background: none;
     border: none;
-
 }
 
 .edit_label_submit_class:hover{
@@ -933,7 +973,6 @@ input.edit_label_name:disabled{
     position: absolute;
     margin-left: 30px;
     padding: 3px 10px 0px 0px;
-
 }
 
 /* HOME */
