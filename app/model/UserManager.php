@@ -4,7 +4,8 @@ namespace App\Model;
 
 use Nette,
     Nette\Security\Passwords,
-    Nette\Security\User;
+    Nette\Security\User,
+    App\Model\ColorManager;
 
 
 /**
@@ -14,7 +15,7 @@ class UserManager extends BaseManager
 {
 	/** @var Nette\Database\Context */
 	private $database;
-	private $options;
+	private $colorManager;
 
 	private $name;
 	private $surname;
@@ -30,9 +31,10 @@ class UserManager extends BaseManager
 	/** @var Nette\Database\Context $database
 	  * contructor inicializace local var $database
 	  */
-	public function __construct(Nette\Database\Context $database, Nette\Security\User $user) {
+	public function __construct(Nette\Database\Context $database, Nette\Security\User $user, ColorManager $colorManager) {
 		$this->database = $database;
 		$this->user = $user;
+		$this->colorManager = $colorManager;
 	}
 
 	/**
@@ -71,10 +73,6 @@ class UserManager extends BaseManager
 		}
 	}
 
-	public function getColors() {
-		return $this->database->table(self::COLOR_TABLE_NAME);		
-	}
-
 	public function updateUserData($itemToChange, $data) {
 		switch($itemToChange) {
 			case 'name':
@@ -94,9 +92,13 @@ class UserManager extends BaseManager
 		$this->user->identity->$itemToChange = $data;
 	}
 
+	public function getColors() {
+		return $this->colorManager->getColors();
+	}
+
 	public function updateUserColor($idColor, $hashColor) {
 		$this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)
-													 ->update(array('color_id' => $idColor));
+													 ->update(array(self::USER_COLUMN_COLOR => $idColor));
 
 		$this->user->identity->color = $hashColor;
 	}
@@ -106,7 +108,7 @@ class UserManager extends BaseManager
 
 		if(Passwords::verify($curentPasswd, $row[self::USER_COLUMN_PASSWORD])) {
 			$this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_ID, $this->user->identity->id)
-													 ->update(array(self::USER_COLUMN_PASSWORD => Passwords::hash($newPasswd)));
+													 	 ->update(array(self::USER_COLUMN_PASSWORD => Passwords::hash($newPasswd)));
 			return True;
 		} else {
 			return False;
