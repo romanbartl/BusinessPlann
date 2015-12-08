@@ -444,6 +444,21 @@ main{
 
 }
 
+#main_add_button{
+	position: absolute;
+	padding: 18px 18px 16px 20px;
+	border-radius: 40px;
+	bottom: 0;
+	right: 0;
+	margin: 0px 40px 40px 0px;
+	cursor: pointer;
+}
+
+#main_add_button .glyphicon{
+	color: white;
+	font-size: 20px;
+}
+
 /* FORMS */
 
 #logo_icon{
@@ -1027,7 +1042,6 @@ input.edit_label_name:disabled{
 	color: #3d3d3d;
 	background: #e6e6e6;
 	border: 1px solid #a3a3a3;
-
 }
 
 #signin_link:hover{
