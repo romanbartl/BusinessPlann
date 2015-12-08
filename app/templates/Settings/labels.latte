@@ -34,7 +34,7 @@
 				
 								<span id="label_color_change_{$label['id']}" class="glyphicon glyphicon-option-horizontal label_button label_icon label_choose_color"></span>			
 								
-								<a n:href="removeLabel! $label['id']" id="label_remove_{$label['id']}" class="ajax label_button label_href">
+								<a n:href="removeLabel! $label['id']" id="label_remove_{$label['id']}" class="ajax label_button label_href label_remove">
 									<span class="glyphicon glyphicon-remove"></span>
 								</a>
 
@@ -60,13 +60,17 @@
 						</div>
 					</div>
 
-					<div id="add_label_form" style="display:none;">
+					<div id="add_label_form">
 						{form addLabelForm}
 							<div id="add_label_input_name_div">
 								{input add_label_name}
 							</div>
 
-							{input add_label_submit}
+							<div id="add_label_submit_div">
+								<span class="glyphicon glyphicon-ok glyphicon_submit">
+									{input add_label_submit}
+								</span>
+							</div>
 						{/form}
 
 						<span id="choose_color_button" class="glyphicon glyphicon-option-horizontal"></span>
