@@ -19,6 +19,8 @@ $("#user-photo-small").click(function() {
 	$("#user-preferences").fadeToggle(120);
 });
 
+
+
 /* IDEA
 $(document).click(
 function(element) {
