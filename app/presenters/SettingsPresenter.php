@@ -220,6 +220,7 @@ class SettingsPresenter extends BasePresenter
         	$this->userManager->updateUserColor($idColor, $hashColor);
 			$this->redrawControl('colorStyle');
 			$this->redrawControl('userPrefColor');
+			$this->redrawControl('settingsHeader');
 		}
 	}
 
