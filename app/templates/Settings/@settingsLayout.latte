@@ -1,7 +1,7 @@
 {layout '../@layout.latte'}
 {$layoutColor = $user->identity->color}
 
-{block title}Nastavení {include #describtion|striptags}{/block}
+{block title}Nastavení - {$section}{/block}
 
 {block head}
 	{snippet colorStyle style}
@@ -15,30 +15,30 @@
 {/block}
 
 {block content}
+{snippet settingsHeader}
+	<header id="header_settings" style="background: #{$user->identity->color};">
+		<div id="menu-button-settings" class="menu-button">
+			<a n:href="Businessplann:default">
+				<div id="menu-icon-settings" class="menu-icon">
+					<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+				</div>
+			</a>
 
-<header id="header_settings">
-	<div id="menu-button-settings" class="menu-button">
-		<a n:href="Businessplann:default">
-			<div id="menu-icon-settings" class="menu-icon">
-				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+			<div class="menu-heading">
+				<span class="menu-text">Nastavení - {$section}</span>
 			</div>
-		</a>
-
-		<div class="menu-heading">
-			<span class="menu-text">{$section}</span>
 		</div>
-	</div>
 
-	<div id="preferences">
-		<div id="user-photo-small">
-			<img class="profile-photo-small" src="{$basePath}/images/users/noPhoto.png">
+		<div id="preferences">
+			<div id="user-photo-small">
+				<img class="profile-photo-small" src="{$basePath}/images/users/noPhoto.png">
+			</div>
 		</div>
-	</div>
-</header>
-
+	</header>
+{/snippet}
 		
 <main id="main2">
-	<nav class="settings_nav">
+	<nav id="settings_nav">
 		<div id="menu">
 			<a n:href="Settings:user">
 				<div id="nav_settings_user" class="heading{if strpos($_SERVER["REQUEST_URI"], 'user')} active{/if}">
