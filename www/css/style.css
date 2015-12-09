@@ -684,17 +684,13 @@ main{
 	margin-left: 15px;
 }
 
-.settings_nav{
+#settings_nav{
 	background: rgba(0,0,0,0.05);
 	box-shadow: none;
 }
 
-.settings_nav .active{
+#settings_nav .active{
 	background: rgba(0,0,0,0.1);
-}
-
-#header_settings{
-	background: #A6A6A6;
 }
 
 #menu-icon-settings{
