@@ -158,7 +158,7 @@ class SettingsPresenter extends BasePresenter
 
 	public function emailFormSucceeded($form, $values){
 		if($this->isAjax()) {
-        	if(preg_match('!^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(.){8,}$!', $values['email'])) 
+        	if(preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['email'])) 
         		$this->userManager->updateUserData('email', $values['email']);
         	else
         		$form->addError('Email je ve špatném tvaru!');
