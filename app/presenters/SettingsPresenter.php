@@ -61,7 +61,8 @@ class SettingsPresenter extends BasePresenter
 		$form->getElementPrototype()->class('ajax');
 		
 		$form->addText('name')
-			 	->setAttribute('id', 'name_input');
+			 	->setAttribute('id', 'name_input')
+			 	->setAttribute('class', 'user_settings_input');
 
 		$form->addButton('name_but', 'Změnit jméno')
 				->setAttribute('class', 'button')
@@ -98,7 +99,8 @@ class SettingsPresenter extends BasePresenter
 
 		//Adding user surname + option for changing the surname
 		$form->addText('surname')
-			 	->setAttribute('id', 'surname_input');
+			 	->setAttribute('id', 'surname_input')
+			 	->setAttribute('class', 'user_settings_input');
 
 		$form->addButton('surname_but', 'Změnit příjmení')
 				->setAttribute('class', 'button')
@@ -134,7 +136,8 @@ class SettingsPresenter extends BasePresenter
 		$form->getElementPrototype()->class('ajax');
 
 		$form->addText('email')
-			 	->setAttribute('id', 'email_input');
+			 	->setAttribute('id', 'email_input')
+			 	->setAttribute('class', 'user_settings_input');
 
 		$form->addButton('email_but', 'Změnit e-mail')
 				->setAttribute('class', 'button')
@@ -174,15 +177,18 @@ class SettingsPresenter extends BasePresenter
 
 		$form->addPassword('current_passwd')
 			    ->setAttribute('placeholder', 'Aktuální heslo')
-			    ->setAttribute('id', 'current_passwd_input');
+			    ->setAttribute('id', 'current_passwd_input')
+			    ->setAttribute('class', 'user_settings_input');
 
 		$form->addPassword('new_passwd')
 				->setAttribute('placeholder', 'Nové heslo')
-				->setAttribute('id', 'new_passwd_input');
+				->setAttribute('id', 'new_passwd_input')
+				->setAttribute('class', 'user_settings_input');
 
 		$form->addPassword('new_passwd_again')
 				->setAttribute('placeholder', 'Potvrzení nového hesla')
-				->setAttribute('id', 'new_passwd_again_input');
+				->setAttribute('id', 'new_passwd_again_input')
+				->setAttribute('class', 'user_settings_input');
 
 		$form->addSubmit('change_passwd_but_save', 'Uložit')
 				->setAttribute('class', 'button last_passwd');

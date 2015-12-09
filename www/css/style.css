@@ -734,6 +734,7 @@ main{
 
 .change_data_tab .description{
 	width: 90px;
+	font-weight: bold;
 }
 
 .change_data_tab #change_passwd_but{
@@ -905,7 +906,7 @@ main{
 	background: rgba(0,0,0,0.05);
 }
 
-input.edit_label_name, input#add_label_name_input{
+input.edit_label_name, input#add_label_name_input, input.user_settings_input{
 	border-top: none;
 	border-left: none;
 	border-right: none;
