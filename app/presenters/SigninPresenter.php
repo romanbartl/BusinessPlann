@@ -20,13 +20,11 @@ class SigninPresenter extends BasePresenter
 
 	protected function createComponentSignInForm() {
 		$form = New Form();
+		$form->getElementPrototype()->class('ajax');
 
 		$form->addText('email')
 			 	->setAttribute('class', 'input')
-			 	->setAttribute('placeholder', 'E-mail')
-			 	->addRule(Form::FILLED, 'Vyplňte svůj email.')
-                ->addRule(Form::PATTERN, 'Email není ve správném tvaru!', 
-                    '^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$');
+			 	->setAttribute('placeholder', 'E-mail');
 
 		$form->addPassword('passwd')
 		     ->setAttribute('class', 'input')
@@ -43,12 +41,18 @@ class SigninPresenter extends BasePresenter
 	}
 
 	public function signInFormSucceeded($form, $values) {
-		try {
-	        $this->getUser()->login($values['email'], $values['passwd']);
-			$this->redirect('Businessplann:default');
+		if($this->isAjax()) {
+			if(preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['email'])) {
+				try {
+		        	$this->getUser()->login($values['email'], $values['passwd']);
+					$this->redirect('Businessplann:default');
+		        } catch (Nette\Security\AuthenticationException $e) {
+		       		$form->addError($e->getMessage());
+	    		}
+	    	} else
+				$form->addError('Email není ve správném tvaru!');
 
-    	} catch (Nette\Security\AuthenticationException $e) {
-       		$form->addError($e->getMessage());
-    	}
+			$this->redrawControl('signInFormSnippet');
+	    }
 	}	
 }

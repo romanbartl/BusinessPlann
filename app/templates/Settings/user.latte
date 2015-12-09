@@ -35,11 +35,14 @@
 							{input name_storno style=>'display:none;'}
 						</td>
 					</tr>
-												<td class="errors" n:if="$form->hasErrors()">
-	        					<span n:foreach="$form->errors as $error">{$error}</span>
-								
-							</td>
-
+					
+					<tr n:if="$form->hasErrors()">
+						<td>&nbsp;</td>
+						
+						<td n:foreach="$form->errors as $error">
+	        				<div class="formErrors">{$error}</div>
+						</td>
+					</tr>
 				</table>
 			{/form}
 		{/snippet}

@@ -10,11 +10,11 @@
 		</a>
 	</div>
 
+	{snippet regSnippet}
 	<div id="registration">
 	{form regForm}
-		<div id="reg">
-			
-				<div class="errors" n:if="$form->hasErrors()">
+		<div id="reg">	
+				<div id="reg_errors" n:if="$form->hasErrors()">
 	        		<span n:foreach="$form->errors as $error">{$error}</span>
 				</div>
 
@@ -89,7 +89,8 @@
 			</div>
 		</div>
 		{/form}
-	</div>
+		</div>
+	{/snippet}
 
 	<div id="new_account" class="account">
 		Máte již účet? <a n:href="Signin:default">Přihlaste se</a>

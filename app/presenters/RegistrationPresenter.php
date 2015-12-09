@@ -5,6 +5,7 @@ namespace App\Presenters;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
+use Nette\Security\User;
 
 /**
  * Registration Presenter
@@ -25,6 +26,12 @@ class RegistrationPresenter extends BasePresenter
         $this->userManager = $userManager;
     }
 
+    public function actionDefault() {
+        if ($this->getUser()->isLoggedIn()) {
+            $this->redirect('Businessplann:default');
+        }
+    }
+
     /**
      * Creates form for registration template
      * @return $form
@@ -33,40 +40,28 @@ class RegistrationPresenter extends BasePresenter
      */
 	protected function createComponentRegForm() {
         $form = new Form;
+        $form->getElementPrototype()->class('ajax');
 
         $form->addText('name')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'Jméno')
-                 ->addRule(Form::FILLED, 'Vyplňte své jméno.')
-                 ->addRule(Form::PATTERN, 'Jméno smí obsahovat pouze písmena.', 
-                    '^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$'); // TODO nebude vadit, že není za začátku velké písmeno
-
+                 ->setAttribute('placeholder', 'Jméno');
+ 
         $form->addText('surname')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'Příjmení')
-                 ->addRule(Form::FILLED, 'Vyplňte své příjmení.')
-                 ->addRule(Form::PATTERN, 'Příjmení smí obsahovat pouze písmena.', 
-                    '^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$'); // TODO nebude vadit, že není za začátku velké písmeno
+                 ->setAttribute('placeholder', 'Příjmení');
 
         $form->addText('email')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'E-mail')
-                 ->addRule(Form::FILLED, 'Vyplňte svůj email.')
-                 // TODO ->addRule($this->userManager->userExists($form['email']), 'Uživatel s tímto emailem již existuje.')
-                 ->addRule(Form::PATTERN, 'Email není ve správném tvaru!', 
-                    '^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$');
+                 ->setAttribute('placeholder', 'E-mail');
 
         /* TODO podmínka pro vstup hesla (reg. výrazy) */
         $form->addPassword('passwd')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'Heslo')             
-                 ->addRule(Form::FILLED, 'Vyplňte své heslo.');
+                 ->setAttribute('placeholder', 'Heslo') ; 
 
         $form->addPassword('passwdControl')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'Heslo znovu')
-                 ->addRule(Form::FILLED, 'Vyplňte kontrolu hesla.')
-                 ->addRule(Form::EQUAL, 'Hesla se musí shodovat!', $form['passwd']);
+                 ->setAttribute('placeholder', 'Heslo znovu');
 
         $form->addSubmit('regBut', 'Vytvořit bezplatný účet')
                  ->setAttribute('class', 'submit_button');
@@ -82,15 +77,39 @@ class RegistrationPresenter extends BasePresenter
      * @param Array $values - sent values from form
      */
     public function regFormSucceeded($form, $values) {
-        $this->userManager->register($values['name'], 
-                                     $values['surname'],
-                                     $values['email'],
-                                     $values['passwd']);
-    }
+        if($this->isAjax()) {
+            if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['name'])) {
+                if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['surname'])){
+                    if(preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['email'])) {
+                        if($values['passwd'] == $values['passwdControl']) {
+                            if(preg_match('!^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(.){8,}$!', $values['passwd']))
+                            {
+                                try {
+                                    /* TODO duplicate Error*/
+                                    $this->userManager->register($values['name'], 
+                                                                 $values['surname'],
+                                                                 $values['email'],
+                                                                 $values['passwd']);
+                                    $this->redirect('Settings:user');
+                                } catch(DuplicateNameException $e) {
+                                    $form->addError($e);
+                                }
+                            } else {
+                                $form->addError('Heslo musí obsahovat nejméně 8 znaků, jedno velké písmeno a jedno číslo!');
+                            }
+                        } else {
+                            $form->addError('Hesla se musí shodovat!');
+                        }
+                    } else {
+                        $form->addError('Email není ve správném tvaru!');
+                    }
+                } else
+                    $form->addError('Příjmení smí obsahovat pouze písmena!');
+            } else {
+                $form->addError('Jméno smí obsahovat pouze písmena!');
+            }
 
-    public function actionDefault() {
-        if ($this->getUser()->isLoggedIn()) {
-            $this->redirect('Businessplann:default');
+            $this->redrawControl('regSnippet');
         }
     }
 }

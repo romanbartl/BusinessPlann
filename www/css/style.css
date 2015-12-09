@@ -39,6 +39,19 @@ input[type="text"]:disabled, input[type="password"]:disabled{
 	text-align: center;
 }
 
+#reg_errors{
+	position: absolute;
+	right: calc(50% - 235px);
+	margin-top: -85px;
+	background: #F2686F;
+	border: 1px solid #F2303A;	
+	border-radius: 5px;
+	padding: 10px;
+	width: 400px;
+	height: 60px;
+	text-align: center;
+}
+
 .formErrors{
 	color: #d01715;
 	text-align: center;
@@ -500,7 +513,7 @@ main{
 }
 
 #new_account{
-	margin-top: 490px;
+	margin-top: 530px;
 }
 
 #have_account{
@@ -551,7 +564,7 @@ main{
 #registration{
 	position: absolute;
 	left: calc(50% - 340px);
-	margin-top: 160px;
+	margin-top: 220px;
 }
 
 #reg_information{
