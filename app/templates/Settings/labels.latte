@@ -22,7 +22,7 @@
 				
 					{else}
 						{form editLabelForm}
-							<div class="label_item" style="border-left: 8px solid #{$label['color']}">
+							<div class="label_item" style="border-left: 10px solid #{$label['color']}">
 								<span class="glyphicon glyphicon-tags tag_icon"></span>
 							
 								<div class="label_name">
@@ -79,6 +79,23 @@
 			</div>
 		{/snippet}
 	</div>
+</div>
+
+
+<div id="choose_color_window">
+	<span id="cancel_choosing_label_color" class="glyphicon glyphicon-remove"></span>
+
+	<table id="colors_tab">
+		{for $i = 0; $i < count($colors) / 5; $i++}
+			<tr>{for $j = 1; $j < (count($colors) / 4)+1; $j++ }
+				<td><a id="color_id_{$colors[$j+($i*5)]['id']}" 
+						class="color_cell ajax" n:href="editLabelColor! ">
+					<div class="cell" style="background-color:#{$colors[$j+($i*5)]['color']};"></div>
+				</a></td>
+			{/for}</tr>
+		{/for}
+		<span class=""></span>
+	</table>
 </div>
 
 {/define}

@@ -28,6 +28,7 @@ class SettingsPresenter extends BasePresenter
 
     public function renderLabels() {
     	$this->template->labels = $this->labelsManager->getLabels();
+    	$this->template->colors = $this->userManager->getColors();
 	}
 
 	public function actionDefault() {
@@ -293,8 +294,15 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	public function handleRemoveLabel($id) {
-		if($this->isAjax()){ 
+		if($this->isAjax()) { 
 			$this->labelsManager->removeLabel($id);
+			$this->redrawControl('labels');
+		}
+	}
+
+	public function handleEditLabelColor($labelId, $colorId) {
+		if($this->isAjax()) {
+			$this->labelsManager->editLabelColor($labelId, $colorId);
 			$this->redrawControl('labels');
 		}
 	}
