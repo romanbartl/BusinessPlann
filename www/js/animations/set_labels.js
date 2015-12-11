@@ -29,8 +29,7 @@ $('.label_edit').click(function() {
 
 $('.edit_label_storno').click(function() {
 	var elementId = this.id.substr(18, 19);
-	$('#edit_label_name_' + elementId).prop("disabled", true);
-	
+	$('#edit_label_name_' + elementId).prop("disabled", true);	
 	$('#edit_label_storno_' + elementId).fadeToggle(120);
 	$('#edit_label_submit_div_' + elementId).fadeToggle(120);
 	setTimeout(function() {
@@ -41,5 +40,29 @@ $('.edit_label_storno').click(function() {
 });
 
 $('.label_choose_color').click(function() {
+	var elementId = this.id.substr(19, this.id.length);
+	var href = '&do=editLabelColor';
+
+	for (var i = 1; i <= 20; i++) {
+		$('#color_id_' + i).attr('href', '?labelId=' + elementId + '&colorId=' + i + href);
+	};
+
+	$('#choose_color_window').fadeToggle(120);
+	$('#dark').fadeToggle(120);
+});
+
+$('#cancel_choosing_label_color').click(function() {
+	$('#choose_color_window').fadeToggle(120);
+	$('#dark').fadeToggle(120);
+});
+
+$('#dark').click(function(){
+	$('#choose_color_window').fadeToggle(120);
+	$('#dark').fadeToggle(120);	
+});
+
+
+$('.color_cell').click(function(){
+	$('#choose_color_window').fadeToggle(120);
 	$('#dark').fadeToggle(120);
 });

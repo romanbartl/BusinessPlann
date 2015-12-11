@@ -47,4 +47,9 @@ class LabelsManager extends BaseManager
 		$this->database->table(self::LABEL_TABLE_NAME)->where(self::LABEL_COLUMN_ID, $labelId)
 													 ->update(array(self::LABEL_COLUMN_NAME => $labelName));
 	}
+
+	public function editLabelColor($labelId, $colorId) {
+		$this->database->table(self::LABEL_TABLE_NAME)->where(self::LABEL_COLUMN_ID, $labelId)
+													  ->update(array(self::LABEL_COLUMN_COLOR => $colorId));
+	}
 }
