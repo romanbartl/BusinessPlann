@@ -254,6 +254,9 @@ class SettingsPresenter extends BasePresenter
 					->setAttribute('id', 'add_label_name_input')
 					->setAttribute('placeholder', 'Zadejte název štítku');
 
+		$form->addHidden('add_label_color_id')
+					->setAttribute('id', 'add_label_color_id_hidden');
+
 		$form->addSubmit('add_label_submit', '')
 					->setAttribute('id', 'add_label_submit');
 
@@ -264,7 +267,7 @@ class SettingsPresenter extends BasePresenter
 
 	public function addLabelFormSucceeded($form, $values) {
 		if($this->isAjax()) {
-			$this->labelsManager->addNewLabel($values['add_label_name']);
+			$this->labelsManager->addNewLabel($values['add_label_name'], $values['add_label_color_id']);
 			$this->redrawControl('labels');
 		}
 	}

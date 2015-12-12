@@ -59,7 +59,7 @@
 						</div>
 					</div>
 
-					<div id="add_label_form">
+					<div id="add_label_form" style="border-left: 10px solid #6048f3">
 						{form addLabelForm}
 							<div id="add_label_input_name_div">
 								{input add_label_name}
@@ -70,9 +70,11 @@
 									{input add_label_submit}
 								</span>
 							</div>
+
+							{input add_label_color_id value=>1}
 						{/form}
 
-						<span id="choose_color_button" class="glyphicon glyphicon-option-horizontal"></span>
+						<span id="add_label_choose_color_button" class="glyphicon glyphicon-option-horizontal"></span>
 						<span id="storno_icon" class="glyphicon glyphicon-remove"></span>
 					</div>
 				</div>
@@ -89,12 +91,11 @@
 		{for $i = 0; $i < count($colors) / 5; $i++}
 			<tr>{for $j = 1; $j < (count($colors) / 4)+1; $j++ }
 				<td><a id="color_id_{$colors[$j+($i*5)]['id']}" 
-						class="color_cell ajax" n:href="editLabelColor! ">
-					<div class="cell" style="background-color:#{$colors[$j+($i*5)]['color']};"></div>
+						class="color_cell ajax" n:href="editLabelColor!">
+					<div id="cell_color_{$colors[$j+($i*5)]['id']}" class="cell" style="background-color:#{$colors[$j+($i*5)]['color']};"></div>
 				</a></td>
 			{/for}</tr>
 		{/for}
-		<span class=""></span>
 	</table>
 </div>
 

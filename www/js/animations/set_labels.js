@@ -51,18 +51,30 @@ $('.label_choose_color').click(function() {
 	$('#dark').fadeToggle(120);
 });
 
+$('#add_label_choose_color_button').click(function() {
+	$('.color_cell').attr('href', '#');
+	$('#choose_color_window').fadeToggle(120);
+	$('#dark').fadeToggle(120);
+});
+
 $('#cancel_choosing_label_color').click(function() {
 	$('#choose_color_window').fadeToggle(120);
 	$('#dark').fadeToggle(120);
 });
 
-$('#dark').click(function(){
+$('#dark').click(function() {
 	$('#choose_color_window').fadeToggle(120);
 	$('#dark').fadeToggle(120);	
 });
 
-
-$('.color_cell').click(function(){
+$('.color_cell').click(function() {
 	$('#choose_color_window').fadeToggle(120);
 	$('#dark').fadeToggle(120);
+	
+	if(this.href.includes('#')) {
+		var elementId = this.id.substr(9, this.id.length)
+		$('#add_label_color_id_hidden').val(elementId);
+		$('#add_label_form').css('border-left-color', $('#cell_color_' + elementId).css('background'));
+		return false;
+	}
 });

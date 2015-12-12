@@ -31,11 +31,11 @@ class LabelsManager extends BaseManager
 		return $labels;
 	}
 
-	public function addNewLabel($labelName) {
+	public function addNewLabel($labelName, $colorId) {
 		$this->database->table(self::LABEL_TABLE_NAME)->insert(array(
 			self::LABEL_COLUMN_NAME => $labelName,
 			self::LABEL_COLUMN_USER_ID => $this->user->identity->id,
-			self::LABEL_COLUMN_COLOR => 1
+			self::LABEL_COLUMN_COLOR => $colorId
 		));
 	}
 
