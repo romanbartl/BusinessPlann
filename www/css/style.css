@@ -446,11 +446,11 @@ main{
 
 #main_add_button{
 	position: absolute;
-	padding: 18px 18px 16px 20px;
+	padding: 16px 16px 14px 18px;
 	border-radius: 40px;
 	bottom: 0;
 	right: 0;
-	margin: 0px 40px 40px 0px;
+	margin: 0px 30px 30px 0px;
 	cursor: pointer;
 }
 

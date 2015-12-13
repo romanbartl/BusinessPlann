@@ -19,6 +19,13 @@ $("#user-photo-small").click(function() {
 	$("#user-preferences").fadeToggle(120);
 });
 
+$('#main_add_button').click(function() {
+	$("#dark").fadeToggle(120);
+});
+
+$('#dark').click(function() {
+	$("#dark").fadeToggle(120);
+});
 
 
 /* IDEA
