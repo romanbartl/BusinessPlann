@@ -15,9 +15,6 @@ $("#menu-button-index").click(function() {
 	$("nav").toggle('slide', {direction: 'left'}, 400);
 });
 
-$("#user-photo-small").click(function() {
-	$("#user-preferences").fadeToggle(120);
-});
 
 $('#main_add_button').click(function() {
 	$("#dark").fadeToggle(120);
