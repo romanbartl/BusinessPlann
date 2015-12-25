@@ -7,7 +7,7 @@ use App\Model;
 
 
 /**
- * Base presenter for all application presenters.
+ * Base maneger for all application managers.
  */
 abstract class BaseManager extends Nette\Object
 {
@@ -35,5 +35,11 @@ abstract class BaseManager extends Nette\Object
 		LABEL_COLUMN_ID = 'id',
 		LABEL_COLUMN_NAME = 'name',
 		LABEL_COLUMN_USER_ID = 'user_id',
-		LABEL_COLUMN_COLOR = 'user_color_id';
+		LABEL_COLUMN_COLOR = 'user_color_id',
+
+		EVENT_TABLE_NAME = 'event',
+		EVENT_COLUMN_NAME = 'name',
+		EVENT_COLUMN_START = 'start',
+		EVENT_COLUMN_END = 'end',
+		EVENT_COLUMN_USER_ID = 'user_id';
 }

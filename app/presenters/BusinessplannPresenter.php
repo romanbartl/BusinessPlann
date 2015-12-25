@@ -24,6 +24,10 @@ class BusinessplannPresenter extends BasePresenter
         $this->labelsManager = $labelsManager;
     }
 
+    public function renderDefault() {
+    	$this->template->events = $this->plannerManager->getEvents();
+    }
+
 	public function actionDefault() {
 	    if (!$this->getUser()->isLoggedIn()) 
 	        $this->redirect('Home:default');
