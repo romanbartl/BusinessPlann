@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Model;
 
 use Nette,
@@ -29,16 +28,16 @@ class BusinessplannManager extends BaseManager
 											WHERE  e.user_id = ' . $this->user->identity->id . '
 											ORDER BY e.start');
    
-        $events = array();
 		foreach ($result as $key => $event) {
-			$events[$key]['id'] = $event['id'];
-			$events[$key]['name'] = $event['name'];
-			$events[$key]['startDay'] = $event['startDay'];
-			$events[$key]['startTime'] = $event['startTime'];
-			$events[$key]['endDay'] = $event['endDay'];
-			$events[$key]['endTime'] = $event['endTime'];
-			$events[$key]['label'] = $event['label'];
-			$events[$key]['label_color'] = $event['label_color'];
+			if($event['startDay'] != $event['endDay']) {
+				$end = new \DateTime($event['endDay']);
+				$end = $end->modify('+1 day');
+				$daterange = new \DatePeriod(new \DateTime($event['startDay']), new \DateInterval('P1D'), $end);
+				
+				foreach ($daterange as $date) 
+					$events[$date->format('d.m.Y')][$event['id']] = $event;				
+			} else
+				$events[$event['startDay']][$event['id']] = $event;	
 		}
 		return $events;
 	}

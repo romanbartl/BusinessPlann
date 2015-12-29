@@ -3,32 +3,56 @@
 		<span class="text" style="color: #{$user->identity->color}">Agenda</span>
 	</div>
 
-	<div id="agendaContent">
+	<div id="agendaContent" class="viewContent">
 
-		{foreach $events as $key => $event}	
-
-			<div id="event_{$event['id']}" class="event" style="border-left: 8px solid #{$event['label_color']}">
-				<div class="name">
-					<span class="text">{$event['name']}</span>
-				</div>
-
-				<div class="date">
-					<span class="text"><span class="describtion">Datum: </span>{$event['startDay']} - {$event['endDay']}</span>
-				</div>
-
-				<div class="time">
-					<span class="text"><span class="describtion">Čas: </span>{$event['startTime']} - {$event['endTime']}</span>
-				</div>
-
-				<div class="labelName"> 
-					<span class="text"><span class="describtion">Štítek: </span>{if $event['label'] != null}{$event['label']}{else}Žádný{/if}</span>
-				</div>
-
-				<div class="groupName"> 
-					<span class="text"><span class="describtion">Skupina: </span></span>
-				</div>
-			</div>	
-
+		{foreach $events as $date => $day}
+			<div class="agendaDay">
+				<a n:href="changeView! day" class='ajax'>
+					<div class="agendaDate">
+						<span class="text">{$date}</span>
+					</div>
+				</a>
+				
+				{foreach $day as $id => $event}
+					<div class='event'>
+						<table class="event_table" style="
+							{if $event['label_color']}
+								border-left: 6px solid #{$event['label_color']};
+							{else}
+								border-left: 6px solid #B3B3B3;
+							{/if}
+						">
+							<tr class="row">
+								<td class="time">
+									<span class="text">
+										{if $event['startDay'] == $event['endDay']}
+											{$event['startTime']} - {$event['endTime']}								
+										{elseif $event['startDay'] == $date}
+											{$event['startTime']}											
+										{elseif $event['endDay'] == $date}
+											>>{$event['endTime']}
+										{else}
+											Celý den
+										{/if}
+									</span>
+								</td>
+								<td class="label_name">
+									<span class="text">
+										{if $event['label']}
+											<span class="glyphicon glyphicon-tags" style="color:#{$event['label_color']}"></span>
+											{$event['label']}
+										{else}
+											<span class="glyphicon glyphicon-tags" style="color:#B3B3B3"></span>
+											Žádný štítek
+										{/if}
+									</span>
+								</td>
+								<td class="name">{$event['name']}</td>
+							</tr>
+						</table>
+					</div>
+				{/foreach}
+			</div>
 		{/foreach}
 	</div>
 </div>
