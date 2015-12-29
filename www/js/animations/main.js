@@ -17,7 +17,6 @@ $(document).keyup(function(e) {
 	}
 });
 
-
 $('#main_add_button').click(function() {
 	$("#dark").fadeToggle(120);
 	$('#add_event').fadeToggle(120);
