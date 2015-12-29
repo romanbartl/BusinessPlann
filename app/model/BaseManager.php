@@ -41,5 +41,6 @@ abstract class BaseManager extends Nette\Object
 		EVENT_COLUMN_NAME = 'name',
 		EVENT_COLUMN_START = 'start',
 		EVENT_COLUMN_END = 'end',
-		EVENT_COLUMN_USER_ID = 'user_id';
+		EVENT_COLUMN_USER_ID = 'user_id',
+		EVENT_COLUMN_LABEL_ID = 'label_id';
 }

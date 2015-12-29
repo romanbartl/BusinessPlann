@@ -1,0 +1,23 @@
+			<div id="viewAgenda">
+				<div id="agenda_heading">
+					<span class="text">Agenda</span>
+				</div>
+
+				{foreach $events as $key => $event}					
+					<div class="event_{$event['id']}">
+						<div class="time">
+							<div class="time">
+		{$event['startTime'] . ' ' . $event['startDay'] . ' - ' . $event['endTime'] . ' ' . $event['endDay']}
+							</div>
+
+							<div class="date">
+								
+							</div>
+						</div>
+
+						<div class="description">
+							{$event['name']}
+						</div>
+					</div>	
+				{/foreach}
+			</div>

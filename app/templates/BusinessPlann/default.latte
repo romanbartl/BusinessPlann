@@ -7,10 +7,15 @@
 			box-shadow: 3px 0 4px -1px #{$user->identity->color}, -10px 0 6px -3px #{$user->identity->color};
 		}
 	</style>
+
+	<link rel="stylesheet" type="text/css" href="{$basePath}/bootstrap/datetimepicker/css/bootstrap-datetimepicker.min.css">
+	
 {/block}
 
 {define #includeScripts}
 	<script type="text/javascript" src="{$basePath}/js/animations/main.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/moment.js"></script>
+	<script type="text/javascript" src="{$basePath}/bootstrap/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 {/define}
 
 {block content}
@@ -18,11 +23,11 @@
 <header id="header_main">
 	<div id="menu-button-index" class="menu-button">
 		<div id="menu-icon-index" class="menu-icon">
-			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+			<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
 		</div>
 
 		<div id="menu-category" class="menu-heading">
-			<span class="menu-text">Události</span>
+			<span class="menu-text">Datum</span>
 		</div>
 	</div>
 
@@ -123,35 +128,19 @@
 		</div>
 	</nav>
 
-	<div id="body">
-		<div id="calendar">
+	<div id="main_body">
+		<div id="choose_view_buttons">
+			<a n:href="changeView! 'day'" onclick="window.location.hash = 'day'" class='ajax'><button id="viewDayButton" type="button">Den</button></a>
+			<a n:href="changeView! 'week'" onclick="window.location.hash = 'week'" class='ajax'><button id="viewWeekButton" type="button">Týden</button></a>
 			
+			<a n:href="changeView! 'month'" onclick="window.location.hash = 'month'" class="ajax"><button id="viewMonthButton" type="button">Měsíc</button></a>
+
+			<a n:href="changeView! 'agenda'" onclick="window.location.hash = 'agenda'" class="ajax"><button id="viewAgendaButton" type="button">Agenda</button></a>
 		</div>
 
-		<div id="agenda">
-			<div id="agenda_heading">
-				<span class="text">Agenda</span>
-			</div>
-
-			{foreach $events as $key => $event}
-				
-				<div class="event_{$event['id']}">
-					<div class="time">
-						<div class="time">
-							{$event['startTime'] .  $event['startDay'] . ' - ' . $event['endTime'] . $event['endDay']}
-						</div>
-
-						<div class="date">
-							
-						</div>
-					</div>
-
-					<div class="description">
-						{$event['name']}
-					</div>
-				</div>	
-			{/foreach}
-		</div>	
+		{snippet eventsView}
+			{include $includeView . '.latte'}
+		{/snippet}
 
 		<div id="main_add_button" style="background:#{$user->identity->color}">
 			<span class="glyphicon glyphicon-plus tag_icon"></span>
@@ -200,4 +189,46 @@
 			</div>
 		</div>
 	</div>
+
+	<div id="add_event">
+		{form addEventForm}
+			<div id="add_eventHeading">
+				<span class="text" style="color: #{$user->identity->color}">Přidat událost</span>
+			</div>
+
+			<div id="add_event_table_div">
+				<table id="add_event_table">
+					<tr>
+						<td class="add_eventTrText"><span class="text">Název:</span></td>
+						<td>{input eventName}</td>
+					</tr>
+					
+					<tr>
+						<td class="add_eventTrText"><span class="text">Datum:</span></td>
+						<td>{input eventStartDate} - {input eventEndDate}</td>
+					</tr>
+					
+					<tr>
+						<td class="add_eventTrText"><span class="text">Čas:</span></td>
+						<td>{input eventStartTime} - {input eventEndTime}</td>
+					</tr>
+					
+					<tr>
+						<td class="add_eventTrText"><span class="text">Štítek:</span></td>
+						<td>{input eventsLabels}</td>
+					</tr>
+
+					<tr>
+						<td class="add_eventTrText"><span class="text">Skupina:</span></td>
+						<td></td>
+					</tr>
+				</table>
+
+				<div d="save_button_event">
+					{input save_new_event}
+				</div>
+			</div>
+		{/form}
+    </div>
+
 </main>
