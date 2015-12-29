@@ -130,12 +130,13 @@
 
 	<div id="main_body">
 		<div id="choose_view_buttons">
-			<a n:href="changeView! 'day'" onclick="window.location.hash = 'day'" class='ajax'><button id="viewDayButton" type="button">Den</button></a>
-			<a n:href="changeView! 'week'" onclick="window.location.hash = 'week'" class='ajax'><button id="viewWeekButton" type="button">Týden</button></a>
+			<a n:href="changeView! 'day'" onclick="window.location.hash = 'day'" class='ajax'><button id="viewDayButton" type="button" class="viewButton" style="border:2px solid #{$user->identity->color}">Den</button></a>
 			
-			<a n:href="changeView! 'month'" onclick="window.location.hash = 'month'" class="ajax"><button id="viewMonthButton" type="button">Měsíc</button></a>
-
-			<a n:href="changeView! 'agenda'" onclick="window.location.hash = 'agenda'" class="ajax"><button id="viewAgendaButton" type="button">Agenda</button></a>
+			<a n:href="changeView! 'week'" onclick="window.location.hash = 'week'" class='ajax'><button id="viewWeekButton" type="button" class="viewButton" style="border:2px solid #{$user->identity->color}">Týden</button></a>	
+			
+			<a n:href="changeView! 'month'" onclick="window.location.hash = 'month'" class="ajax"><button id="viewMonthButton" type="button" class="viewButton" style="border:2px solid #{$user->identity->color}">Měsíc</button></a>
+			
+			<a n:href="changeView! 'agenda'" onclick="window.location.hash = 'agenda'" class="ajax"><button id="viewAgendaButton" type="button" class="viewButton" style="border:2px solid #{$user->identity->color}">Agenda</button></a>
 		</div>
 
 		{snippet eventsView}

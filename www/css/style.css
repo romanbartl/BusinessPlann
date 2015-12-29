@@ -479,6 +479,49 @@ main{
 	font-size: 17px;
 }
 
+#choose_view_buttons{
+	position: absolute;
+	right: 0;
+	margin-right: 20px;
+}
+
+#viewDayButton{
+	border-top-left-radius:26px;
+	border-bottom-left-radius:26px;
+}
+
+#viewAgendaButton{
+	border-top-right-radius:26px;
+	border-bottom-right-radius:26px;
+}
+
+.viewButton{
+	transition-duration: 0.01s;
+	display: inline-block;
+	cursor: pointer;
+	color: #4f4f4f;
+	font-size: 17px;
+	padding: 5px 10px;
+	text-decoration: none;
+	width: 90px;
+	outline: 0;
+	background: rgba(0,0,0,0.05);
+}
+
+.viewButton:hover{
+	transition-duration: 0.01s;
+	background: rgba(0,0,0,0.1);
+}
+
+.myButton:hover {
+	background-color:#5cbf2a;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+
 #save_new_event_button{
 	padding: 3px 25px 3px 25px;
 	font-size: 20px;
@@ -776,7 +819,6 @@ main{
 	border-radius: 100px;
 	cursor: pointer;
 }
-
 
 .change_data_tab tr{
 	height: 36px;
