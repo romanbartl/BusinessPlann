@@ -11,7 +11,7 @@ function updateClock() {
     	mins = "0" + mins;
     }
 
-    var TotalTime = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear() + " - " +
+    var TotalTime = 'Čas: ' + today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear() + " - " +
     				today.getHours() + ":" + mins + ":" + secs;
 
     document.getElementById("timer").innerHTML = TotalTime;
