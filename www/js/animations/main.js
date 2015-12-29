@@ -1,9 +1,3 @@
-$(function() {
-	if(window.location.hash == '') {
-		window.location.hash = 'day';
-	}
-});
-
 $("#search-div-icon").click(function() { 
 	$("#search-div-input").toggle('slide', {direction: 'right'}, 300);
 	$(".search-input").select();

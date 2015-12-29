@@ -41,6 +41,9 @@ class LabelsManager extends BaseManager
 
 	public function removeLabel($labelId) {
 		$this->database->query('DELETE FROM ' . self::LABEL_TABLE_NAME . ' WHERE ' . self::LABEL_COLUMN_ID . ' = ' . $labelId);
+		
+		$this->database->table(self::EVENT_TABLE_NAME)->where(self::EVENT_COLUMN_LABEL_ID, $labelId)
+													 ->update(array(self::EVENT_COLUMN_LABEL_ID => NULL));
 	}
 
 	public function editLabelName($labelId, $labelName) {

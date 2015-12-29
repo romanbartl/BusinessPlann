@@ -30,7 +30,7 @@
 	</head>
 
 	<body>
-		<div id="dark"></div>
+		{snippet dark}<div id="dark"></div>{/snippet}
 
 		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 

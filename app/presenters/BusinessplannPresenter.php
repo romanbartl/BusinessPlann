@@ -50,7 +50,7 @@ class BusinessplannPresenter extends BasePresenter
 
     protected function createComponentAddEventForm() {
         $form = new Form();
-        //$form->getElementPrototype()->class('ajax');
+        $form->getElementPrototype()->class('ajax');
 
         $form->addText('eventName')
                  ->setAttribute('class', 'input')
@@ -95,12 +95,16 @@ class BusinessplannPresenter extends BasePresenter
     }
 
     public function addEventFormSucceeded($form, $values) {
-        $this->plannerManager->addNewEvent($values['eventName'],
-                                           $values['eventStartDate'],
-                                           $values['eventEndDate'],
-                                           $values['eventStartTime'],
-                                           $values['eventEndTime'],
-                                           $values['eventsLabels']);
-        $this->redrawControl('eventsView');
+        if($this->isAjax()) {
+            $this->plannerManager->addNewEvent($values['eventName'],
+                                               $values['eventStartDate'],
+                                               $values['eventEndDate'],
+                                               $values['eventStartTime'],
+                                               $values['eventEndTime'],
+                                               $values['eventsLabels']);
+            $this->redrawControl('eventsView');
+            $this->redrawControl('addEvent');
+            $this->redrawControl('dark');
+        }
     }
 }

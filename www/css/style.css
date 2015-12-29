@@ -247,7 +247,7 @@ input[type=text].search-input{
 nav{
 	overflow-x: auto;
 	height: calc(100% - 50px);
-	width: 250px;
+	width: 252px;
 	float: left;
 	background: #fafafa;
 	position: absolute;
@@ -279,7 +279,7 @@ nav{
 	padding: 10px 0px 10px 20px;
 	position: relative;
 	width: 250px;
-	font-size: 16px;
+	font-size: 15px;
 	max-width: 250px;
 }
 
@@ -315,7 +315,7 @@ nav{
 
 #menu .list .item{
 	padding: 10px 0px 10px 20px;
-	font-size: 16px;
+	font-size: 15px;
 	cursor: pointer;
 }
 
@@ -478,6 +478,48 @@ main{
 .add_eventTrText .text{
 	font-size: 17px;
 }
+
+.view_div .viewHeading .text{
+	font-size: 26px;
+}
+
+#agendaContent{
+	overflow-y: scroll;
+	width: calc(100% - 20px);
+	height: calc(100vh - 180px);
+	margin-top: 30px;
+}
+
+#agendaContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+#agendaContent::-webkit-scrollbar-thumb { 
+	background: #c2c2c2;
+}
+
+.event{
+	padding: 5px 0px 5px 20px;
+	cursor: pointer;
+	margin-bottom: 5px;
+}
+
+.event:hover{
+	background: rgba(0,0,0,0.05);
+}
+
+.event .describtion{
+	font-weight: bold;
+}
+
+.event .name {
+	padding-bottom: 5px;
+}
+
+.event .name .text{
+	font-size: 18px;
+}
+
 
 #choose_view_buttons{
 	position: absolute;
