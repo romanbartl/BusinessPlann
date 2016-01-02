@@ -1,0 +1,105 @@
+{layout '../@layout.latte'}
+
+{block head}
+	<style>
+		#header_main {
+			background: #{$user->identity->color};
+		}
+		nav {
+			border-right: 1px solid #{$user->identity->color};
+		}
+		.viewButton {
+			border: 1px solid #{$user->identity->color};
+		}
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="{$basePath}/bootstrap/datetimepicker/css/bootstrap-datetimepicker.min.css">
+	
+{/block}
+
+{define #includeScripts}
+	<script type="text/javascript" src="{$basePath}/js/animations/main.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/moment.js"></script>
+	<script type="text/javascript" src="{$basePath}/bootstrap/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+{/define}
+
+
+{block content}
+
+<header id="header_main">
+	<div id="menu-button-index" class="menu-button">
+		<div id="menu-icon-index" class="menu-icon">
+			<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+		</div>
+
+		<div id="menu-category" class="menu-heading">
+			<span id="timer" class="menu-text"></span>
+		</div>
+	</div>
+
+	<div id="preferences">
+		<div id="search">
+			<div id="search-div-icon">
+				<span class="glyphicon glyphicon-search search-icon" aria-hidden="true"></span>
+			</div>
+		</div>
+
+		<div id="user-photo-small">
+			<img class="profile-photo-small" src="{$basePath}/images/users/noPhoto.png">
+		</div>
+	</div>
+
+	<div id="search-div-input">
+		<input class="search-input" type="text" placeholder="Vyhledat v aplikaci ...">
+	</div>
+</header>
+
+<main id="main2">
+
+{include #area}
+
+	<div id="user-preferences">
+		<div id="user-photo-big">
+			<img src="{$basePath}/images/users/noPhoto.png">
+		</div>
+		
+		<div id="user-info">
+			<div id="user-info-name">
+				<span class="name">
+					{$user->identity->name . " " . $user->identity->surname}
+				</span>
+			</div>
+
+			<div id="user-info-email">
+				<span class="email">
+					{$user->identity->email}
+				</span>
+			</div>
+		</div>
+
+		<div id="user-buttons">
+			<div>
+				<a n:href="Home:default" class="user-button">
+					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+					Domovská stránka
+				</a>
+			</div>
+
+			<div class="last-button">
+				<a n:href="Settings:user" class="user-button">
+					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+					Nastavení
+				</a>
+			</div>
+
+			<div class="last-button">
+				<a n:href="out" class="user-button">
+					<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+					Odhlásit se
+				</a>
+			</div>
+		</div>
+	</div>
+</main>
+
+{/block}

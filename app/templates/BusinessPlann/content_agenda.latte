@@ -1,0 +1,76 @@
+<div id="viewAgenda" class="view_div">
+	<div id="agenda_heading" class="viewHeading">
+		<span class="text" style="color: #{$user->identity->color}">Agenda</span>
+	</div>
+
+	<div id="" class="view_from_time">
+		<div class="arrow">
+			<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+		</div>
+
+		<div class="arrow">
+			<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+		</div>
+
+		<div class="">
+			<span></span>
+		</div>
+	</div>
+
+	<div id="agendaContent" class="viewContent">
+
+		{foreach $events as $date => $day}
+			<div class="agendaDay">
+				<a n:href="changeView! day" class='ajax'>
+					<div class="agendaDate">
+						<span class="text">{$date}</span>
+					</div>
+				</a>
+				
+				<div class="events">
+				{foreach $day as $id => $event}
+					<a href="" class="ajax">
+					<div class='event' style="
+							{if $event['label_color']}
+								border-left: 6px solid #{$event['label_color']};
+							{else}
+								border-left: 6px solid #B3B3B3;
+							{/if}
+						">
+						<table class="event_table">
+							<tr class="row">
+								<td class="time">
+									<span class="text">
+										{if $event['startDay'] == $event['endDay']}
+											od {$event['startTime']} do {$event['endTime']}								
+										{elseif $event['startDay'] == $date}
+											od {$event['startTime']}											
+										{elseif $event['endDay'] == $date}
+											do {$event['endTime']}
+										{else}
+											Celý den
+										{/if}
+									</span>
+								</td>
+								<td class="label_name">
+									<span class="text">
+										{if $event['label']}
+											<span class="glyphicon glyphicon-tags" style="color:#{$event['label_color']}"></span>
+											{$event['label']}
+										{else}
+											<span class="glyphicon glyphicon-tags" style="color:#B3B3B3"></span>
+											Žádný štítek
+										{/if}
+									</span>
+								</td>
+								<td class="name">{$event['name']}</td>
+							</tr>
+						</table>
+					</div>
+					</a>
+				{/foreach}
+				</div>
+			</div>
+		{/foreach}
+	</div>
+</div>
