@@ -13,24 +13,26 @@
 					</div>
 				</a>
 				
+				<div class="events">
 				{foreach $day as $id => $event}
-					<div class='event'>
-						<table class="event_table" style="
+					<a href="" class="ajax">
+					<div class='event' style="
 							{if $event['label_color']}
 								border-left: 6px solid #{$event['label_color']};
 							{else}
 								border-left: 6px solid #B3B3B3;
 							{/if}
 						">
+						<table class="event_table">
 							<tr class="row">
 								<td class="time">
 									<span class="text">
 										{if $event['startDay'] == $event['endDay']}
-											{$event['startTime']} - {$event['endTime']}								
+											od {$event['startTime']} do {$event['endTime']}								
 										{elseif $event['startDay'] == $date}
-											{$event['startTime']}											
+											od {$event['startTime']}											
 										{elseif $event['endDay'] == $date}
-											>>{$event['endTime']}
+											do {$event['endTime']}
 										{else}
 											Celý den
 										{/if}
@@ -51,7 +53,9 @@
 							</tr>
 						</table>
 					</div>
+					</a>
 				{/foreach}
+				</div>
 			</div>
 		{/foreach}
 	</div>

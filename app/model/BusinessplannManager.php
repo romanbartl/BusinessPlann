@@ -14,6 +14,16 @@ class BusinessplannManager extends BaseManager
 		$this->user = $user;
 	}
 
+	public function getViewByURL() {
+		$getArgs = array_keys($_GET);
+		foreach ($getArgs as $arg) {
+			if($arg == 'day' || $arg == 'week' || $arg == 'month' || $arg == 'agenda'|| $arg == 'edit_event')
+				return $arg;
+			else 
+				return null;	
+		}
+	}
+
 	public function getEvents() {
 		$result = $this->database->query('SELECT e.id AS id, e.name AS name, 
 											DATE_FORMAT(e.start, "%d.%c.%Y") AS startDay,
@@ -40,6 +50,23 @@ class BusinessplannManager extends BaseManager
 				$events[$event['startDay']][$event['id']] = $event;	
 		}
 		return $events;
+	}
+
+	public function getEventById($eventId) {
+		$event = $this->database->query('SELECT e.id AS id, e.name AS name, 
+											DATE_FORMAT(e.start, "%d.%c.%Y") AS startDay,
+											DATE_FORMAT(e.start, "%H:%i") AS startTime,
+											DATE_FORMAT(e.end, "%d.%c.%Y") AS endDay,
+											DATE_FORMAT(e.end, "%H:%i") AS endTime,
+											l.name AS label,
+											c.color AS label_color
+											FROM `event` AS e
+											LEFT JOIN `label` AS l ON l.id = e.label_id
+											LEFT JOIN `color` AS c ON c.id = l.user_color_id
+											WHERE  e.user_id = ' . $this->user->identity->id . '
+											HAVING e.id = ' . $eventId . '
+											ORDER BY e.start')->fetch();
+		return $event;
 	}
 
 	public function addNewEvent($eventName, $startDay, $endDay, $startTime, $endTime, $labelId) {

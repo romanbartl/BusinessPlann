@@ -525,7 +525,7 @@ main{
 	width: 175px;
 	cursor: pointer;
 	border: 1px solid rgba(0,0,0,0.5);
-	border-radius: 26px;
+	border-radius: 5px;
 }
 
 .agendaDate:hover{
@@ -537,8 +537,20 @@ main{
 	font-size: 14px;
 }
 
-.event_table{
-	margin: 20px 20px 20px 0px;
+.events{
+	margin-top: 25px;
+}
+
+.event{
+	cursor: pointer;
+	padding-top: 10px;
+	padding-bottom: 10px;  
+	margin-top: 10px;
+	margin-bottom: 10px; 
+}
+
+.event:hover{
+	background: rgba(0,0,0,0.05);
 }
 
 .event_table tr{

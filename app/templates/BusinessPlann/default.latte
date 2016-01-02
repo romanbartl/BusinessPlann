@@ -143,7 +143,11 @@
 		</div>
 
 		{snippet eventsView}
-			{include $includeView . '.latte'}
+			{if $includeView}
+				{include $includeView . '.latte'}
+			{else}
+				{include 'day.latte'}
+			{/if}
 		{/snippet}
 
 		<div id="main_add_button" style="background:#{$user->identity->color}">

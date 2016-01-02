@@ -29,13 +29,18 @@ class BusinessplannPresenter extends BasePresenter
     public function renderDefault() {
     	$this->template->events = $this->plannerManager->getEvents(); 
         if($this->includeView === NULL)
-            $this->includeView = 'agenda'; 
+            $this->includeView = $this->plannerManager->getViewByURL();
         $this->template->includeView = $this->includeView;
     }
 
     public function handleChangeView($view){
-        $this->includeView = $view;
-        
+        if($this->isAjax()) {
+            $this->includeView = $view;
+            $this->redrawControl('eventsView');
+        }
+    }
+
+    public function handleEditEvent($id){
         if($this->isAjax()) {
             $this->redrawControl('eventsView');
         }
