@@ -479,22 +479,70 @@ main{
 	font-size: 17px;
 }
 
-.view_div .viewHeading .text{
+#including_heading{
+	float: left;
+	max-width: 100px;
+	min-width: 100px;
+}
+
+#choose_view_day_buttons{
+	float: left;
+}
+
+#including_heading .text{
 	font-size: 26px;
 }
 
-.viewContent{
-	overflow-y: scroll;
-	width: calc(100% - 20px);
-	height: calc(100vh - 180px);
-	margin-top: 30px;
+#viewDiv{
+	padding-top: 90px;
+	z-index: -1;
 }
 
-.viewContent::-webkit-scrollbar {
+#viewContent{
+	overflow-y: scroll;
+	width: calc(100% - 20px);
+	height: calc(100vh - 170px);
+}
+
+#choose_view_day_buttons{
+	margin-top: -5px;
+	margin-left: 5px;
+}
+
+#choose_view_day_buttons .div{
+	float: left;
+}
+
+#choose_view_day_buttons .button{
+	transition-duration: 0.05s;
+	background: rgba(0,0,0,0.05);
+	color: black;
+	padding: 7px 10px 7px 10px;
+	margin-top: 8px;
+	font-size: 14px;
+	margin-left: 1px;
+}
+
+#choose_view_day_buttons #left{
+	border-top-left-radius: 30px;
+	border-bottom-left-radius: 30px;
+}
+
+#choose_view_day_buttons #right{
+	border-top-right-radius: 30px;
+	border-bottom-right-radius: 30px;
+}
+
+#choose_view_day_buttons .button:hover{
+	transition-duration: 0.05s;
+	background: rgba(0,0,0,0.1);
+}
+
+#viewContent::-webkit-scrollbar {
     width: 6px;
 }
 
-.viewContent::-webkit-scrollbar-thumb { 
+#viewContent::-webkit-scrollbar-thumb { 
 	background: #c2c2c2;
 }
 
@@ -575,6 +623,7 @@ main{
 	right: 0;
 	margin-right: 20px;
 }
+
 
 #viewDayButton{
 	border-top-left-radius:26px;
