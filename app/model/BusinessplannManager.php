@@ -81,4 +81,45 @@ class BusinessplannManager extends BaseManager
 			self::EVENT_COLUMN_LABEL_ID => $labelId
 		));
 	}
+
+	public function getDate($format, $direction = null) {
+		$day = new \DateTime();
+
+		if($direction != null)
+			$day->modify($direction . '1 day' . $format);
+
+		switch($format) {
+			case 'day':
+			case 'agenda':
+			default:
+				$date = $this->czechDay($day->format('w')) . 
+						' - ' . $day->format('j') . 
+						'. ' . $this->czechMonth($day->format('n')) . 
+						' ' . $day->format('Y');
+				break;
+			case 'week':
+				$date = '';
+				break;
+			case 'month':
+				$date = $this->czechMonth($day->format('n')) . 
+						' ' . $day->format('Y');
+				break;
+		}
+
+		return $date;
+	}
+
+    private function czechDay($dayNumber) {
+    	$days = array('Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota');
+    	
+    	return $days[$dayNumber];
+	}
+	
+	private function czechMonth($monthNumber) {
+        $months = array(1 => 'leden', 'únor', 'březen', 'duben', 
+                                    'květen', 'červen', 'červenec', 'srpen', 
+                                    'září', 'říjen', 'listopad', 'prosinec');
+        
+        return $months[$monthNumber];
+    }
 }

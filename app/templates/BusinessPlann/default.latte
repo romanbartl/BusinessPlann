@@ -94,44 +94,44 @@
 	{snippet eventsView}
 		<div id="including_heading">
 			<span class="text" style="color: #{$user->identity->color}">
-				{if $includeView == 'day'}
+				{if $viewFormat == 'day' || $viewFormat == null}
 					Den
-				{elseif $includeView == 'week'}
+				{elseif $viewFormat == 'week'}
 					Týden
-				{elseif $includeView == 'month'}
+				{elseif $viewFormat == 'month'}
 					Měsíc
-				{elseif $includeView == 'agenda'}
+				{elseif $viewFormat == 'agenda'}
 					Agenda
 				{/if}
 			</span>
 		</div>
 		
 		<div id="choose_view_day_buttons">
-			<a href="#">
+			<a n:href="changeViewTime! '-'" class="">
 				<div id="left" class="div button">
 					<span class="glyphicon glyphicon-menu-left"></span>
 				</div>
 			</a>
 
-			<a href="#">
+			<a n:href="changeViewTime! '+'" class="">
 				<div id="right" class="div button">
 					<span class="glyphicon glyphicon-menu-right"></span>
 				</div>
 			</a>
 
-			<div class="div">
-				<span>
-					
+			<div id="date" class="div">
+				<span class="text">
+					{$viewFromTime}
 				</span>
 			</div>
 		</div>
 
 		<div id="viewDiv">
 			<div id="viewContent">
-				{if $includeView}
-					{include 'content_' . $includeView . '.latte'}
+				{if $viewFormat}
+					{include 'content_' . $viewFormat . '.latte'}
 				{else}
-					{include 'day.latte'}
+					{include 'content_day.latte'}
 				{/if}	
 			</div>
 		</div>

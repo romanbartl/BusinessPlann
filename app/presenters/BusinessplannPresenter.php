@@ -18,7 +18,8 @@ class BusinessplannPresenter extends BasePresenter
 	private $plannerManager;
 	private $labelsManager;
 
-    private $includeView;
+    private $viewFormat;
+    private $viewFromTime;
 
 	public function __construct(BusinessplannManager $plannerManager, LabelsManager $labelsManager) {
         parent::__construct();
@@ -28,20 +29,32 @@ class BusinessplannPresenter extends BasePresenter
 
     public function renderDefault() {
     	$this->template->events = $this->plannerManager->getEvents(); 
-        if($this->includeView === NULL)
-            $this->includeView = $this->plannerManager->getViewByURL();
-        $this->template->includeView = $this->includeView;
+        if($this->viewFormat === NULL)
+            $this->viewFormat = $this->plannerManager->getViewByURL();
+        $this->template->viewFormat = $this->viewFormat;
+        if($this->viewFromTime === NULL)
+            $this->viewFromTime = $this->plannerManager->getDate($this->viewFormat);
+        $this->template->viewFromTime = $this->viewFromTime;
     }
 
     public function handleChangeView($view){
         if($this->isAjax()) {
-            $this->includeView = $view;
+            $this->viewFormat = $view;
+            $this->viewFromTime = $this->plannerManager->getDate($this->viewFormat);
             $this->redrawControl('eventsView');
         }
     }
 
     public function handleEditEvent($id){
         if($this->isAjax()) {
+            $this->redrawControl('eventsView');
+        }
+    }
+
+    public function handleChangeViewTime($direction){
+        if(!$this->isAjax()) {
+            $this->viewFormat = $this->plannerManager->getViewByURL();
+            $this->viewFromTime = $this->plannerManager->getDate($this->viewFormat, $direction);
             $this->redrawControl('eventsView');
         }
     }
