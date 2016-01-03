@@ -505,8 +505,8 @@ main{
 }
 
 #choose_view_day_buttons{
-	margin-top: -5px;
-	margin-left: 5px;
+	margin-top: -10px;
+	margin-left: 30px;
 }
 
 #choose_view_day_buttons .div{
@@ -531,6 +531,14 @@ main{
 #choose_view_day_buttons #right{
 	border-top-right-radius: 30px;
 	border-bottom-right-radius: 30px;
+}
+
+#choose_view_day_buttons #date{
+	margin: 15px 0px 0px 20px;
+}
+
+#choose_view_day_buttons #date .text{
+	font-size: 16px;	
 }
 
 #choose_view_day_buttons .button:hover{
