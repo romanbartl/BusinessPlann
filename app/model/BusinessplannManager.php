@@ -14,16 +14,6 @@ class BusinessplannManager extends BaseManager
 		$this->user = $user;
 	}
 
-	public function getViewByURL() {
-		$getArgs = array_keys($_GET);
-		foreach ($getArgs as $arg) {
-			if($arg == 'day' || $arg == 'week' || $arg == 'month' || $arg == 'agenda'|| $arg == 'edit_event')
-				return $arg;
-			else 
-				return null;	
-		}
-	}
-
 	public function getEvents() {
 		$result = $this->database->query('SELECT e.id AS id, e.name AS name, 
 											DATE_FORMAT(e.start, "%d.%c.%Y") AS startDay,
@@ -82,44 +72,61 @@ class BusinessplannManager extends BaseManager
 		));
 	}
 
-	public function getDate($format, $direction = null) {
-		$day = new \DateTime();
+	public function getViewByURL() {
+		$getArgs = array_keys($_GET);
+		foreach ($getArgs as $arg) {
+			if($arg == 'day' || $arg == 'week' || $arg == 'month' || $arg == 'agenda'|| $arg == 'edit_event')
+				return $arg;	
+		}
+		return 'day';
+	}
 
-		if($direction != null)
-			$day->modify($direction . '1 day' . $format);
+	public function getDateByURL() {
+		if(isset($_GET['date'])) {
+			$date = date_create($_GET['date']);
+			if($date)
+				return new \DateTime($_GET['date']);
+		}
+		return new \DateTime();
+	}
 
+	public function getFormatedDate($defaultDate, $format) {
 		switch($format) {
 			case 'day':
 			case 'agenda':
 			default:
-				$date = $this->czechDay($day->format('w')) . 
-						' - ' . $day->format('j') . 
-						'. ' . $this->czechMonth($day->format('n')) . 
-						' ' . $day->format('Y');
+				$date = $this->czechDay($defaultDate->format('w')) . 
+						' - ' . $defaultDate->format('j') . 
+						'. ' . $this->czechMonth($defaultDate->format('n')) . 
+						' ' . $defaultDate->format('Y');
 				break;
 			case 'week':
 				$date = '';
 				break;
 			case 'month':
-				$date = $this->czechMonth($day->format('n')) . 
-						' ' . $day->format('Y');
+				$date = $this->czechMonth($defaultDate->format('n')) . 
+						' ' . $defaultDate->format('Y');
 				break;
 		}
-
 		return $date;
 	}
 
+	public function getModifiedDate($date, $format, $modify) {
+		if($format == 'agenda')
+			$format = 'day';
+		$date->modify( $modify . $format );
+		return $date->format('Y-m-d');
+	}
+
     private function czechDay($dayNumber) {
-    	$days = array('Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota');
-    	
+    	$days = array('Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota');	
     	return $days[$dayNumber];
 	}
 	
 	private function czechMonth($monthNumber) {
         $months = array(1 => 'leden', 'únor', 'březen', 'duben', 
                                     'květen', 'červen', 'červenec', 'srpen', 
-                                    'září', 'říjen', 'listopad', 'prosinec');
-        
+                                    'září', 'říjen', 'listopad', 'prosinec');   
         return $months[$monthNumber];
     }
 }

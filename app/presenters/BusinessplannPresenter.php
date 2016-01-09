@@ -19,7 +19,7 @@ class BusinessplannPresenter extends BasePresenter
 	private $labelsManager;
 
     private $viewFormat;
-    private $viewFromTime;
+    private $viewFromDate;
 
 	public function __construct(BusinessplannManager $plannerManager, LabelsManager $labelsManager) {
         parent::__construct();
@@ -29,18 +29,24 @@ class BusinessplannPresenter extends BasePresenter
 
     public function renderDefault() {
     	$this->template->events = $this->plannerManager->getEvents(); 
+
         if($this->viewFormat === NULL)
             $this->viewFormat = $this->plannerManager->getViewByURL();
         $this->template->viewFormat = $this->viewFormat;
-        if($this->viewFromTime === NULL)
-            $this->viewFromTime = $this->plannerManager->getDate($this->viewFormat);
-        $this->template->viewFromTime = $this->viewFromTime;
+
+        if($this->viewFromDate === NULL)
+            $this->viewFromDate = $this->plannerManager->getDateByURL();
+        $this->template->viewFromDate = $this->viewFromDate;
+
+        $this->template->viewFromDateFormated = $this->plannerManager->getFormatedDate($this->viewFromDate, $this->viewFormat);     
+        $this->template->viewDatePlus = $this->plannerManager->getModifiedDate($this->viewFromDate, $this->viewFormat, '+1 ');
+        $this->template->viewDateMinus = $this->plannerManager->getModifiedDate($this->viewFromDate, $this->viewFormat, '-2 ');
+        
     }
 
     public function handleChangeView($view){
         if($this->isAjax()) {
             $this->viewFormat = $view;
-            $this->viewFromTime = $this->plannerManager->getDate($this->viewFormat);
             $this->redrawControl('eventsView');
         }
     }
@@ -51,10 +57,10 @@ class BusinessplannPresenter extends BasePresenter
         }
     }
 
-    public function handleChangeViewTime($direction){
-        if(!$this->isAjax()) {
-            $this->viewFormat = $this->plannerManager->getViewByURL();
-            $this->viewFromTime = $this->plannerManager->getDate($this->viewFormat, $direction);
+    public function handleChangeViewDate($view, $date){
+        if($this->isAjax()) {
+            $this->viewFormat = $view;
+            $this->viewFromDate = new \DateTime($date);
             $this->redrawControl('eventsView');
         }
     }

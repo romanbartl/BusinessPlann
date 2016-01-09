@@ -82,19 +82,27 @@
 
 <div id="main_body">
 	<div id="choose_view_buttons">
-		<a n:href="changeView! 'day'" class='ajax'><button id="viewDayButton" type="button" class="viewButton">Dnes</button></a>
+		<a n:href="changeView! 'day'" class='ajax'>
+			<button id="viewDayButton" type="button" class="viewButton">Dnes</button>
+		</a>
 			
-		<a n:href="changeView! 'week'" class='ajax'><button id="viewWeekButton" type="button" class="viewButton">Týden</button></a>	
+		<a n:href="changeView! 'week'" class='ajax'>
+			<button id="viewWeekButton" type="button" class="viewButton">Týden</button>
+		</a>	
 		
-		<a n:href="changeView! 'month'" class="ajax"><button id="viewMonthButton" type="button" class="viewButton">Měsíc</button></a>
+		<a n:href="changeView! 'month'" class="ajax">
+			<button id="viewMonthButton" type="button" class="viewButton">Měsíc</button>
+		</a>
 			
-		<a n:href="changeView! 'agenda'" class="ajax"><button id="viewAgendaButton" type="button" class="viewButton">Agenda</button></a>
+		<a n:href="changeView! 'agenda'" class="ajax">
+			<button id="viewAgendaButton" type="button" class="viewButton">Agenda</button>
+		</a>
 	</div>
 
 	{snippet eventsView}
 		<div id="including_heading">
 			<span class="text" style="color: #{$user->identity->color}">
-				{if $viewFormat == 'day' || $viewFormat == null}
+				{if $viewFormat == 'day'}
 					Den
 				{elseif $viewFormat == 'week'}
 					Týden
@@ -107,32 +115,28 @@
 		</div>
 		
 		<div id="choose_view_day_buttons">
-			<a n:href="changeViewTime! '-'" class="">
-				<div id="left" class="div button">
+			<a n:href="changeViewDate! $viewFormat, $viewDateMinus" class="ajax">
+				<button id="left" class="button" value="{$viewDateMinus}" onclick="viewDayChange(this)">
 					<span class="glyphicon glyphicon-menu-left"></span>
-				</div>
+				</button>
 			</a>
 
-			<a n:href="changeViewTime! '+'" class="">
-				<div id="right" class="div button">
+			<a n:href="changeViewDate! $viewFormat, $viewDatePlus" class="ajax">
+				<button id="right" class="button" value="{$viewDatePlus}" onclick="viewDayChange(this)">
 					<span class="glyphicon glyphicon-menu-right"></span>
-				</div>
+				</button>
 			</a>
 
 			<div id="date" class="div">
 				<span class="text">
-					{$viewFromTime}
+					{$viewFromDateFormated}
 				</span>
 			</div>
 		</div>
 
 		<div id="viewDiv">
 			<div id="viewContent">
-				{if $viewFormat}
-					{include 'content_' . $viewFormat . '.latte'}
-				{else}
-					{include 'content_day.latte'}
-				{/if}	
+				{include 'content_' . $viewFormat . '.latte'}
 			</div>
 		</div>
 	{/snippet}

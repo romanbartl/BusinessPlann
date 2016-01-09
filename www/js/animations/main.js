@@ -1,24 +1,3 @@
-$(function() {
-	if(window.location.search == '')
-		window.history.replaceState('', '', '?day');
-});
-
-$('#viewDayButton').click(function(){
-	window.history.replaceState('', '', '?day');
-});
-
-$('#viewWeekButton').click(function(){
-	window.history.replaceState('', '', '?week');
-});
-
-$('#viewMonthButton').click(function(){
-	window.history.replaceState('', '', '?month');
-});
-
-$('#viewAgendaButton').click(function(){
-	window.history.replaceState('', '', '?agenda');
-});
-
 $("#search-div-icon").click(function() { 
 	$("#search-div-input").toggle('slide', {direction: 'right'}, 300);
 	$(".search-input").select();
