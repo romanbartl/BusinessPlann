@@ -4,7 +4,7 @@ namespace App\Model;
 use Nette,
 	Nette\Security\User;
 
-class BusinessplannManager extends BaseManager
+class AppManager extends BaseManager
 {
 	private $database;
 	private $user;
@@ -14,32 +14,62 @@ class BusinessplannManager extends BaseManager
 		$this->user = $user;
 	}
 
-	public function getEvents() {
-		$result = $this->database->query('SELECT e.id AS id, e.name AS name, 
-											DATE_FORMAT(e.start, "%d.%c.%Y") AS startDay,
-											DATE_FORMAT(e.start, "%H:%i") AS startTime,
-											DATE_FORMAT(e.end, "%d.%c.%Y") AS endDay,
-											DATE_FORMAT(e.end, "%H:%i") AS endTime,
-											l.name AS label,
-											c.color AS label_color
-											FROM `event` AS e
-											LEFT JOIN `label` AS l ON l.id = e.label_id
-											LEFT JOIN `color` AS c ON c.id = l.user_color_id
-											WHERE  e.user_id = ' . $this->user->identity->id . '
-											ORDER BY e.start');
-   
-		foreach ($result as $key => $event) {
-			if($event['startDay'] != $event['endDay']) {
-				$end = new \DateTime($event['endDay']);
-				$end = $end->modify('+1 day');
-				$daterange = new \DatePeriod(new \DateTime($event['startDay']), new \DateInterval('P1D'), $end);
+	public function getEvents($format, $viewDate) {
+		$events = array();
+
+		$query = 'SELECT e.id AS id, e.name AS name, 
+				  DATE_FORMAT(e.start, "%Y-%c-%d") AS startDay,
+				  DATE_FORMAT(e.start, "%H:%i") AS startTime,
+				  DATE_FORMAT(e.end, "%Y-%c-%d") AS endDay,
+				  DATE_FORMAT(e.end, "%H:%i") AS endTime,
+				  l.name AS label,
+				  c.color AS label_color
+				  FROM `event` AS e
+				  LEFT JOIN `label` AS l ON l.id = e.label_id
+				  LEFT JOIN `color` AS c ON c.id = l.user_color_id
+				  WHERE  e.user_id = ' . $this->user->identity->id . ' 
+				  ORDER BY e.start';
+
+		$result = $this->database->query($query);
+
+		switch ($format) {
+			case 'day':
+				foreach ($result as $key => $event) {
+					$end = new \DateTime($event['endDay']);
+					$end = $end->modify('+1 day');
+					$daterange = new \DatePeriod(new \DateTime($event['startDay']), new \DateInterval('P1D'), $end);
+					
+					foreach ($daterange as $date) {
+						if($date->format('Y-m-d') == $viewDate->format('Y-m-d'))
+							$events[$event['id']] = $event;
+					}
+				}
+				return $events;
+
+			default:
+				foreach ($result as $key => $event) {
+					$end = new \DateTime($event['endDay']);
+					$end = $end->modify('+1 day');
+					$daterange = new \DatePeriod(new \DateTime($event['startDay']), new \DateInterval('P1D'), $end);
 				
-				foreach ($daterange as $date) 
-					$events[$date->format('d.m.Y')][$event['id']] = $event;				
-			} else
-				$events[$event['startDay']][$event['id']] = $event;	
+					foreach ($daterange as $date) {
+						switch ($format) {
+							case 'week':
+								$condition = $date->format('Y-W') == $viewDate->format('Y-W');
+								break;
+							case 'month':
+								$condition = $date->format('Y-m') == $viewDate->format('Y-m');
+								break;
+							case 'agenda':
+								$condition = $date->format('Y-m-d') >= $viewDate->format('Y-m-d');
+								break;
+						}
+						if($condition)
+							$events[$date->format('Y-m-d')][$event['id']] = $event;	
+					}			 
+				}
+				return $events;
 		}
-		return $events;
 	}
 
 	public function getEventById($eventId) {
@@ -72,22 +102,10 @@ class BusinessplannManager extends BaseManager
 		));
 	}
 
-	public function getViewByURL() {
-		$getArgs = array_keys($_GET);
-		foreach ($getArgs as $arg) {
-			if($arg == 'day' || $arg == 'week' || $arg == 'month' || $arg == 'agenda'|| $arg == 'edit_event')
-				return $arg;	
-		}
-		return 'day';
-	}
-
-	public function getDateByURL() {
-		if(isset($_GET['date'])) {
-			$date = date_create($_GET['date']);
-			if($date)
-				return new \DateTime($_GET['date']);
-		}
-		return new \DateTime();
+	public function checkViewCorrect($view) {	
+		if($view == 'day' || $view == 'week' || $view == 'month' || $view == 'agenda' || $view == 'edit')
+			return TRUE;
+		return FALSE;
 	}
 
 	public function getFormatedDate($defaultDate, $format) {
@@ -101,14 +119,24 @@ class BusinessplannManager extends BaseManager
 						' ' . $defaultDate->format('Y');
 				break;
 			case 'week':
+
+				//$monday = date('w', $defaultDate);
+				//$sunday = date('d.m.Y', strtotime($monday . '+1 week -1 day'));
 				$date = '';
 				break;
 			case 'month':
 				$date = $this->czechMonth($defaultDate->format('n')) . 
 						' ' . $defaultDate->format('Y');
 				break;
+			case 'agendaLink':
+				$date = $defaultDate->format('d.m.Y');
+				break;
 		}
 		return $date;
+	}
+
+	public function getNewDate($date) {
+		return new \DateTime($date);
 	}
 
 	public function getModifiedDate($date, $format, $modify) {

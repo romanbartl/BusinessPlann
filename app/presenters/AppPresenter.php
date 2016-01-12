@@ -6,47 +6,54 @@ use Nette,
     Nette\Security\User,
     Nette\Application\UI\Presenter,
 	Nette\Application\UI\Form,
-    App\Model\BusinessplannManager,
+    App\Model\AppManager,
     App\Model\LabelsManager;
 
 
 /**
  * 
  */
-class BusinessplannPresenter extends BasePresenter
+class AppPresenter extends BasePresenter
 {
-	private $plannerManager;
+	private $appManager;
 	private $labelsManager;
 
     private $viewFormat;
     private $viewFromDate;
 
-	public function __construct(BusinessplannManager $plannerManager, LabelsManager $labelsManager) {
+	public function __construct(AppManager $appManager, LabelsManager $labelsManager) {
         parent::__construct();
-        $this->plannerManager = $plannerManager;
+        $this->appManager = $appManager;
         $this->labelsManager = $labelsManager;
     }
 
-    public function renderDefault() {
-    	$this->template->events = $this->plannerManager->getEvents(); 
+    public function actionDefault($view, $date) {
+        if (!$this->getUser()->isLoggedIn()) 
+            $this->redirect('Home:default');
+        if($view == 'out'){
+            $this->user->logout();
+            $this->redirect('Home:default');
+        }    
+        if(!$this->appManager->checkViewCorrect($view))
+            if($view == '')
+                $this->redirect('default', 'day');
+            else
+                throw new Nette\Application\BadRequestException('Špatný pohled');
 
-        if($this->viewFormat === NULL)
-            $this->viewFormat = $this->plannerManager->getViewByURL();
-        $this->template->viewFormat = $this->viewFormat;
-
-        if($this->viewFromDate === NULL)
-            $this->viewFromDate = $this->plannerManager->getDateByURL();
-        $this->template->viewFromDate = $this->viewFromDate;
-
-        $this->template->viewFromDateFormated = $this->plannerManager->getFormatedDate($this->viewFromDate, $this->viewFormat);     
-        $this->template->viewDatePlus = $this->plannerManager->getModifiedDate($this->viewFromDate, $this->viewFormat, '+1 ');
-        $this->template->viewDateMinus = $this->plannerManager->getModifiedDate($this->viewFromDate, $this->viewFormat, '-2 ');
-        
+        $this->template->viewFromDate = $this->appManager->getNewDate($date);
+        $this->template->viewFormat = $view;
     }
 
-    public function handleChangeView($view){
+    public function handleChangeView($view, $date){
         if($this->isAjax()) {
-            $this->viewFormat = $view;
+            $this->template->viewFormat = $view;
+            $this->redrawControl('eventsView');
+        }
+    }
+    
+    public function handleChangeViewDate($date){
+        if($this->isAjax()) {
+            $this->template->viewFromDate = $this->appManager->getNewDate($date);
             $this->redrawControl('eventsView');
         }
     }
@@ -57,20 +64,18 @@ class BusinessplannPresenter extends BasePresenter
         }
     }
 
-    public function handleChangeViewDate($view, $date){
-        if($this->isAjax()) {
-            $this->viewFormat = $view;
-            $this->viewFromDate = new \DateTime($date);
-            $this->redrawControl('eventsView');
-        }
+    public function renderDefault() {
+    	$this->template->events = $this->appManager->getEvents($this->template->viewFormat, $this->template->viewFromDate); 
+        $this->template->labels = $this->labelsManager->getLabels();
+
+        $this->template->viewFromDateFormated = $this->appManager->getFormatedDate($this->template->viewFromDate, $this->template->viewFormat);     
+        $this->template->viewDatePlus = $this->appManager->getModifiedDate($this->template->viewFromDate, $this->template->viewFormat, '+1 ');
+        $this->template->viewDateMinus = $this->appManager->getModifiedDate($this->template->viewFromDate, $this->template->viewFormat, '-2 ');       
     }
 
-	public function actionDefault() {
-	    if (!$this->getUser()->isLoggedIn()) 
-	        $this->redirect('Home:default');
-	    
-	    $this->template->labels = $this->labelsManager->getLabels();
-	}
+    public function getFormatedDate($date) {
+        return $this->appManager->getFormatedDate($this->appManager->getNewDate($date), 'agendaLink');
+    }
 
     protected function createComponentAddEventForm() {
         $form = new Form();
@@ -120,7 +125,7 @@ class BusinessplannPresenter extends BasePresenter
 
     public function addEventFormSucceeded($form, $values) {
         if($this->isAjax()) {
-            $this->plannerManager->addNewEvent($values['eventName'],
+            $this->appManager->addNewEvent($values['eventName'],
                                                $values['eventStartDate'],
                                                $values['eventEndDate'],
                                                $values['eventStartTime'],

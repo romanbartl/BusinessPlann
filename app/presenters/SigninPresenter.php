@@ -15,7 +15,7 @@ class SigninPresenter extends BasePresenter
 {
 	public function actionDefault() {
 		if ($this->getUser()->isLoggedIn())
-	        $this->redirect('Businessplann:default');
+	        $this->redirect('App:default');
 	}
 
 	protected function createComponentSignInForm() {
@@ -45,7 +45,7 @@ class SigninPresenter extends BasePresenter
 			if(preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['email'])) {
 				try {
 		        	$this->getUser()->login($values['email'], $values['passwd']);
-					$this->redirect('Businessplann:default');
+					$this->redirect('App:default');
 		        } catch (Nette\Security\AuthenticationException $e) {
 		       		$form->addError($e->getMessage());
 	    		}

@@ -1,8 +1,8 @@
 {foreach $events as $date => $day}
 	<div class="agendaDay">
-		<a n:href="changeView! day" class='ajax'>
-			<div class="agendaDate">
-				<span class="text">{$date}</span>
+		<a n:href="changeView! 'day', $date" class='ajax'>
+			<div id="{$date}" class="agendaDate" onclick="showDay(this)">
+				<span class="text">{$presenter->getFormatedDate($date)}</span>
 			</div>
 		</a>
 				
@@ -20,7 +20,7 @@
 						<table class="event_table">
 							<tr class="row">
 								<td class="time">
-									<span class="text">
+									<span class="text">	
 										{if $event['startDay'] == $event['endDay']}
 											{$event['startTime']} - {$event['endTime']}								
 										{elseif $event['startDay'] == $date}

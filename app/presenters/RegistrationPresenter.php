@@ -28,7 +28,7 @@ class RegistrationPresenter extends BasePresenter
 
     public function actionDefault() {
         if ($this->getUser()->isLoggedIn()) {
-            $this->redirect('Businessplann:default');
+            $this->redirect('App:default');
         }
     }
 

@@ -1,29 +1,25 @@
-$(function() {
-	if(window.location.search == '')
-		window.history.replaceState('', '', '?day');
-});
-
-$('#viewDayButton').click(function(){
-	window.history.replaceState('', '', '?day');
-});
-
-$('#viewWeekButton').click(function(){
-	window.history.replaceState('', '', '?week');
-});
-
-$('#viewMonthButton').click(function(){
-	window.history.replaceState('', '', '?month');
-});
-
-$('#viewAgendaButton').click(function(){
-	window.history.replaceState('', '', '?agenda');
-});
+function viewChange(button){
+	var url = window.location.pathname;
+	var date = '';
+	var url2 = url.substring(url.indexOf('/app/') + 5);
+	if(url2.indexOf('/') > -1)
+		date = url2.substring(url2.indexOf('/'));
+	url = url.substring(0, url.indexOf('/app/') + 5);
+	window.history.replaceState('', '', url + button.id + date);
+};
 
 function viewDayChange(button){
-	if(window.location.search.indexOf('&') > -1) {
-		var url = window.location.search;
-		var view = url.substring(url.indexOf('?'), url.indexOf('&'));
-		window.history.replaceState('', '', view + '&date=' + button.value);
+	var url = window.location.pathname;
+	url = url.substring(url.indexOf('/app/') + 5);
+	if(url.indexOf('/') > -1) {
+		url = url.substring(0, url.indexOf('/'));
+		window.history.replaceState('', '', button.value);
 	} else
-		window.history.replaceState('', '', window.location.search + '&date=' + button.value);
+		window.history.replaceState('', '', url + '/' + button.value);
 };
+
+function showDay(button){
+	var url = window.location.pathname;
+	url = url.substring(0, url.indexOf('/app/') + 5);
+	window.history.replaceState('', '', url + 'day/' + button.id);
+}

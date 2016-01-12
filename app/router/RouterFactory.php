@@ -15,25 +15,10 @@ class RouterFactory
 	 */
 	public static function createRouter()
 	{
-		$router = new RouteList;
-		$router[] = new Route('<presenter>/<action>[/view]', 'Businessplann:default');
-
-		/*$router[] = new Route('settings', 'Settings:default');
-		$router[] = new Route('lagels', 'Settings:labels');
-		$router[] = new Route('groups', 'Settings:groups');
-
-		
-		/*$router[] = new Route('<agenda | day | month | week>', array(
-						    'presenter' => 'Businessplann',
-						    'action' => 'default',
-						    'view' => NULL,
-						));*/
-		
-		/*$router[] = new Route('<presenter>/<action>/?view=<view>', array(
-		    'presenter' => 'Businessplann',
-		    'action' => 'default'
-		));*/
-		
+		$router = new RouteList;		
+		$router[] = new Route('app/<view>[/<date>]', array('presenter' => 'App', 'action' => 'default'));
+		$router[] = new Route('<presenter>/<action>', array('presenter' => 'Home', 'action' => 'default'));
+	
 		return $router;
 	}
 
