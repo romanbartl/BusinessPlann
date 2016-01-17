@@ -30,7 +30,7 @@
 							<span>{$label['name']}</span>
 						</li></a>
 					{/foreach}
-						
+					
 					<a n:href="Settings:labels">
 						<li class="item">
 							<span class="glyphicon glyphicon-cog"></span>
@@ -50,12 +50,12 @@
 			
 			<div id="groups_list" class="list-div">
 				<ul class="list">
-					<!--<a href="#">
-						<li class="item">
-							<span class="glyphicon glyphicon-user" style="color: #33CC33;"></span>
-							<span>1. skupina</span>
-						</li>
-					</a>-->
+					{foreach $groups as $key => $group}
+						<a href="#"><li class="item">
+							<span class="glyphicon glyphicon-user" style="color:#{$group['color']}"></span>
+							<span>{$group['name']}</span>
+						</li></a>
+					{/foreach}
 
 					<a n:href="Settings:groups">
 						<li class="item">

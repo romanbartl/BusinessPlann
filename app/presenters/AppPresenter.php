@@ -7,7 +7,8 @@ use Nette,
     Nette\Application\UI\Presenter,
 	Nette\Application\UI\Form,
     App\Model\AppManager,
-    App\Model\LabelsManager;
+    App\Model\LabelsManager,
+    App\Model\GroupsManager;
 
 
 /**
@@ -17,14 +18,16 @@ class AppPresenter extends BasePresenter
 {
 	private $appManager;
 	private $labelsManager;
+    private $groupsManager;
 
     private $viewFormat;
     private $viewFromDate;
 
-	public function __construct(AppManager $appManager, LabelsManager $labelsManager) {
+	public function __construct(AppManager $appManager, LabelsManager $labelsManager, GroupsManager $groupsManager) {
         parent::__construct();
         $this->appManager = $appManager;
         $this->labelsManager = $labelsManager;
+        $this->groupsManager = $groupsManager;
     }
 
     public function actionDefault($view, $date) {
@@ -67,6 +70,7 @@ class AppPresenter extends BasePresenter
     public function renderDefault() {
     	$this->template->events = $this->appManager->getEvents($this->template->viewFormat, $this->template->viewFromDate); 
         $this->template->labels = $this->labelsManager->getLabels();
+        $this->template->groups = $this->groupsManager->getGroups();
 
         $this->template->viewFromDateFormated = $this->appManager->getFormatedDate($this->template->viewFromDate, $this->template->viewFormat);     
         $this->template->viewDatePlus = $this->appManager->getModifiedDate($this->template->viewFromDate, $this->template->viewFormat, '+1 ');

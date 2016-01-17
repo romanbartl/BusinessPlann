@@ -23,6 +23,7 @@ services:
 	- App\Model\AppManager
 	- App\Model\UserManager
 	- App\Model\LabelsManager
+	- App\Model\GroupsManager
 	- App\Model\ColorManager
 	router: App\RouterFactory::createRouter
 	authenticate: App\Model\AuthenticateManager
