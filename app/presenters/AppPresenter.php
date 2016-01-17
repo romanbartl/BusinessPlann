@@ -110,7 +110,7 @@ class AppPresenter extends BasePresenter
                  ->setAttribute('id', 'eventEndTime');
 
         $labels = $this->labelsManager->getLabels();
-
+        $labelsOptions = array();
         foreach ($labels as $key => $label) {
             $labelsOptions[$label['id']] = $label['name'];
         }
