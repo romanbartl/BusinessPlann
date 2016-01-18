@@ -17,18 +17,24 @@ class AppManager extends BaseManager
 	public function getEvents($format, $viewDate) {
 		$events = array();
 
-		$query = 'SELECT e.id AS id, e.name AS name, 
-				  DATE_FORMAT(e.start, "%Y-%c-%d") AS startDay,
-				  DATE_FORMAT(e.start, "%H:%i") AS startTime,
-				  DATE_FORMAT(e.end, "%Y-%c-%d") AS endDay,
-				  DATE_FORMAT(e.end, "%H:%i") AS endTime,
-				  l.name AS label,
-				  c.color AS label_color
-				  FROM `event` AS e
-				  LEFT JOIN `label` AS l ON l.id = e.label_id
-				  LEFT JOIN `color` AS c ON c.id = l.user_color_id
-				  WHERE  e.user_id = ' . $this->user->identity->id . ' 
-				  ORDER BY e.start';
+		$query = 'SELECT e.id AS id, 
+					e.name AS name, 
+					DATE_FORMAT(e.start, "%Y-%c-%d") AS startDay,
+					DATE_FORMAT(e.start, "%H:%i") AS startTime,
+					DATE_FORMAT(e.end, "%Y-%c-%d") AS endDay,
+					DATE_FORMAT(e.end, "%H:%i") AS endTime,
+					l.name AS label,
+					c_lab.color AS label_color
+
+					FROM `event_has_label` AS ehl 
+
+					RIGHT JOIN `event` AS e ON ehl.event_id = e.id
+					LEFT JOIN `label` AS l ON ehl.label_id = l.id
+					LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
+
+					WHERE e.user_id = ' . $this->user->identity->id . '
+
+					ORDER BY e.start';
 
 		$result = $this->database->query($query);
 
