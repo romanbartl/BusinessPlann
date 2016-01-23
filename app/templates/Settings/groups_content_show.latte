@@ -1,0 +1,41 @@
+<div id="edit_groups_heading_smaller" class="heading_smaller">
+	<span class="text">Správa skupin</span>
+</div>
+
+<div id="labels_list_edit">
+	<div id="labels">
+		{foreach $groups as $key => $group}
+			
+			{if $groups == null}
+				<div id="zero_labels">
+					<span class="text">Doposud nemáte přidány žádné štítky</span>
+				</div>
+						
+				{else}
+					<div class="label_item" style="border-left: 10px solid #{$group['color']}">
+						<span class="glyphicon glyphicon-user tag_icon"></span>
+								
+						<div class="label_name">
+							{$group['name']}
+						</div>
+						
+						{if $group['leader_id'] == $user->identity->id}
+							<a id='edit' n:href="changeGroupsView! edit, $group['id']" class="ajax" onclick="editGroup({$group['id']})">		
+								<span id="{$group['id']}" class="glyphicon glyphicon-pencil label_button label_icon groups_edit"></span>
+							</a>
+						{/if}
+					</div>
+				{/if}
+						
+		{/foreach}
+
+		<a id='add' n:href="changeGroupsView! add" class="ajax" onclick="addGroup()">
+			<div id="add_group_button">
+				<span class="glyphicon glyphicon-plus tag_icon"></span>
+				<div id="add_group">
+					<span class="text">Přidat novou skupinu</span>
+				</div>
+			</div>
+		</a>			
+	</div>
+</div>

@@ -17,6 +17,7 @@ class RouterFactory
 	{
 		$router = new RouteList;		
 		$router[] = new Route('app/<view>[/<date>]', array('presenter' => 'App', 'action' => 'default'));
+		$router[] = new Route('settings/groups/<view>[/<id>]', array('presenter' => 'Settings', 'action' => 'groups'));
 		$router[] = new Route('<presenter>/<action>', array('presenter' => 'Home', 'action' => 'default'));
 	
 		return $router;
