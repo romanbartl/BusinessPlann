@@ -114,4 +114,10 @@ class UserManager extends BaseManager
 			return False;
 		}
 	}
+
+	public function userExists($email) {
+		if($this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_EMAIL, $email)->fetch())
+			return true;
+		return false;
+	}
 }

@@ -7,7 +7,8 @@ use Nette,
     Nette\Application\UI\Form,
     Nette\Security\User,
     App\Model\UserManager,
-    App\Model\LabelsManager;
+    App\Model\LabelsManager,
+    App\Model\GroupsManager;
 
 /**
  * 
@@ -16,22 +17,21 @@ class SettingsPresenter extends BasePresenter
 {
 	private $userManager;
 	private $labelsManager;
+	private $groupsManager;
 
-	public function __construct(UserManager $userManager, LabelsManager $labelsManager) {
+	private $groupsView;
+	private $usersInGroup;
+	private $groupColor;
+
+	public function __construct(UserManager $userManager, LabelsManager $labelsManager, GroupsManager $groupsManager) {
         $this->userManager = $userManager;
         $this->labelsManager = $labelsManager;
+        $this->groupsManager = $groupsManager;
+
+        $this->usersInGroup = array();
     }
 
-    public function renderUser() {
-    	$this->template->colors = $this->userManager->getColors();
-    }
-
-    public function renderLabels() {
-    	$this->template->labels = $this->labelsManager->getLabels();
-    	$this->template->colors = $this->userManager->getColors();
-	}
-
-	public function actionDefault() {
+    public function actionDefault() {
 		$this->redirect('Settings:user');
 	}
 
@@ -43,14 +43,65 @@ class SettingsPresenter extends BasePresenter
 		$this->chceckUserLoggedIn();
 	}
 
-	public function actionGroups() {
+	public function actionGroups($view, $id) {
 		$this->chceckUserLoggedIn();
+		
+        $this->groupsView = 'show';
+        
+        if($view != '') {
+           	if($this->groupsManager->checkViewCorrect($view))
+               	$this->groupsView = $view;
+        	else
+            	throw new Nette\Application\BadRequestException('Špatný pohled');
+        }
+	}
+
+
+	public function handleChangeGroupsView($view, $id = null) {
+		if($this->isAjax()) {
+			$this->groupsView = $view;
+			$this->redrawControl('groupsView');
+		}
+	}
+
+    public function renderUser() {
+    	$this->template->colors = $this->userManager->getColors();
+    }
+
+    public function renderLabels() {
+    	$this->template->labels = $this->labelsManager->getLabels();
+    	$this->template->colors = $this->userManager->getColors();
+	}
+
+	public function renderGroups() {
+    	$this->template->groups = $this->groupsManager->getGroups();
+    	$this->template->colors = $this->userManager->getColors();
+    	$this->template->groupsView = $this->groupsView;
+    	$this->template->usersInGroup = $this->usersInGroup;
+    	if(!$this->groupColor)
+    		$this->template->groupColor = 1;
+    	else
+    		$this->template->groupColor = $this->groupColor;
 	}
 
 	public function chceckUserLoggedIn() {
 	    if (!$this->getUser()->isLoggedIn()) {
 	        $this->redirect('Home:default');
 	    }
+	}
+
+	public function handleRemoveLabel($id) {
+		if($this->isAjax()) { 
+			$this->labelsManager->removeLabel($id);
+			$this->redrawControl('labels');
+		}
+	}
+
+	public function handleEditLabelColor($labelId, $colorId) {
+		if($this->isAjax()) {
+			$this->labelsManager->editLabelColor($labelId, $colorId);
+			$this->redrawControl('labels');
+		}
 	}
 
 	/**
@@ -296,17 +347,72 @@ class SettingsPresenter extends BasePresenter
 		}
 	}
 
-	public function handleRemoveLabel($id) {
-		if($this->isAjax()) { 
-			$this->labelsManager->removeLabel($id);
-			$this->redrawControl('labels');
+	public function handleGroupStorno(){
+		if($this->isAjax()) {
+			$this->groupsView = 'show';
+			$this->redrawControl('groupsView');
 		}
 	}
 
-	public function handleEditLabelColor($labelId, $colorId) {
-		if($this->isAjax()) {
-			$this->labelsManager->editLabelColor($labelId, $colorId);
-			$this->redrawControl('labels');
+
+	public function createComponentGroupForm() {
+		$form = new Form();
+		//$form->getElementPrototype()->class('ajax');
+
+		$form->addText('group_name')
+				->setAttribute('class', '');
+
+		$form->addHidden('group_color_hidden')
+				->setAttribute('id', 'group_color_hidden');
+
+		$form->addHidden('group_users_hidden')
+				->setAttribute('name', 'group_users_hidden[]');
+
+		$user = $form->addText('group_user')
+				->setAttribute('placeholder', 'přidat e-mail uživatele')
+				->setAttribute('class', '');
+
+		$form->addSubmit('add_group_user_submit', 'bla')
+				->setAttribute('class', '');
+
+		$form->addSubmit('group_form_submit', 'Uložit')
+				->setAttribute('class', '');
+
+		$form->onSuccess[] = array($this, 'groupFormSucceeded');
+
+		return $form;
+	}
+
+	public function groupFormSucceeded($form, $values){
+
+		if(!$this->isAjax()) {
+
+			if($form['group_form_submit']->isSubmittedBy()){
+			$this->groupsManager->addGroup($values['group_name'], 
+											$values['group_color_hidden'], 
+											array($values['group_users_hidden']));
+			$this->redirect('Settings:groups');
+		} elseif($form['add_group_user_submit']->isSubmittedBy()){
+
+			if(isset($values['group_users_hidden']))
+				$this->usersInGroup = array($values['group_users_hidden']);
+
+			if(preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['group_user'])) {
+				if($this->userManager->userExists($values['group_user'])){
+					if($values['group_user'] != $this->user->identity->email) {
+						$this->usersInGroup[] = $values['group_user'];
+						
+					}
+					else {$form->addError('Váš účet je již definován jako leader skupiny');}
+			} else{$form->addError('Žádný uživatel pod tímto e-mailem zde není registrován');}}
+			else{$form->addError('Zadaný e-mail není ve správném formátu');}
+
+			$this->groupColor = $values['group_color_hidden'];
+
+			$this->redrawControl('addGroup');
+
+
+		}
 		}
 	}
 }

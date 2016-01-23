@@ -1,13 +1,35 @@
 {$section = "skupiny"}
 {layout './@settingsLayout.latte'}
+
 {define #includeScripts}
+	<script type="text/javascript" src="{$basePath}/js/animations/set_labels.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/animations/set_groups.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/url-groups.js"></script>
 {/define}
 
 {define #area}
 
-<div id="settings_labels">
-
-	<!-- CONTENT -->
-
+<div id="settings_groups">
+	<div id="groups" class="settings_container">
+		{snippet groupsView}
+			{include 'groups_content_' . $groupsView . '.latte'}			
+		{/snippet}
+	</div>
 </div>
+
+
+<div id="choose_color_window">
+	<span id="cancel_choosing_label_color" class="glyphicon glyphicon-remove"></span>
+
+	<table id="colors_tab">
+		{for $i = 0; $i < count($colors) / 5; $i++}
+			<tr>{for $j = 1; $j < (count($colors) / 4)+1; $j++ }
+				<td>
+					<div id="{$colors[$j+($i*5)]['id']}" class="cell" style="background-color:#{$colors[$j+($i*5)]['color']};" onclick="changeColor({$colors[$j+($i*5)]['id']}, {$colors[$j+($i*5)]['color']})"></div>
+				</a></td>
+			{/for}</tr>
+		{/for}
+	</table>
+</div>
+
 {/define}

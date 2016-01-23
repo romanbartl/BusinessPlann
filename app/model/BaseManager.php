@@ -42,5 +42,16 @@ abstract class BaseManager extends Nette\Object
 		EVENT_COLUMN_START = 'start',
 		EVENT_COLUMN_END = 'end',
 		EVENT_COLUMN_USER_ID = 'user_id',
-		EVENT_COLUMN_LABEL_ID = 'label_id';
+		EVENT_COLUMN_LABEL_ID = 'label_id',
+
+		GROUP_TABLE_NAME = 'group',
+		GROUP_COLUMN_ID = 'id',
+		GROUP_COLUMN_NAME = 'name',
+		GROUP_COLUMN_COLOR_ID = 'color_id',
+		GROUP_COLUMN_LEADER_ID = 'leader_user_id',
+
+		USER_GROUP_TABLE_NAME = 'user_is_in_group',
+		USER_GROUP_COLUMN_USER_ID = 'user_id',
+		USER_GROUP_COLUMN_GROUP_ID = 'group_id',
+		USER_GROUP_COLUMN_CONFIRM  = 'confirm';
 }
