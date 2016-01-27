@@ -1,3 +1,37 @@
-<div id="edit_groups_heading_smaller" class="heading_smaller">
-	<span class="text">Upravit skupinu - </span>
+<div id="edit_groups_heading_smaller" class="heading_smaller" n:if="!isset($groupError)">
+	<span class="text">Upravit skupinu</span>
+</div>	
+
+{snippet editGroup}
+	<a n:href="deleteGroup! $groups['id']" class="ajax"><button>Smazat</button></a>
+		
+	{form editGroup}
+		{input group_id_hidden value=>$groups['id']}
+		
+		Název {input group_name value=>$groups['name']}
+			
+		Uživatelé
+			
+		{foreach $groups['users'] as $groupUser}
+			{if $groups['leader_id'] == $groupUser['id']}
+				Leader skupiny - 
+			{/if}
+	
+			{$groupUser['name']} - {$groupUser['email']}
+		{/foreach}
+			
+		{input group_user value=>''}
+		{input add_user_submit}
+	{/form}
+
+	<a n:href="groupStorno!" class="ajax" onclick="stornoGroup()"><button>Storno</button></a>
+		
+	<div id="reg_errors" n:if="$form->hasErrors()">
+		<span n:foreach="$form->errors as $error">{$error}</span>
+	</div>
+{/snippet}
+
+
+<div n:if="isset($groupError)">
+	{$error}
 </div>

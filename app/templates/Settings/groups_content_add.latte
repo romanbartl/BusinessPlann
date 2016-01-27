@@ -3,31 +3,31 @@
 </div>
 
 {snippet addGroup}
-{form groupForm}
-	{input group_name}
-	<div id="chooseGroupColor" style="background: #{$colors[$groupColor]['color']}">
-		<span class="text">Barva skupiny</span>
-	</div>
-
-	
-	{input group_color_hidden value=>$groupColor}
-	
-
+	{form groupForm}
+		{input group_name}
+		
+		<div id="chooseGroupColor" style="background: #{$colors[$groupColor]['color']}">
+			<span class="text">Barva skupiny</span>
+		</div>
+		
+		{input group_color_hidden value=>$groupColor}
+		
 		{input group_form_submit}
-	<a n:href="groupStorno!" class="ajax" onclick="stornoGroup()"><button>Storno</button></a>
+		
+		<a n:href="groupStorno!" class="ajax" onclick="stornoGroup()"><button>Storno</button></a>
 
-	{if !empty($usersInGroup)}
-		{foreach $usersInGroup as $user}
-			{$user}
-		{/foreach}
-		{input group_users_hidden value=>$usersInGroup}
-	{/if}
+		{if !empty($usersInGroup)}
+			{foreach $usersInGroup as $user}
+				{$user}
+			{/foreach}
+			{input group_users_hidden value=>$usersInGroup}
+		{/if}
 
-	
+		
 		{input group_user value=>''}
-				<div id="reg_errors" n:if="$form->hasErrors()">
-	        		<span n:foreach="$form->errors as $error">{$error}</span>
-				</div>
+			<div id="reg_errors" n:if="$form->hasErrors()">
+		   		<span n:foreach="$form->errors as $error">{$error}</span>
+			</div>
 		{input add_group_user_submit}
-{/form}
+	{/form}
 {/snippet}

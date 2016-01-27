@@ -22,6 +22,7 @@ class SettingsPresenter extends BasePresenter
 	private $groupsView;
 	private $usersInGroup;
 	private $groupColor;
+	private $group;
 
 	public function __construct(UserManager $userManager, LabelsManager $labelsManager, GroupsManager $groupsManager) {
         $this->userManager = $userManager;
@@ -44,8 +45,7 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	public function actionGroups($view, $id) {
-		$this->chceckUserLoggedIn();
-		
+		$this->chceckUserLoggedIn();		
         $this->groupsView = 'show';
         
         if($view != '') {
@@ -54,8 +54,15 @@ class SettingsPresenter extends BasePresenter
         	else
             	throw new Nette\Application\BadRequestException('Špatný pohled');
         }
-	}
 
+        if($id != ''){
+        	if($group = $this->groupsManager->getGroups($id)) {
+        		$this->group = $group;
+        	} else {
+        		$this->template->groupError = 'Zdá se, že skupina neexistuje, nebo nemáte práva na upravování';
+        	}
+        }
+	}
 
 	public function handleChangeGroupsView($view, $id = null) {
 		if($this->isAjax()) {
@@ -74,20 +81,19 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	public function renderGroups() {
-    	$this->template->groups = $this->groupsManager->getGroups();
-    	$this->template->colors = $this->userManager->getColors();
-    	$this->template->groupsView = $this->groupsView;
-    	$this->template->usersInGroup = $this->usersInGroup;
-    	if(!$this->groupColor)
+		if($this->group)
+			$this->template->groups = $this->group;
+		else
+			$this->template->groups = $this->groupsManager->getGroups();
+		if(!$this->groupColor)
     		$this->template->groupColor = 1;
     	else
     		$this->template->groupColor = $this->groupColor;
-	}
 
-	public function chceckUserLoggedIn() {
-	    if (!$this->getUser()->isLoggedIn()) {
-	        $this->redirect('Home:default');
-	    }
+    	$this->template->colors = $this->userManager->getColors();
+    	$this->template->groupsView = $this->groupsView;
+
+    	$this->template->usersInGroup = $this->usersInGroup;
 	}
 
 	public function handleRemoveLabel($id) {
@@ -102,6 +108,12 @@ class SettingsPresenter extends BasePresenter
 			$this->labelsManager->editLabelColor($labelId, $colorId);
 			$this->redrawControl('labels');
 		}
+	}
+
+	private function chceckUserLoggedIn() {
+	    if (!$this->getUser()->isLoggedIn()) {
+	        $this->redirect('Home:default');
+	    }
 	}
 
 	/**
@@ -350,10 +362,10 @@ class SettingsPresenter extends BasePresenter
 	public function handleGroupStorno(){
 		if($this->isAjax()) {
 			$this->groupsView = 'show';
+			$this->group = $this->groupsManager->getGroups();
 			$this->redrawControl('groupsView');
 		}
 	}
-
 
 	public function createComponentGroupForm() {
 		$form = new Form();
@@ -388,10 +400,16 @@ class SettingsPresenter extends BasePresenter
 		if(!$this->isAjax()) {
 
 			if($form['group_form_submit']->isSubmittedBy()){
+				if($values['group_name'] != '') {
+				
+				
 			$this->groupsManager->addGroup($values['group_name'], 
 											$values['group_color_hidden'], 
 											array($values['group_users_hidden']));
 			$this->redirect('Settings:groups');
+			}else{
+				$form->addError('Skupina musí mít název');
+			}
 		} elseif($form['add_group_user_submit']->isSubmittedBy()){
 
 			if(isset($values['group_users_hidden']))
@@ -415,5 +433,49 @@ class SettingsPresenter extends BasePresenter
 		}
 		}
 	}
+
+	public function createComponentEditGroup() {
+		$form = new Form();
+		//$form->getElementPrototype()->class('ajax');
+
+		$form->addText('group_name')
+				->setAttribute('class', '');
+
+		$form->addText('group_user')
+				->setAttribute('class', '');
+
+		$form->addHidden('group_id_hidden');
+
+		$form->addSubmit('add_user_submit', 'Přidat')
+				->setAttribute('class', '');
+
+		$form->onSuccess[] = array($this, 'editGroupSucceeded');
+
+		return $form;
+	}
+
+	public function handleDeleteGroup($groupId) {		
+		if($this->isAjax()){	
+			$this->groupsManager->deleteGroup($groupId);
+			$this->redirect('Settings:groups');
+		}
+	}
+
+	public function editGroupSucceeded($form, $values){
+		if(!preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['group_user'])){
+			$form->addError('Zadaný e-mail není ve správném formátu');
+			return false;
+		} elseif(!$this->userManager->userExists($values['group_user'])) {
+			$form->addError('Žádný uživatel pod tímto e-mailem zde není registrován');
+			return false;
+		} if($this->groupsManager->userIsAlreadyInGroup($values['group_id_hidden'], $values['group_user'])) {
+			$form->addError('Zadaný uživatel již ve skupině je');
+			return false;
+		}
+
+		$this->groupsManager->addGroupUser($values['group_id_hidden'], $values['group_user']);
+		$this->group = $this->groupsManager->getGroups($values['group_id_hidden']);
+		$this->redrawControl('editGroup');
+	}		
 }
 
