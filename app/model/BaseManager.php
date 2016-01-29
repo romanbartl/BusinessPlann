@@ -42,7 +42,14 @@ abstract class BaseManager extends Nette\Object
 		EVENT_COLUMN_START = 'start',
 		EVENT_COLUMN_END = 'end',
 		EVENT_COLUMN_USER_ID = 'user_id',
-		EVENT_COLUMN_LABEL_ID = 'label_id',
+
+		EVENT_HAS_LABEL_TABLE_NAME = 'event_has_label',
+		EVENT_HAS_LABEL_COLUMN_EVENT_ID = 'event_id',
+		EVENT_HAS_LABEL_COLUMN_LABEL_ID = 'label_id',
+
+		GROUP_HAS_EVENT_TABLE_NAME = 'group_has_event',
+		GROUP_HAS_EVENT_COLUMN_EVENT_ID = 'event_id',
+		GROUP_HAS_EVENT_COLUMN_GROUP_ID = 'group_id',
 
 		GROUP_TABLE_NAME = 'group',
 		GROUP_COLUMN_ID = 'id',

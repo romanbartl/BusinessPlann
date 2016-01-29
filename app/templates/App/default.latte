@@ -178,7 +178,11 @@
 
 					<tr>
 						<td class="add_eventTrText"><span class="text">Skupina:</span></td>
-						<td></td>
+						<td>
+							{foreach $groups as $group}
+								{input group_ . $group['id']}
+							{/foreach}
+						</td>
 					</tr>
 				</table>
 

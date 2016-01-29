@@ -95,17 +95,34 @@ class AppManager extends BaseManager
 		return $event;
 	}
 
-	public function addNewEvent($eventName, $startDay, $endDay, $startTime, $endTime, $labelId) {
+	public function addNewEvent($eventName, $startDay, $endDay, $startTime, $endTime, $labelId, $groups) {
 		$start = substr($startDay, 6) . '-' . substr($startDay, 3, 2) . '-' . substr($startDay, 0, 2) . ' ' . $startTime;
 		$end = substr($endDay, 6) . '-' . substr($endDay, 3, 2) . '-' . substr($endDay, 0, 2) . ' ' . $endTime;
 		
-		$this->database->table(self::EVENT_TABLE_NAME)->insert(array(
+		$row = $this->database->table(self::EVENT_TABLE_NAME)->insert(array(
 			self::EVENT_COLUMN_NAME => $eventName,
 			self::EVENT_COLUMN_START => $start,
 			self::EVENT_COLUMN_END => $end,
 			self::EVENT_COLUMN_USER_ID => $this->user->identity->id,
-			self::EVENT_COLUMN_LABEL_ID => $labelId
 		));
+		
+		$eventId = $row->id;
+
+		if($labelId != NULL) {
+			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)->insert(array(
+				self::EVENT_HAS_LABEL_COLUMN_EVENT_ID => $eventId,
+				self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId
+			));
+		} 
+
+		foreach ($groups as $group) {
+			if($group['value']){
+				$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)->insert(array(
+					self::GROUP_HAS_EVENT_COLUMN_EVENT_ID => $eventId,
+					self::GROUP_HAS_EVENT_COLUMN_GROUP_ID => $group['id']
+				));
+			}
+		}
 	}
 
 	public function checkViewCorrect($view) {	

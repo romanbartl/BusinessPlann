@@ -111,8 +111,13 @@ class AppPresenter extends BasePresenter
 
         $labels = $this->labelsManager->getLabels();
         $labelsOptions = array();
-        foreach ($labels as $key => $label) {
+        foreach ($labels as $label) {
             $labelsOptions[$label['id']] = $label['name'];
+        }
+
+        $groups = $this->groupsManager->getGroups();
+        foreach ($groups as $group) {
+            $form->addCheckbox('group_' . $group['id'], $group['name']);
         }
         
         $form->addSelect('eventsLabels', '', $labelsOptions)
@@ -129,12 +134,22 @@ class AppPresenter extends BasePresenter
 
     public function addEventFormSucceeded($form, $values) {
         if($this->isAjax()) {
+            $groups = $this->groupsManager->getGroups();
+            $groupsArrayValues = array();
+            foreach ($groups as $key => $group) {
+                if($values['group_' . $group['id']]){
+                    $groupsArrayValues[$key]['id'] = $group['id'];
+                    $groupsArrayValues[$key]['value'] = $values['group_' . $group['id']];
+                }
+            }
+
             $this->appManager->addNewEvent($values['eventName'],
                                                $values['eventStartDate'],
                                                $values['eventEndDate'],
                                                $values['eventStartTime'],
                                                $values['eventEndTime'],
-                                               $values['eventsLabels']);
+                                               $values['eventsLabels'], 
+                                               $groupsArrayValues);
             $this->redrawControl('eventsView');
             $this->redrawControl('addEvent');
             $this->redrawControl('dark');
