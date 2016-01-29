@@ -125,6 +125,11 @@ class GroupsManager extends BaseManager
 		}
 	}
 
+	public function changeGroupName($newName, $groupId) {
+		$this->database->table(self::GROUP_TABLE_NAME)->where(self::GROUP_COLUMN_ID, $groupId)
+    													 ->update(array(self::GROUP_COLUMN_NAME => $newName));
+	}
+
 	public function checkViewCorrect($view) {
 		if($view == 'add' || $view == 'edit' || $view = 'show')
 			return true;

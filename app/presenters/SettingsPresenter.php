@@ -449,6 +449,9 @@ class SettingsPresenter extends BasePresenter
 		$form->addSubmit('add_user_submit', 'Přidat')
 				->setAttribute('class', '');
 
+		$form->addSubmit('change_name_submit', 'Změnit jméno')
+			->setAttribute('class', '');
+
 		$form->onSuccess[] = array($this, 'editGroupSucceeded');
 
 		return $form;
@@ -462,18 +465,21 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	public function editGroupSucceeded($form, $values){
-		if(!preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['group_user'])){
-			$form->addError('Zadaný e-mail není ve správném formátu');
-			return false;
-		} elseif(!$this->userManager->userExists($values['group_user'])) {
-			$form->addError('Žádný uživatel pod tímto e-mailem zde není registrován');
-			return false;
-		} if($this->groupsManager->userIsAlreadyInGroup($values['group_id_hidden'], $values['group_user'])) {
-			$form->addError('Zadaný uživatel již ve skupině je');
-			return false;
-		}
+		if($form['add_user_submit']->isSubmittedBy()) {
+			if(!preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['group_user'])){
+				$form->addError('Zadaný e-mail není ve správném formátu');
+				return false;
+			} elseif(!$this->userManager->userExists($values['group_user'])) {
+				$form->addError('Žádný uživatel pod tímto e-mailem zde není registrován');
+				return false;
+			} if($this->groupsManager->userIsAlreadyInGroup($values['group_id_hidden'], $values['group_user'])) {
+				$form->addError('Zadaný uživatel již ve skupině je');
+				return false;
+			}
+			$this->groupsManager->addGroupUser($values['group_id_hidden'], $values['group_user']);
+		} elseif($form['change_name_submit']->isSubmittedBy())
+			$this->groupsManager->changeGroupName($values['group_name'], $values['group_id_hidden']);
 
-		$this->groupsManager->addGroupUser($values['group_id_hidden'], $values['group_user']);
 		$this->group = $this->groupsManager->getGroups($values['group_id_hidden']);
 		$this->redrawControl('editGroup');
 	}		
