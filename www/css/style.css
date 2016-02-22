@@ -1335,3 +1335,16 @@ input.edit_label_name:disabled{
 	transition-duration: 0.1s;
 	color: #6048f3;
 }
+
+#share_dialog {
+	position: absolute;
+	width: 500px;
+	height: 500px;
+	background: white;
+	z-index: 20;
+	display: none;
+}
+
+#share_event {
+
+}

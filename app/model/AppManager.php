@@ -8,10 +8,12 @@ class AppManager extends BaseManager
 {
 	private $database;
 	private $user;
+	private $groupsManager;
 
-	public function __construct(Nette\Database\Context $database, User $user) {
+	public function __construct(Nette\Database\Context $database, User $user, GroupsManager $groupsManager) {
 		$this->database = $database;
 		$this->user = $user;
+		$this->groupsManager = $groupsManager;
 	}
 
 	public function getEvents($format, $viewDate) {
@@ -19,9 +21,9 @@ class AppManager extends BaseManager
 
 		$query = 'SELECT e.id AS id, 
 					e.name AS name, 
-					DATE_FORMAT(e.start, "%Y-%c-%d") AS startDay,
+					DATE_FORMAT(e.start, "%Y-%m-%d") AS startDay,
 					DATE_FORMAT(e.start, "%H:%i") AS startTime,
-					DATE_FORMAT(e.end, "%Y-%c-%d") AS endDay,
+					DATE_FORMAT(e.end, "%Y-%m-%d") AS endDay,
 					DATE_FORMAT(e.end, "%H:%i") AS endTime,
 					l.name AS label,
 					c_lab.color AS label_color
@@ -79,20 +81,32 @@ class AppManager extends BaseManager
 	}
 
 	public function getEventById($eventId) {
-		$event = $this->database->query('SELECT e.id AS id, e.name AS name, 
-											DATE_FORMAT(e.start, "%d.%c.%Y") AS startDay,
-											DATE_FORMAT(e.start, "%H:%i") AS startTime,
-											DATE_FORMAT(e.end, "%d.%c.%Y") AS endDay,
-											DATE_FORMAT(e.end, "%H:%i") AS endTime,
-											l.name AS label,
-											c.color AS label_color
-											FROM `event` AS e
-											LEFT JOIN `label` AS l ON l.id = e.label_id
-											LEFT JOIN `color` AS c ON c.id = l.user_color_id
-											WHERE  e.user_id = ' . $this->user->identity->id . '
-											HAVING e.id = ' . $eventId . '
-											ORDER BY e.start')->fetch();
+		$event = $this->database->query('SELECT e.id AS id, 
+					e.name AS name, 
+					DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
+					DATE_FORMAT(e.start, "%H:%i") AS startTime,
+					DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
+					DATE_FORMAT(e.end, "%H:%i") AS endTime,
+					l.name AS label,
+					l.id AS labelId,
+					c_lab.color AS label_color
+
+					FROM `event_has_label` AS ehl 
+
+					RIGHT JOIN `event` AS e ON ehl.event_id = e.id
+					LEFT JOIN `label` AS l ON ehl.label_id = l.id
+					LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
+
+					WHERE e.user_id = ' . $this->user->identity->id . 
+					' HAVING e.id = ' . $eventId)->fetch();
+
 		return $event;
+	}
+
+	public function eventInGroups($eventId) {
+		return $this->database->query('SELECT g.id AS id, g.name AS name, g.color_id AS color
+										FROM `group` AS g, `group_has_event` AS ghe
+										WHERE g.id = ghe.group_id AND ghe.event_id = ' . $eventId)->fetchAll();
 	}
 
 	public function addNewEvent($eventName, $startDay, $endDay, $startTime, $endTime, $labelId, $groups) {
@@ -123,6 +137,46 @@ class AppManager extends BaseManager
 				));
 			}
 		}
+	}
+
+	public function editEvent($eventId, $eventName, $startDay, $endDay, $startTime, $endTime, $labelId) {
+		$start = substr($startDay, 6) . '-' . substr($startDay, 3, 2) . '-' . substr($startDay, 0, 2) . ' ' . $startTime;
+		$end = substr($endDay, 6) . '-' . substr($endDay, 3, 2) . '-' . substr($endDay, 0, 2) . ' ' . $endTime;
+		
+		$this->database->table(self::EVENT_TABLE_NAME)->where(self::EVENT_COLUMN_ID, $eventId)
+														->update(array(
+															self::EVENT_COLUMN_NAME => $eventName,
+															self::EVENT_COLUMN_START => $start,
+															self::EVENT_COLUMN_END => $end,
+														));
+
+
+		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
+				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)->delete();
+
+		if($labelId != NULL) {
+			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)->insert(array(
+				self::EVENT_HAS_LABEL_COLUMN_EVENT_ID => $eventId,
+				self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId
+			));
+		}
+	}
+
+	public function deleteEventFromGroup($eventId, $groupId) {
+		$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)
+													  ->where(self::GROUP_HAS_EVENT_COLUMN_GROUP_ID, $groupId)
+													  ->delete();
+	}
+
+	public function deleteEvent($eventId) {
+		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
+								->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)->delete();
+
+		$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)
+								->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)->delete();
+
+		$this->database->table(self::EVENT_TABLE_NAME)
+								->where(self::EVENT_COLUMN_ID, $eventId)->delete();
 	}
 
 	public function checkViewCorrect($view) {	
@@ -158,6 +212,16 @@ class AppManager extends BaseManager
 		return $date;
 	}
 
+	public function shareInGroups($eventId, $groupsIds) {
+		foreach($groupsIds as $key => $id) {
+			$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)
+							->insert(array(
+								self::GROUP_HAS_EVENT_COLUMN_EVENT_ID => $eventId,
+								self::GROUP_HAS_EVENT_COLUMN_GROUP_ID => $id
+							));
+		}
+	}
+
 	public function getNewDate($date) {
 		return new \DateTime($date);
 	}
@@ -179,5 +243,35 @@ class AppManager extends BaseManager
                                     'květen', 'červen', 'červenec', 'srpen', 
                                     'září', 'říjen', 'listopad', 'prosinec');   
         return $months[$monthNumber];
+    }
+
+    public function getGroupsDifference($eventId) {  
+    	$eventInGroups = $this->eventInGroups($eventId);
+    	$groups = $this->groupsManager->getGroups();
+
+        $groupsTmp = array();
+        $eventInGroupsTmp = array();
+        
+        foreach ($groups as $group) {
+            $groupsTmp[] = $group['id'];   
+        }
+
+        foreach ($eventInGroups as $eventInGroup) {
+            $eventInGroupsTmp[] = $eventInGroup['id'];   
+        }
+
+        $arrayDif = array_diff($groupsTmp, $eventInGroupsTmp);
+        $differentGroups = array();
+        
+        foreach ($groups as $group) {
+            foreach ($arrayDif as $key) {
+                if($key == $group['id']) {
+                    $differentGroups[$key]['id'] = $group['id'];
+                    $differentGroups[$key]['name'] = $group['name'];
+                }
+            }     
+        }
+
+        return $differentGroups;
     }
 }

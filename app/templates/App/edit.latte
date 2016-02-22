@@ -1,0 +1,69 @@
+{layout './@appLayout.latte'}
+
+{define #area}
+
+<div id="share_dialog">
+{form shareInGroupForm}
+{foreach $groups as $group}
+	{input group_ . $group['id']}
+{/foreach}
+{input groupSubmit}
+{/form}
+</div>
+
+
+{snippet event}
+<a n:href="App:default" class=""><button>Zpět</button></a>
+<button id="share_event">Sdílet</button>
+<a n:href="deleteEvent!" class=""><button>Smazat</button></a>
+
+<div style="position: relative;">
+{form editEventForm}
+	{input edit_event}
+	{input eventName value=>$event['name']}
+	<div>{input eventStartDate value=>$event['startDay']}</div>
+	<div>{input eventEndDate value=>$event['endDay']}</div>
+	<div>{input eventStartTime value=>$event['startTime']}</div>
+	<div>{input eventEndTime value=>$event['endTime']}</div>
+	{input editEventsLabels value=>$event['labelId']}
+	<div><span>Sílet ve skupině</span></div>
+
+{/form}
+
+{foreach $eventInGroups as $group}
+	{$group['name']} <a n:href="deleteFromGroup! $group['id']" class="ajax">
+		<span class="glyphicon glyphicon-remove"></span>
+	</a>
+{/foreach}
+
+<div id="choose_color_window">
+	<span id="cancel_choosing_label_color" class="glyphicon glyphicon-remove"></span>
+</div>
+
+
+</div>
+{/snippet}
+
+{snippet comments}
+<div>
+	{foreach $comments as $comment}
+		<div style="background:#{$comment['color']}">
+			<div>
+				<div>{$comment['photo']}</div>
+				<div>{$comment['name']}</div>
+			</div>
+			<div>{$comment['content']}</div>
+		</div>
+	{/foreach}
+</div>
+
+	<div>
+		{form commentsForm}
+			{input commentContent}
+			{input commentSubmit}
+		{/form}
+	</div>
+{/snippet}
+
+
+{/define}

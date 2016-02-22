@@ -8,7 +8,8 @@ use Nette,
 	Nette\Application\UI\Form,
     App\Model\AppManager,
     App\Model\LabelsManager,
-    App\Model\GroupsManager;
+    App\Model\GroupsManager,
+    App\Model\CommentsManager;
 
 
 /**
@@ -19,15 +20,22 @@ class AppPresenter extends BasePresenter
 	private $appManager;
 	private $labelsManager;
     private $groupsManager;
+    private $commentsManager;
 
     private $viewFormat;
     private $viewFromDate;
 
-	public function __construct(AppManager $appManager, LabelsManager $labelsManager, GroupsManager $groupsManager) {
+    private $eventId;
+    private $eventLabelId;
+
+
+	public function __construct(AppManager $appManager, LabelsManager $labelsManager, GroupsManager $groupsManager,
+                                CommentsManager $commentsManager) {
         parent::__construct();
         $this->appManager = $appManager;
         $this->labelsManager = $labelsManager;
         $this->groupsManager = $groupsManager;
+        $this->commentsManager = $commentsManager;
     }
 
     public function actionDefault($view, $date) {
@@ -77,6 +85,7 @@ class AppPresenter extends BasePresenter
         $this->template->viewDateMinus = $this->appManager->getModifiedDate($this->template->viewFromDate, $this->template->viewFormat, '-2 ');       
     }
 
+
     public function getFormatedDate($date) {
         return $this->appManager->getFormatedDate($this->appManager->getNewDate($date), 'agendaLink');
     }
@@ -87,7 +96,7 @@ class AppPresenter extends BasePresenter
 
         $form->addText('eventName')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'Zadejte název událsti');
+                 ->setAttribute('placeholder', 'Zadejte název události');
 
         $form->addText('eventStartDate')
                  ->setAttribute('placeholder', 'Od')
@@ -155,4 +164,140 @@ class AppPresenter extends BasePresenter
             $this->redrawControl('dark');
         }
     }
+
+    public function actionEdit($id) {
+        $this->eventId = $id;
+    }
+
+    public function handleDeleteFromGroup($groupId) {
+        if($this->isAjax()) {
+            $this->appManager->deleteEventFromGroup($this->eventId, $groupId);
+            $this->redrawControl('event');  
+        }
+    }
+
+    public function handleDeleteEvent() {
+        $this->appManager->deleteEvent($this->eventId);
+        $this->redirect('App:default');
+    }
+
+    public function renderEdit() {
+        $this->template->event = $this->appManager->getEventById($this->eventId);
+        $this->eventLabelId = $this->template->event['labelId'];
+        $this->template->eventInGroups = $this->appManager->eventInGroups($this->eventId);
+        $this->template->groups = $this->appManager->getGroupsDifference($this->eventId);
+        $this->template->comments = $this->commentsManager->getComents($this->eventId);
+    }
+
+    protected function createComponentEditEventForm() {
+        $form = new Form();
+        $form->getElementPrototype()->class('ajax');
+
+        $form->addText('eventName')
+                 ->setAttribute('class', 'input')
+                 ->setAttribute('placeholder', 'Zadejte název události');
+
+        $form->addText('eventStartDate')
+                 ->setAttribute('class', 'input datepicker')
+                 ->setAttribute('id', 'eventStartDate');
+
+        $form->addText('eventEndDate')
+                 ->setAttribute('class', 'input datepicker')
+                 ->setAttribute('id', 'eventEndDate');
+
+        $form->addText('eventStartTime')
+                 ->setAttribute('placeholder', 'Od')
+                 ->setAttribute('class', 'input timepicker')
+                 ->setAttribute('id', 'eventStartTime');
+
+        $form->addText('eventEndTime')
+                 ->setAttribute('placeholder', 'Do')
+                 ->setAttribute('class', 'input timepicker')
+                 ->setAttribute('id', 'eventEndTime');
+
+        $labels = $this->labelsManager->getLabels();
+        $labelsOptions = array();
+        foreach ($labels as $label) {
+            $labelsOptions[$label['id']] = $label['name'];
+        }
+
+        $form->addSelect('editEventsLabels', '', $labelsOptions)
+                 ->setAttribute('id', 'eventsLabelsChooser')
+                 ->setPrompt('Žádný');
+
+        $form['editEventsLabels']->setDefaultValue($this->eventLabelId);
+
+        $form->addSubmit('edit_event', 'Uložit')
+                 ->setAttribute('class', '')
+                 ->setAttribute('id', 'edit_event_button');
+
+        $form->onSuccess[] = array($this, 'editEventFormSucceeded');
+
+        return $form;
+    }
+
+    public function editEventFormSucceeded($form, $values) {
+        if($this->isAjax()) {
+            $this->appManager->editEvent($this->eventId,
+                                            $values['eventName'],
+                                            $values['eventStartDate'],
+                                            $values['eventEndDate'],
+                                            $values['eventStartTime'],
+                                            $values['eventEndTime'],
+                                            $values['editEventsLabels']); 
+
+            $this->redrawControl('event');  
+        }                          
+    }
+    protected function createComponentShareInGroupForm() {
+        $form = new Form();
+        $form->getElementPrototype()->class('ajax');
+
+        $groups = $this->appManager->getGroupsDifference($this->eventId);
+        foreach($groups as $group) {
+            $form->addCheckbox('group_' . $group['id'], $group['name']);
+        }
+
+        $form->addSubmit('groupSubmit', 'uložit');
+
+        $form->onSuccess[] = array($this, 'shareInGroupFormSucceeded');
+
+        return $form;
+    }
+
+    public function shareInGroupFormSucceeded($form, $values) {
+        if($this->isAjax()) {
+            $shareGroupsIds = array();
+
+            $groups = $this->appManager->getGroupsDifference($this->eventId);
+            foreach($groups as $group) {
+                if($values['group_' . $group['id']])
+                    $shareGroupsIds[] = $group['id'];
+            }
+
+            $this->appManager->shareInGroups($this->eventId, $shareGroupsIds);
+            $this->redrawControl('event');
+        }
+    }
+
+    protected function createComponentCommentsForm() {
+        $form = new Form();
+        $form->getElementPrototype()->class('ajax');
+
+        $form->addTextArea('commentContent', 'Komentář ..', 50, 5);
+
+        $form->addSubmit('commentSubmit', 'uložit');
+
+        $form->onSuccess[] = array($this, 'commentsFormSucceeded');
+
+        return $form;
+    }
+
+    public function commentsFormSucceeded($form, $values) {
+        if($this->isAjax()) {
+            $this->commentsManager->addComment($values['commentContent'], $this->eventId);
+            $this->redrawControl('comments');
+        }
+    }
+
 }

@@ -25,5 +25,6 @@ services:
 	- App\Model\LabelsManager
 	- App\Model\GroupsManager
 	- App\Model\ColorManager
+	- App\Model\CommentsManager
 	router: App\RouterFactory::createRouter
 	authenticate: App\Model\AuthenticateManager

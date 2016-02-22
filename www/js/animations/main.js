@@ -1,3 +1,16 @@
+$(function() {
+	$('.datepicker').datetimepicker({
+    	format: 'DD.MM.YYYY',
+    	viewMode: 'days'
+    });
+});
+
+$(function() {
+	$('.timepicker').datetimepicker({
+   		format: 'HH:mm'
+    });
+});
+
 $("#search-div-icon").click(function() { 
 	$("#search-div-input").toggle('slide', {direction: 'right'}, 300);
 	$(".search-input").select();
@@ -19,18 +32,10 @@ $('#main_add_button').click(function() {
 $('#dark').click(function() {
 	$("#dark").fadeToggle(120);
 	$('#add_event').fadeToggle(120);
+	$("#share_dialog").fadeToggle(120);
 });
 
-
-$(function() {
-	$('.datepicker').datetimepicker({
-    	format: 'DD.MM.YYYY',
-    	viewMode: 'days'
-    });
-});
-
-$(function() {
-	$('.timepicker').datetimepicker({
-   		format: 'HH:mm'
-    });
+$('#share_event').click(function() {
+	$("#dark").fadeToggle(120);
+	$("#share_dialog").fadeToggle(120);
 });

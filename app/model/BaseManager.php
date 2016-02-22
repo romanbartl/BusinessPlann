@@ -38,6 +38,7 @@ abstract class BaseManager extends Nette\Object
 		LABEL_COLUMN_COLOR = 'user_color_id',
 
 		EVENT_TABLE_NAME = 'event',
+		EVENT_COLUMN_ID = 'id',
 		EVENT_COLUMN_NAME = 'name',
 		EVENT_COLUMN_START = 'start',
 		EVENT_COLUMN_END = 'end',
@@ -60,5 +61,11 @@ abstract class BaseManager extends Nette\Object
 		USER_GROUP_TABLE_NAME = 'user_is_in_group',
 		USER_GROUP_COLUMN_USER_ID = 'user_id',
 		USER_GROUP_COLUMN_GROUP_ID = 'group_id',
-		USER_GROUP_COLUMN_CONFIRM  = 'confirm';
+		USER_GROUP_COLUMN_CONFIRM  = 'confirm',
+
+		COMMENT_TABLE_NAME = 'comment',
+		COMMENT_COLUMN_CONTENT = 'content',
+		COMMENT_COLUMN_TIME = 'time',
+		COMMENT_COLUMN_EVENT_ID  = 'event_id',
+		COMMENT_COLUMN_USER_ID = 'user_id';
 }

@@ -8,7 +8,7 @@
 				
 		<div class="events">
 			{foreach $day as $id => $event}
-				<a href="" class="ajax">
+				<a n:href="App:edit $event['id']" class="">
 					<div class='event' style="
 						{if $event['label_color']}
 							border-left: 6px solid #{$event['label_color']};
