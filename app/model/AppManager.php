@@ -17,26 +17,59 @@ class AppManager extends BaseManager
 	}
 
 	public function getEvents($format, $viewDate) {
+		$eventsIds = array();
 		$events = array();
 
+		$query = 'SELECT `id` AS id 
+				  FROM `event` AS e
+				  WHERE e.user_id = ' . $this->user->identity->id;
+
+		$result = $this->database->query($query)->fetchPairs('id', 'id');
+
+		foreach ($result as $id) {
+			$eventsIds[] = $id;
+		}
+
+		$query = 'SELECT ghe.event_id AS id
+				  FROM `user_is_in_group` AS uig
+				  LEFT JOIN `group_has_event` AS ghe ON ghe.group_id = uig.group_id
+				  WHERE uig.user_id = ' . $this->user->identity->id;
+		
+		$result = $this->database->query($query)->fetchPairs('id', 'id');
+
+		foreach ($result as $id) {
+			if(isset($id))
+				$eventsIds[] = $id;
+		}
+
 		$query = 'SELECT e.id AS id, 
-					e.name AS name, 
-					DATE_FORMAT(e.start, "%Y-%m-%d") AS startDay,
-					DATE_FORMAT(e.start, "%H:%i") AS startTime,
-					DATE_FORMAT(e.end, "%Y-%m-%d") AS endDay,
-					DATE_FORMAT(e.end, "%H:%i") AS endTime,
-					l.name AS label,
-					c_lab.color AS label_color
+				  e.user_id AS owner,
+				  e.name AS name, 
+				  DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
+				  DATE_FORMAT(e.start, "%H:%i") AS startTime,
+				  DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
+				  DATE_FORMAT(e.end, "%H:%i") AS endTime,
+				  l.name AS label,
+				  l.id AS labelId,
+				  c_lab.color AS label_color
 
-					FROM `event_has_label` AS ehl 
+				  FROM `event` AS e 
 
-					RIGHT JOIN `event` AS e ON ehl.event_id = e.id
-					LEFT JOIN `label` AS l ON ehl.label_id = l.id
-					LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
+				  LEFT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
+				  LEFT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
+				  LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id ';
 
-					WHERE e.user_id = ' . $this->user->identity->id . '
+		if(count($eventsIds) > 0){
+			$query .= 'WHERE ';
 
-					ORDER BY e.start';
+			foreach ($eventsIds as $id) {
+				$query .= 'e.id = ' . $id . ' OR ';
+			}
+
+			$query = substr($query, 0, -4);
+		}
+
+		$query .= ' ORDER BY e.start';
 
 		$result = $this->database->query($query);
 
@@ -82,23 +115,23 @@ class AppManager extends BaseManager
 
 	public function getEventById($eventId) {
 		$event = $this->database->query('SELECT e.id AS id, 
-					e.name AS name, 
-					DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
-					DATE_FORMAT(e.start, "%H:%i") AS startTime,
-					DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
-					DATE_FORMAT(e.end, "%H:%i") AS endTime,
-					l.name AS label,
-					l.id AS labelId,
-					c_lab.color AS label_color
+							e.user_id AS owner,
+							e.name AS name, 
+							DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
+							DATE_FORMAT(e.start, "%H:%i") AS startTime,
+							DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
+							DATE_FORMAT(e.end, "%H:%i") AS endTime,
+							l.name AS label,
+							l.id AS labelId,
+							c_lab.color AS label_color
 
-					FROM `event_has_label` AS ehl 
+							FROM `event` AS e 
 
-					RIGHT JOIN `event` AS e ON ehl.event_id = e.id
-					LEFT JOIN `label` AS l ON ehl.label_id = l.id
-					LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
+							LEFT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
+							LEFT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
+							LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
 
-					WHERE e.user_id = ' . $this->user->identity->id . 
-					' HAVING e.id = ' . $eventId)->fetch();
+							WHERE e.id = ' . $eventId)->fetch();
 
 		return $event;
 	}
