@@ -25,13 +25,16 @@
 	<div>{input eventEndDate value=>$event['endDay']}</div>
 	<div>{input eventStartTime value=>$event['startTime']}</div>
 	<div>{input eventEndTime value=>$event['endTime']}</div>
-	{input editEventsLabels value=>$event['labelId']}
-	<div><span>Sílet ve skupině</span></div>
-
 {/form}
 
+{form labelsForm}
+	{input editEventsLabels value=>$event['labelId']}
+	{input edit_labels_submit}
+{/form}
+
+<div><span>Sílet ve skupině</span></div>
 {foreach $eventInGroups as $group}
-	{$group['name']} <a n:href="deleteFromGroup! $group['id']" class="ajax">
+	{$group['name']} <a n:href="deleteFromGroup! $group['id']" class="dajax">
 		<span class="glyphicon glyphicon-remove"></span>
 	</a>
 {/foreach}

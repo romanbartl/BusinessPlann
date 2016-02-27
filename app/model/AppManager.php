@@ -18,7 +18,6 @@ class AppManager extends BaseManager
 
 	public function getEvents($format, $viewDate) {
 		$eventsIds = array();
-		$events = array();
 
 		$query = 'SELECT `id` AS id 
 				  FROM `event` AS e
@@ -42,6 +41,8 @@ class AppManager extends BaseManager
 				$eventsIds[] = $id;
 		}
 
+		$events = array();
+
 		$query = 'SELECT e.id AS id, 
 				  e.user_id AS owner,
 				  e.name AS name, 
@@ -55,8 +56,8 @@ class AppManager extends BaseManager
 
 				  FROM `event` AS e 
 
-				  LEFT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
-				  LEFT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
+				  RIGHT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
+				  RIGHT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
 				  LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id ';
 
 		if(count($eventsIds) > 0){
@@ -67,7 +68,8 @@ class AppManager extends BaseManager
 			}
 
 			$query = substr($query, 0, -4);
-		}
+		} else 
+			return $events;
 
 		$query .= ' ORDER BY e.start';
 
@@ -127,8 +129,8 @@ class AppManager extends BaseManager
 
 							FROM `event` AS e 
 
-							LEFT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
-							LEFT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
+							RIGHT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
+							RIGHT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
 							LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
 
 							WHERE e.id = ' . $eventId)->fetch();
@@ -172,7 +174,7 @@ class AppManager extends BaseManager
 		}
 	}
 
-	public function editEvent($eventId, $eventName, $startDay, $endDay, $startTime, $endTime, $labelId) {
+	public function editEvent($eventId, $eventName, $startDay, $endDay, $startTime, $endTime) {
 		$start = substr($startDay, 6) . '-' . substr($startDay, 3, 2) . '-' . substr($startDay, 0, 2) . ' ' . $startTime;
 		$end = substr($endDay, 6) . '-' . substr($endDay, 3, 2) . '-' . substr($endDay, 0, 2) . ' ' . $endTime;
 		
@@ -186,17 +188,48 @@ class AppManager extends BaseManager
 
 		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
 				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)->delete();
+	}
 
-		if($labelId != NULL) {
-			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)->insert(array(
+	public function changeLabel($eventId, $labelId) {
+		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)->insert(array(
 				self::EVENT_HAS_LABEL_COLUMN_EVENT_ID => $eventId,
 				self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId
 			));
+
+		/*$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
+				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $lastLabelId)
+				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
+				->update(array(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId));	
+
+		/*if($labelId == NULL) {
+			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
+				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $labelId)
+				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
+				->delete();	
+
+			return TRUE;
 		}
+
+		$query = 'SELECT l.id AS id
+				  FROM `label` AS l
+				  LEFT JOIN `event_has_label` AS ehl ON l.id = ehl.label_id
+				  WHERE l.user_id = ' . $this->user->identity->id . ' AND ehl.event_id = ' . $eventId;
+
+		$lastLabelId = $this->database->query($query)->fetch();
+
+		if(isset($lastLabelId->id)) {
+			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
+				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $lastLabelId)
+				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
+				->update(array(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId));			
+		} else {
+			
+		}*/
 	}
 
 	public function deleteEventFromGroup($eventId, $groupId) {
-		$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)
+		$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)
+														->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)
 													  ->where(self::GROUP_HAS_EVENT_COLUMN_GROUP_ID, $groupId)
 													  ->delete();
 	}

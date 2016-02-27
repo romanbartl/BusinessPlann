@@ -170,7 +170,7 @@ class AppPresenter extends BasePresenter
     }
 
     public function handleDeleteFromGroup($groupId) {
-        if($this->isAjax()) {
+        if(!$this->isAjax()) {
             $this->appManager->deleteEventFromGroup($this->eventId, $groupId);
             $this->redrawControl('event');  
         }
@@ -215,18 +215,6 @@ class AppPresenter extends BasePresenter
                  ->setAttribute('class', 'input timepicker')
                  ->setAttribute('id', 'eventEndTime');
 
-        $labels = $this->labelsManager->getLabels();
-        $labelsOptions = array();
-        foreach ($labels as $label) {
-            $labelsOptions[$label['id']] = $label['name'];
-        }
-
-        $form->addSelect('editEventsLabels', '', $labelsOptions)
-                 ->setAttribute('id', 'eventsLabelsChooser')
-                 ->setPrompt('Žádný');
-
-        $form['editEventsLabels']->setDefaultValue($this->eventLabelId);
-
         $form->addSubmit('edit_event', 'Uložit')
                  ->setAttribute('class', '')
                  ->setAttribute('id', 'edit_event_button');
@@ -243,12 +231,45 @@ class AppPresenter extends BasePresenter
                                             $values['eventStartDate'],
                                             $values['eventEndDate'],
                                             $values['eventStartTime'],
-                                            $values['eventEndTime'],
-                                            $values['editEventsLabels']); 
+                                            $values['eventEndTime']); 
 
             $this->redrawControl('event');  
         }                          
     }
+
+    protected function createComponentLabelsForm() {
+        $form = new Form();
+        //$form->getElementPrototype()->class('ajax');
+
+        $labels = $this->labelsManager->getLabels();
+        $labelsOptions = array();
+        
+        foreach ($labels as $label) {
+            $labelsOptions[$label['id']] = $label['name'];
+        }
+
+        $form->addSelect('editEventsLabels', '', $labelsOptions)
+                 ->setAttribute('id', 'eventsLabelsChooser')
+                 ->setPrompt('Žádný');
+
+        $form->addSubmit('edit_labels_submit', 'Uložit')
+                 ->setAttribute('class', '')
+                 ->setAttribute('id', 'edit_event_button');
+
+        $form['editEventsLabels']->setDefaultValue($this->eventLabelId);
+
+        $form->onSuccess[] = array($this, 'labelsFormSucceeded');
+
+        return $form;
+    }
+
+    public function labelsFormSucceeded($form, $values) {
+        if(!$this->isAjax()) {
+            $this->appManager->changeLabel($this->eventId, $values['editEventsLabels']); 
+            $this->redrawControl('event');  
+        }  
+    }
+
     protected function createComponentShareInGroupForm() {
         $form = new Form();
         $form->getElementPrototype()->class('ajax');
