@@ -43,25 +43,17 @@ class AppManager extends BaseManager
 
 		$events = array();
 
-		$query = 'SELECT e.id AS id, 
-				  e.user_id AS owner,
+		$query = 'SELECT e.id AS id,
 				  e.name AS name, 
 				  DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
 				  DATE_FORMAT(e.start, "%H:%i") AS startTime,
 				  DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
-				  DATE_FORMAT(e.end, "%H:%i") AS endTime,
-				  l.name AS label,
-				  l.id AS labelId,
-				  c_lab.color AS label_color
+				  DATE_FORMAT(e.end, "%H:%i") AS endTime
 
-				  FROM `event` AS e 
-
-				  RIGHT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
-				  RIGHT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
-				  LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id ';
+				  FROM `event` AS e ';
 
 		if(count($eventsIds) > 0){
-			$query .= 'WHERE ';
+			$query .= 'WHERE (';
 
 			foreach ($eventsIds as $id) {
 				$query .= 'e.id = ' . $id . ' OR ';
@@ -71,9 +63,20 @@ class AppManager extends BaseManager
 		} else 
 			return $events;
 
-		$query .= ' ORDER BY e.start';
+		$query .= ') AND e.trash != 1 ORDER BY e.start';
 
-		$result = $this->database->query($query);
+		$result = $this->database->query($query)->fetchAll();
+
+		foreach ($result as $key => $event) {
+			$label = $this->database->query('SELECT l.id AS id, l.name AS name, c.color AS label_color
+							  FROM `color` AS c, `label` AS l
+							  LEFT JOIN `event_has_label` AS ehl ON l.id = ehl.label_id
+							  WHERE (c.id = l.user_color_id) AND l.user_id = ' . $this->user->identity->id . ' AND ehl.event_id = ' . $event['id'])->fetch();
+			
+			$result[$key]['labelId'] = $label['id'];
+			$result[$key]['label'] = $label['name'];
+			$result[$key]['label_color'] = $label['label_color'];
+		}
 
 		switch ($format) {
 			case 'day':
@@ -122,29 +125,32 @@ class AppManager extends BaseManager
 							DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
 							DATE_FORMAT(e.start, "%H:%i") AS startTime,
 							DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
-							DATE_FORMAT(e.end, "%H:%i") AS endTime,
-							l.name AS label,
-							l.id AS labelId,
-							c_lab.color AS label_color
-
+							DATE_FORMAT(e.end, "%H:%i") AS endTime,				  
+							e.place AS place,
+				  			e.description AS description
+							
 							FROM `event` AS e 
-
-							RIGHT JOIN `event_has_label` AS ehl ON ehl.event_id = e.id
-							RIGHT JOIN `label` AS l ON ehl.label_id = l.id AND l.user_id = ' . $this->user->identity->id . ' 
-							LEFT JOIN `color` AS c_lab ON l.user_color_id = c_lab.id
-
+							
 							WHERE e.id = ' . $eventId)->fetch();
+
+		$label = $this->database->query('SELECT l.id AS id, c.color AS label_color
+						  FROM `color` AS c, `label` AS l
+						  LEFT JOIN `event_has_label` AS ehl ON l.id = ehl.label_id
+						  WHERE (c.id = l.user_color_id) AND l.user_id = ' . $this->user->identity->id . ' AND ehl.event_id = ' . $eventId)->fetch();
+		
+		$event['labelId'] = $label['id'];
+		$event['label_color'] = $label['label_color'];
 
 		return $event;
 	}
 
 	public function eventInGroups($eventId) {
-		return $this->database->query('SELECT g.id AS id, g.name AS name, g.color_id AS color
-										FROM `group` AS g, `group_has_event` AS ghe
-										WHERE g.id = ghe.group_id AND ghe.event_id = ' . $eventId)->fetchAll();
+		return $this->database->query('SELECT g.id AS id, g.name AS name, c.color AS color
+										FROM `group` AS g, `group_has_event` AS ghe, `color` AS c
+										WHERE (c.id = g.color_id) AND (g.id = ghe.group_id AND ghe.event_id = ' . $eventId . ')')->fetchAll();
 	}
 
-	public function addNewEvent($eventName, $startDay, $endDay, $startTime, $endTime, $labelId, $groups) {
+	public function addNewEvent($eventName, $startDay, $endDay, $startTime, $endTime, $labelId) {
 		$start = substr($startDay, 6) . '-' . substr($startDay, 3, 2) . '-' . substr($startDay, 0, 2) . ' ' . $startTime;
 		$end = substr($endDay, 6) . '-' . substr($endDay, 3, 2) . '-' . substr($endDay, 0, 2) . ' ' . $endTime;
 		
@@ -153,6 +159,7 @@ class AppManager extends BaseManager
 			self::EVENT_COLUMN_START => $start,
 			self::EVENT_COLUMN_END => $end,
 			self::EVENT_COLUMN_USER_ID => $this->user->identity->id,
+			self::EVENT_COLUMN_TRASH => 0
 		));
 		
 		$eventId = $row->id;
@@ -164,17 +171,10 @@ class AppManager extends BaseManager
 			));
 		} 
 
-		foreach ($groups as $group) {
-			if($group['value']){
-				$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)->insert(array(
-					self::GROUP_HAS_EVENT_COLUMN_EVENT_ID => $eventId,
-					self::GROUP_HAS_EVENT_COLUMN_GROUP_ID => $group['id']
-				));
-			}
-		}
+		return $eventId;
 	}
 
-	public function editEvent($eventId, $eventName, $startDay, $endDay, $startTime, $endTime) {
+	public function editEvent($eventId, $eventName, $startDay, $endDay, $startTime, $endTime, $place, $description) {
 		$start = substr($startDay, 6) . '-' . substr($startDay, 3, 2) . '-' . substr($startDay, 0, 2) . ' ' . $startTime;
 		$end = substr($endDay, 6) . '-' . substr($endDay, 3, 2) . '-' . substr($endDay, 0, 2) . ' ' . $endTime;
 		
@@ -183,70 +183,62 @@ class AppManager extends BaseManager
 															self::EVENT_COLUMN_NAME => $eventName,
 															self::EVENT_COLUMN_START => $start,
 															self::EVENT_COLUMN_END => $end,
+															self::EVENT_COLUMN_PLACE => $place,
+															self::EVENT_COLUMN_DESCRIPTION => $description,
 														));
-
-
-		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
-				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)->delete();
 	}
 
 	public function changeLabel($eventId, $labelId) {
-		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)->insert(array(
-				self::EVENT_HAS_LABEL_COLUMN_EVENT_ID => $eventId,
-				self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId
-			));
-
-		/*$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
-				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $lastLabelId)
-				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
-				->update(array(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId));	
-
-		/*if($labelId == NULL) {
-			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
-				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $labelId)
-				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
-				->delete();	
-
-			return TRUE;
-		}
-
 		$query = 'SELECT l.id AS id
 				  FROM `label` AS l
 				  LEFT JOIN `event_has_label` AS ehl ON l.id = ehl.label_id
 				  WHERE l.user_id = ' . $this->user->identity->id . ' AND ehl.event_id = ' . $eventId;
+		
+		$lastLabelId = $this->database->query($query)->fetch();			
 
-		$lastLabelId = $this->database->query($query)->fetch();
+		if($labelId == NULL && isset($lastLabelId->id)) {
+			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
+				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $lastLabelId->id)
+				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
+				->delete();
+			
+			return TRUE;	
+		}
 
 		if(isset($lastLabelId->id)) {
 			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
-				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $lastLabelId)
+				->where(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID, $lastLabelId->id)
 				->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)
 				->update(array(self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId));			
 		} else {
-			
-		}*/
+			$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)->insert(array(
+				self::EVENT_HAS_LABEL_COLUMN_EVENT_ID => $eventId,
+				self::EVENT_HAS_LABEL_COLUMN_LABEL_ID => $labelId
+			));			
+		}
 	}
 
 	public function deleteEventFromGroup($eventId, $groupId) {
 		$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)
-														->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)
+													  ->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)
 													  ->where(self::GROUP_HAS_EVENT_COLUMN_GROUP_ID, $groupId)
 													  ->delete();
 	}
 
 	public function deleteEvent($eventId) {
-		$this->database->table(self::EVENT_HAS_LABEL_TABLE_NAME)
-								->where(self::EVENT_HAS_LABEL_COLUMN_EVENT_ID, $eventId)->delete();
-
-		$this->database->table(self::GROUP_HAS_EVENT_TABLE_NAME)
-								->where(self::GROUP_HAS_EVENT_COLUMN_EVENT_ID, $eventId)->delete();
-
 		$this->database->table(self::EVENT_TABLE_NAME)
-								->where(self::EVENT_COLUMN_ID, $eventId)->delete();
+								->where(self::EVENT_COLUMN_ID, $eventId)
+								->update(array(self::EVENT_COLUMN_TRASH => 1));
 	}
 
 	public function checkViewCorrect($view) {	
 		if($view == 'day' || $view == 'week' || $view == 'month' || $view == 'agenda' || $view == 'edit')
+			return TRUE;
+		return FALSE;
+	}
+
+	public function checkDateCorrect($date){
+		if(\DateTime::createFromFormat('Y-m-d', $date))
 			return TRUE;
 		return FALSE;
 	}
@@ -272,7 +264,8 @@ class AppManager extends BaseManager
 						' ' . $defaultDate->format('Y');
 				break;
 			case 'agendaLink':
-				$date = $defaultDate->format('d.m.Y');
+				$date['date'] = $defaultDate->format('j. n.');
+				$date['name'] = $this->czechDay($defaultDate->format('w'));
 				break;
 		}
 		return $date;
@@ -339,5 +332,25 @@ class AppManager extends BaseManager
         }
 
         return $differentGroups;
+    }
+
+    public function userHasPermition($eventId) {
+    	$share = $this->database->query('SELECT ghe.event_id AS id
+					FROM `user_is_in_group` AS uig
+					LEFT JOIN `group_has_event` AS ghe ON ghe.group_id = uig.group_id
+					WHERE uig.user_id = ' . $this->user->identity->id . ' AND ghe.event_id = ' . $eventId)->fetch();
+    	
+    	if($share != NULL)
+    		return TRUE;
+    	
+    	$owner = $this->database->table(self::EVENT_TABLE_NAME)->where(self::EVENT_COLUMN_ID, $eventId)
+    					->where(self::EVENT_COLUMN_USER_ID, $this->user->identity->id)
+    					->select(self::EVENT_COLUMN_USER_ID)->fetch();
+
+    	if(!$owner)
+    		return FALSE;
+
+
+    	return TRUE;
     }
 }

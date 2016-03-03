@@ -175,15 +175,6 @@
 						<td class="add_eventTrText"><span class="text">Štítek:</span></td>
 						<td>{input eventsLabels}</td>
 					</tr>
-
-					<tr>
-						<td class="add_eventTrText"><span class="text">Skupina:</span></td>
-						<td>
-							{foreach $groups as $group}
-								{input group_ . $group['id']}
-							{/foreach}
-						</td>
-					</tr>
 				</table>
 
 				<div d="save_button_event">

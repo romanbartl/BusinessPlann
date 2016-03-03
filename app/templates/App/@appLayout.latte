@@ -8,12 +8,9 @@
 		nav {
 			border-right: 1px solid #{$user->identity->color};
 		}
-		.viewButton {
+		#choose_view_day_buttons .button, .viewButton {
 			border: 1px solid #{$user->identity->color};
-		}
-		#choose_view_day_buttons .button {
-			border: 1px solid #{$user->identity->color};
-		}
+		}	
 	</style>
 
 	<link rel="stylesheet" type="text/css" href="{$basePath}/bootstrap/datetimepicker/css/bootstrap-datetimepicker.min.css">
@@ -26,7 +23,6 @@
 	<script type="text/javascript" src="{$basePath}/js/moment.js"></script>
 	<script type="text/javascript" src="{$basePath}/bootstrap/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 {/define}
-
 
 {block content}
 

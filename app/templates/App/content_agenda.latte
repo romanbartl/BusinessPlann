@@ -1,53 +1,57 @@
 {foreach $events as $date => $day}
 	<div class="agendaDay">
-		<a n:href="changeView! 'day', $date" class='ajax'>
-			<div id="{$date}" class="agendaDate" onclick="showDay(this)">
-				<span class="text">{$presenter->getFormatedDate($date)}</span>
-			</div>
-		</a>
-				
+		<div class="date">
+			<a n:href="changeView! 'day', $date" class='ajax'>
+				<div id="{$date}" class="agendaDate" onclick="showDay(this)">
+					{var $formatedDate = $presenter->getFormatedDate($date)}
+					
+					<span class="date">
+						{$formatedDate['date']}
+					</span>
+					
+					<span class="name">
+						{$formatedDate['name']}
+					</span>
+				</div>
+			</a>
+		</div>
+
 		<div class="events">
 			{foreach $day as $id => $event}
-				<a n:href="App:edit $event['id']" class="">
+				<a n:href="App:event $event['id']">
 					<div class='event' style="
 						{if $event['label_color']}
-							border-left: 6px solid #{$event['label_color']};
+							background: #{$event['label_color']};
 						{else}
-							border-left: 6px solid #B3B3B3;
+							background: #B3B3B3;
 						{/if}
 					">
-	
-						<table class="event_table">
-							<tr class="row">
-								<td class="time">
-									<span class="text">	
-										{if $event['startDay'] == $event['endDay']}
-											{$event['startTime']} - {$event['endTime']}								
-										{elseif $event['startDay'] == $date}
-											od {$event['startTime']}											
-										{elseif $event['endDay'] == $date}
-											do {$event['endTime']}
-										{else}
-											Celý den
-										{/if}
-									</span>
-								</td>
 
-								<td class="label_name">
-									<span class="text">
-										{if $event['label']}
-											<span class="glyphicon glyphicon-tags" style="color:#{$event['label_color']}"></span>
-											{$event['label']}
-										{else}
-											<span class="glyphicon glyphicon-tags" style="color:#B3B3B3"></span>
-											Žádný štítek
-										{/if}
-									</span>
-								</td>
+						<div class="event_name">
+							<span class="text">{$event['name']}</span>
+						</div>
 
-								<td class="name">{$event['name']}</td>
-							</tr>
-						</table>
+						<div class="event_time">
+							<span class="glyphicon glyphicon-time"></span>
+
+							<span class="text">	
+								{if $event['startDay'] == $event['endDay']}
+									{$event['startTime']} - {$event['endTime']}								
+								{elseif $event['startDay'] == $date}
+									od {$event['startTime']}											
+								{elseif $event['endDay'] == $date}
+									do {$event['endTime']}
+								{else}
+									Celý den
+								{/if}
+							</span>
+						</div>
+
+						<div class="event_label">
+							<span class="glyphicon glyphicon-tag"></span>
+							<span class="text">{if $event['label']}{$event['label']}{else}Žádný{/if}</span>
+						</div>
+
 					</div>
 				</a>
 			{/foreach}

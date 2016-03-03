@@ -49,7 +49,10 @@ class AppPresenter extends BasePresenter
             if($view == '')
                 $this->redirect('default', 'day');
             else
-                throw new Nette\Application\BadRequestException('Špatný pohled');
+                throw new Nette\Application\BadRequestException('Objekt nebyl nalezen');
+
+        if($date != '' && !$this->appManager->checkDateCorrect($date))
+            throw new Nette\Application\BadRequestException('Objekt nebyl nalezen');
 
         $this->template->viewFromDate = $this->appManager->getNewDate($date);
         $this->template->viewFormat = $view;
@@ -92,11 +95,12 @@ class AppPresenter extends BasePresenter
 
     protected function createComponentAddEventForm() {
         $form = new Form();
-        $form->getElementPrototype()->class('ajax');
+        //$form->getElementPrototype()->class('ajax');
 
         $form->addText('eventName')
                  ->setAttribute('class', 'input')
-                 ->setAttribute('placeholder', 'Zadejte název události');
+                 ->setAttribute('placeholder', 'Zadejte název události')
+                 ->setAttribute('id', 'event_name_input');
 
         $form->addText('eventStartDate')
                  ->setAttribute('placeholder', 'Od')
@@ -123,11 +127,6 @@ class AppPresenter extends BasePresenter
         foreach ($labels as $label) {
             $labelsOptions[$label['id']] = $label['name'];
         }
-
-        $groups = $this->groupsManager->getGroups();
-        foreach ($groups as $group) {
-            $form->addCheckbox('group_' . $group['id'], $group['name']);
-        }
         
         $form->addSelect('eventsLabels', '', $labelsOptions)
                  ->setAttribute('id', 'eventsLabelsChooser')
@@ -142,37 +141,30 @@ class AppPresenter extends BasePresenter
     }
 
     public function addEventFormSucceeded($form, $values) {
-        if($this->isAjax()) {
-            $groups = $this->groupsManager->getGroups();
-            $groupsArrayValues = array();
-            foreach ($groups as $key => $group) {
-                if($values['group_' . $group['id']]){
-                    $groupsArrayValues[$key]['id'] = $group['id'];
-                    $groupsArrayValues[$key]['value'] = $values['group_' . $group['id']];
-                }
-            }
-
-            $this->appManager->addNewEvent($values['eventName'],
+        if(!$this->isAjax()) {
+            $eventId = $this->appManager->addNewEvent($values['eventName'],
                                                $values['eventStartDate'],
                                                $values['eventEndDate'],
                                                $values['eventStartTime'],
                                                $values['eventEndTime'],
-                                               $values['eventsLabels'], 
-                                               $groupsArrayValues);
-            $this->redrawControl('eventsView');
-            $this->redrawControl('addEvent');
-            $this->redrawControl('dark');
+                                               $values['eventsLabels']);
+            
+            $this->redirect('App:event', array('id' => $eventId));
         }
     }
 
-    public function actionEdit($id) {
+    public function actionEvent($id) {
+        if(!$this->appManager->userHasPermition($id))
+            throw new Nette\Application\BadRequestException('Tato událost nebyla nalezena');
+
         $this->eventId = $id;
     }
 
     public function handleDeleteFromGroup($groupId) {
-        if(!$this->isAjax()) {
+        if($this->isAjax()) {
             $this->appManager->deleteEventFromGroup($this->eventId, $groupId);
-            $this->redrawControl('event');  
+            $this->redrawControl('groups');  
+            $this->redrawControl('shareGroups');  
         }
     }
 
@@ -181,7 +173,7 @@ class AppPresenter extends BasePresenter
         $this->redirect('App:default');
     }
 
-    public function renderEdit() {
+    public function renderEvent() {
         $this->template->event = $this->appManager->getEventById($this->eventId);
         $this->eventLabelId = $this->template->event['labelId'];
         $this->template->eventInGroups = $this->appManager->eventInGroups($this->eventId);
@@ -215,8 +207,16 @@ class AppPresenter extends BasePresenter
                  ->setAttribute('class', 'input timepicker')
                  ->setAttribute('id', 'eventEndTime');
 
-        $form->addSubmit('edit_event', 'Uložit')
-                 ->setAttribute('class', '')
+        $form->addText('eventPlace')
+                 ->setAttribute('placeholder', 'Místo')
+                 ->setAttribute('class', 'input')
+                 ->setAttribute('id', 'event_place_input');
+
+        $form->addTextArea('eventDescription')
+                ->setAttribute('id', 'textarea_description')
+                ->setAttribute('class', 'input');
+
+        $form->addSubmit('edit_event', '')
                  ->setAttribute('id', 'edit_event_button');
 
         $form->onSuccess[] = array($this, 'editEventFormSucceeded');
@@ -231,15 +231,17 @@ class AppPresenter extends BasePresenter
                                             $values['eventStartDate'],
                                             $values['eventEndDate'],
                                             $values['eventStartTime'],
-                                            $values['eventEndTime']); 
+                                            $values['eventEndTime'],
+                                            $values['eventPlace'],
+                                            $values['eventDescription']); 
 
-            $this->redrawControl('event');  
+            $this->redirect('App:default');  
         }                          
     }
 
     protected function createComponentLabelsForm() {
         $form = new Form();
-        //$form->getElementPrototype()->class('ajax');
+        $form->getElementPrototype()->class('ajax');
 
         $labels = $this->labelsManager->getLabels();
         $labelsOptions = array();
@@ -264,9 +266,9 @@ class AppPresenter extends BasePresenter
     }
 
     public function labelsFormSucceeded($form, $values) {
-        if(!$this->isAjax()) {
-            $this->appManager->changeLabel($this->eventId, $values['editEventsLabels']); 
-            $this->redrawControl('event');  
+        if($this->isAjax()) {
+            $this->appManager->changeLabel($this->eventId, $values['editEventsLabels']);
+            $this->redrawControl('header');  
         }  
     }
 
@@ -298,6 +300,8 @@ class AppPresenter extends BasePresenter
 
             $this->appManager->shareInGroups($this->eventId, $shareGroupsIds);
             $this->redrawControl('event');
+            $this->redrawControl('shareGroups');
+            $this->redrawControl('dark');
         }
     }
 
@@ -305,9 +309,11 @@ class AppPresenter extends BasePresenter
         $form = new Form();
         $form->getElementPrototype()->class('ajax');
 
-        $form->addTextArea('commentContent', 'Komentář ..', 50, 5);
+        $form->addTextArea('commentContent', 'Komentář ..')
+                ->setAttribute('id', 'textarea_comment');
 
-        $form->addSubmit('commentSubmit', 'uložit');
+        $form->addSubmit('commentSubmit', '')
+                ->setAttribute('id', 'comment_submit');
 
         $form->onSuccess[] = array($this, 'commentsFormSucceeded');
 

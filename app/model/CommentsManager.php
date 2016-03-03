@@ -15,7 +15,7 @@ class CommentsManager extends BaseManager
 	}	
 
 	public function getComents($eventId) {
-		return $this->database->query('SELECT CONCAT(u.name, " ", u.surname) AS name, 
+		return $this->database->query('SELECT u.id AS user_id, CONCAT(u.name, " ", u.surname) AS name, 
 						col.color AS color, u.profile_photo AS photo, c.content AS content
 						FROM `comment` AS c, `user` AS u, `color` AS col
 						WHERE u.id = c.user_id AND col.id = u.color_id AND c.event_id = ' . $eventId . ' 

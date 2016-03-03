@@ -23,7 +23,6 @@ class UserManager extends BaseManager
 	private $password;
 	private $profile_photo = 1;
 	private $bg_color = 1;
-	private $role;
 
 	private $user;
 
@@ -43,16 +42,14 @@ class UserManager extends BaseManager
 	 * @param  string $surname - user's real surname
 	 * @param  string $email - user's email
 	 * @param  string $password - user's password
-	 * @param  int $role - default is set on 2 (standard user)
 	 *
 	 * @return void or failure message 
 	 */
-	public function register($name, $surname, $email, $password, $role = 2) {
+	public function register($name, $surname, $email, $password) {
 		$this->name = ucfirst(strtolower(trim(strip_tags($name))));
 		$this->surname = ucfirst(strtolower(trim(strip_tags($surname))));
 		$this->email = trim(strip_tags($email));
 		$this->password = Passwords::hash($password);
-		$this->role = $role;
 
 		try {
 			$this->database->table(self::USER_TABLE_NAME)->insert(array(
@@ -61,15 +58,13 @@ class UserManager extends BaseManager
 				self::USER_COLUMN_EMAIL => $this->email,
 				self::USER_COLUMN_PASSWORD => $this->password,
 				self::USER_COLUMN_PROFILE_PHOTO => $this->profile_photo,
-				self::USER_COLUMN_COLOR => $this->bg_color,
-				self::USER_COLUMN_ROLE => $this->role,
-				self::USER_COLUMN_LANGUAGE => 2
+				self::USER_COLUMN_COLOR => $this->bg_color
 			));
 
 			$this->user->login($this->email, $password);
 			//TODO look at this class how it works
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
-			throw new DuplicateNameException('Uživatel pod tímto emailem je již registrován!');
+			//throw new Nette\Database\DuplicateNameException('Uživatel pod tímto emailem je již registrován!');
 		}
 	}
 

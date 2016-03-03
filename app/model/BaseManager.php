@@ -18,14 +18,8 @@ abstract class BaseManager extends Nette\Object
 		USER_COLUMN_SURNAME = 'surname',
 		USER_COLUMN_EMAIL = 'email',
 		USER_COLUMN_PASSWORD = 'password',
-		USER_COLUMN_SEND_EVENTS = 'send_events',
-		USER_COLUMN_SEND_INFO = 'send_info',
 		USER_COLUMN_PROFILE_PHOTO = 'profile_photo',
 		USER_COLUMN_COLOR = 'color_id',
-		USER_COLUMN_ROLE = 'role_id',
-		USER_COLUMN_LANGUAGE = 'language_id',
-
-		ROLE_COLUMN_ROLE = 'role',
 
 		COLOR_TABLE_NAME = 'color',
 		COLOR_COLUMN_ID = 'id',
@@ -43,6 +37,9 @@ abstract class BaseManager extends Nette\Object
 		EVENT_COLUMN_START = 'start',
 		EVENT_COLUMN_END = 'end',
 		EVENT_COLUMN_USER_ID = 'user_id',
+		EVENT_COLUMN_PLACE = 'place',
+		EVENT_COLUMN_DESCRIPTION = 'description',
+		EVENT_COLUMN_TRASH = 'trash',
 
 		EVENT_HAS_LABEL_TABLE_NAME = 'event_has_label',
 		EVENT_HAS_LABEL_COLUMN_EVENT_ID = 'event_id',
@@ -61,7 +58,6 @@ abstract class BaseManager extends Nette\Object
 		USER_GROUP_TABLE_NAME = 'user_is_in_group',
 		USER_GROUP_COLUMN_USER_ID = 'user_id',
 		USER_GROUP_COLUMN_GROUP_ID = 'group_id',
-		USER_GROUP_COLUMN_CONFIRM  = 'confirm',
 
 		COMMENT_TABLE_NAME = 'comment',
 		COMMENT_COLUMN_CONTENT = 'content',

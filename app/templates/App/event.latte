@@ -1,0 +1,215 @@
+{layout './@appLayout.latte'}
+
+{define #area}
+
+{snippet header}
+<div id="container_buttons" style="background:#{$event['label_color']};">
+	<div id="container_back-button">
+		<a n:href="App:default">
+			<div id="button-back" class="buttons">
+				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+			</div>
+		</a>
+	</div>
+
+	<div id="event_submit_button" class="buttons" n:if="$event['owner'] == $user->identity->id">
+		<div id="okey">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		</div>
+	</div>
+
+	<div id="share_event" class="buttons" n:if="$event['owner'] == $user->identity->id">
+		<span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+	</div>
+
+	<div id="delete_event" n:if="$event['owner'] == $user->identity->id">
+		<a n:href="deleteEvent!" class="">
+			<div class="buttons">
+				<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+			</div>
+		</a>
+	</div>
+
+	<div id="labelsForm">
+		<div id="tag_icon">
+			<span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+		</div>
+
+		<div id="labels">
+			{form labelsForm}
+				{input editEventsLabels value=>$event['labelId']}
+			{/form}
+		</div>
+	</div>
+</div>
+{/snippet}
+
+<br><br><br>
+
+<div id="event">
+	{snippet event}		
+		<div id="event_form">
+			{if $event['owner'] != $user->identity->id}
+				{var $disabled='disabled'}
+			{else}
+				{var $disabled=''}
+			{/if}
+
+			{form editEventForm}
+				<div id="container_datetime">
+					<div id="event_name_input">
+						{input eventName value=>$event['name'], $disabled=>$disabled}
+					</div>
+
+					<div class="datetime date">
+						{input eventStartDate value=>$event['startDay'], $disabled=>$disabled}
+					</div>
+
+					<div class="datetime time">
+						{input eventStartTime value=>$event['startTime'], $disabled=>$disabled}
+					</div>
+
+					<div id="az_text" class="datetime">
+						<span class="text">až</span>
+					</div>
+					
+					<div class="datetime date">
+						{input eventEndDate value=>$event['endDay'], $disabled=>$disabled}
+					</div>
+
+					<div class="datetime time">
+						{input eventEndTime value=>$event['endTime'], $disabled=>$disabled}
+					</div>
+				</div>
+
+				<br><br>
+				
+				<div id="event_detail">
+					<span class="text">Podrobnosti události</span>
+				</div>
+				
+				<div id="event_description">
+					<div class="event_cell">
+						<div class="description">
+							<span>Místo</span>
+						</div>
+
+						<div id="event_place" class="desc_content"> 
+							{input eventPlace value=>$event['place'], $disabled=>$disabled}
+						</div>
+					</div>
+
+				
+					<div class="event_cell">
+						<div class="description">
+							<span>Popis</span>
+						</div>
+
+						<div id="event_textarea" class="desc_content"> 
+							{? $form[eventDescription]->setDefaultValue($event['description'])}
+							{input eventDescription onkeyup=>"textAreaAdjust(this)", $disabled=>$disabled}
+						</div>
+					</div>
+				</div>
+			{/form}
+		
+
+			<div id="share" class="event_cell" n:if="$event['owner'] == $user->identity->id">
+				<div class="description">
+					<span>Síleno v</span>
+				</div>
+
+				{snippet groups}
+					<div id="group_content">
+						<ul id="groups">
+							{foreach $eventInGroups as $group}
+								<li class="group">
+									<span class="glyphicon glyphicon-user icon" style="color: #{$group['color']}"></span>
+									
+									<span class="name">{$group['name']}</span>
+									
+									<a n:href="deleteFromGroup! $group['id']" class="ajax remove">
+										<span class="glyphicon glyphicon-remove"></span>
+									</a>
+								</li>
+							{/foreach}
+						</ul>
+					</div>
+				{/snippet}
+			</div>
+		</div>
+	{/snippet}
+</div>
+
+
+<div id="container_comments">
+	{snippet comments}
+		<div id="inner_comments">
+			<div id="comments">
+				{foreach $comments as $comment}
+					
+					{if $user->identity->id != $comment['user_id']} 
+						{var $direction = 'left'}
+						{var $name = $comment['name']}
+						{var $background = 'e2e2e2'}
+						{var $color = '404040'}
+					{else}
+						{var $direction = 'right'}
+						{var $name = 'Já'}
+						{var $background = $user->identity->color}
+						{var $color = 'ffffff'}
+					{/if}
+
+					<div class="comment {$direction}" style="background:#{$background}; color:#{$color};">
+						<div class="header">
+							<div class="photo">
+								<img src="{$basePath}/images/users/noPhoto.png">
+							</div>
+
+							<div class="name">
+								<span class="text">
+									{$name}
+								</span>
+							</div>
+						</div>
+						
+						<div class="content">
+							{$comment['content']}
+						</div>
+					</div>
+				{/foreach}
+			</div>
+
+			<div id="form">
+				{form commentsForm}
+					<div id="input">
+						{input commentContent onkeyup=>"textAreaCommentAdjust(this)"}
+					</div>
+
+					<div id="submit">
+						{input commentSubmit}
+
+						<div id="okey_comment">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						</div>
+					</div>
+				{/form}
+			</div>
+		</div>
+	{/snippet}
+</div>
+
+{snippet shareGroups}
+	<div id="share_dialog">
+		{form shareInGroupForm}
+			{foreach $groups as $group}
+				{input group_ . $group['id']}
+			{/foreach}
+
+			{input groupSubmit}
+		{/form}
+	</div>
+{/snippet}
+
+
+{/define}

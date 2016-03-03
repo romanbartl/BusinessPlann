@@ -559,10 +559,15 @@ main{
 
 .agendaDay{
 	border-bottom: 1px solid #B3B3B3;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 }
 
-.agendaDay a{
+.agendaDay a:link{
+	color: black;
+	text-decoration: none;
+}
+
+.agendaDay a:visited{
 	color: black;
 	text-decoration: none;
 }
@@ -577,56 +582,57 @@ main{
 	text-decoration: none;
 }
 
+.agendaDay .date {
+}
+
 .agendaDate{
 	transition-duration: 0.01s;
-	background: rgba(0,0,0,0.1);
-	padding: 2px 50px 2px 50px;
-	width: 175px;
+	padding: 12px 12px 10px 10px;
+	width: 80px;
+	height: 80px;
 	cursor: pointer;
-	border: 1px solid rgba(0,0,0,0.5);
-	border-radius: 5px;
 }
 
 .agendaDate:hover{
 	transition-duration: 0.01s;
-	background: rgba(0,0,0,0.2);
+	background: rgba(0,0,0,0.05);
 }
 
-.agendaDate .text{
+.agendaDate .date{
+	font-size: 21px;
+}
+
+.agendaDate .name{
 	font-size: 14px;
 }
 
 .events{
-	margin-top: 25px;
+	margin: -90px 0px 15px 150px;
 }
 
-.event{
+.event {
 	cursor: pointer;
-	padding-top: 10px;
-	padding-bottom: 10px;  
+	padding: 10px 10px 10px 20px;
 	margin-top: 10px;
-	margin-bottom: 10px; 
+	margin-bottom: 10px;
+	width: 90%;
 }
 
-.event:hover{
-	background: rgba(0,0,0,0.05);
+.event .event_name{
+	margin-bottom: 10px;
 }
 
-.event_table tr{
-	font-size: 16px;
+.event .event_name .text{
+	font-size: 17px;
 }
 
-.event_table .time{
-	width: 150px;
-	text-align: center;
+.event .event_time .text, .event .event_time .glyphicon, .event .event_label .text, .event .event_label .glyphicon{
+	font-size: 14px;
 }
 
-.event_table .label_name{
-	width: 200px;
-}
-
-.event_table .label_name .glyphicon{
-	padding-right: 15px;
+.event .event_time .glyphicon, .event .event_label .glyphicon{
+	padding-right: 8px;
+	padding-top: 8px;
 }
 
 #choose_view_buttons{
@@ -1337,14 +1343,361 @@ input.edit_label_name:disabled{
 }
 
 #share_dialog {
+	width: 600px;
+	height: 400px;
 	position: absolute;
-	width: 500px;
-	height: 500px;
+	z-index: 13;
 	background: white;
-	z-index: 20;
+	left: calc(50% - 300px);
+	top: calc(50% - 200px);
+	padding: 90px 50px 90px 50px;
 	display: none;
 }
 
-#share_event {
+#container_comments {
+	height: calc(100% - 50px);
+	width: 350px;
+	margin-top: 50px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	border-left: 1px solid #cdcdcd;
+}
 
+#comments {
+	height: 560px;
+	overflow-y: scroll;
+	padding: 10px;
+}
+
+#comments::-webkit-scrollbar {
+    width: 6px;
+}
+
+#comments::-webkit-scrollbar-thumb { 
+	background: #c2c2c2;
+}
+
+#container_comments #form {
+	border-top: 1px solid #cdcdcd;
+	min-height: 50px;
+	position: absolute;
+	bottom: 0;
+	width: 349px;
+	background: #F8F8F8;
+}
+
+#container_comments #form #input{
+	float: left;
+	padding: 15px 10px 10px 10px;
+}
+
+#container_comments #form #input #textarea_comment {
+	width: 280px;
+	height: 25px;
+	resize: none;
+	overflow: hidden;
+	outline: none;
+}
+
+#container_comments #form #submit{
+
+}
+
+#container_comments #form #submit #comment_submit{
+	transition-duration: 0.1s;
+	height: 40px;
+	width: 40px;
+	z-index: 5;
+	position: absolute;
+	right: 0;
+	margin-top: 10px;
+	margin-right: 10px;
+	background: none;
+	border: none;
+	outline: none;
+	border-radius: 30px;
+}
+
+#container_comments #form #submit #comment_submit:hover{
+	transition-duration: 0.1s;
+	background: rgba(0,0,0,0.15);
+}
+
+#container_comments #form #submit #okey_comment{
+	right: 0;
+	margin-right: 12px;
+	margin-top: 8px;
+	z-index: 0;
+	position: absolute;
+	padding: 10px;
+	font-size: 18px;
+}
+
+#container_comments .comment{
+	width: 280px;
+	margin-bottom: 20px;
+	padding: 20px;
+}
+
+#container_comments .right {
+	margin-left: 40px;
+}
+
+#container_comments .comment .header{
+	height: 40px;
+}
+
+#container_comments .left .header .photo {
+	float: left;
+}
+
+#container_comments .right .header .photo {
+	float: right;
+}
+
+#container_comments .comment .header .photo img{
+	height: 30px;
+	width: 30px;
+	border-radius: 30px;
+}
+
+#container_comments .comment .header .name{
+	margin-top: 3px;
+}
+
+#container_comments .left .header .name{
+	margin-left: 20px;
+	float: left;
+}
+
+#container_comments .right .header .name{
+	margin-right: 20px;
+	float: right;
+}
+
+
+#container_comments .comment .header .name .text{
+	font-size: 17px;
+}
+
+#container_comments .comment .content{
+	margin-top: 10px;
+}
+
+#container_comments .left .content{
+	text-align: left;
+}
+
+#container_comments .right .content{
+	text-align: right;
+}
+
+.buttons{
+	border: 1px solid black;
+	border-radius: 30px;
+	padding: 10px 10px 10px 12px;
+	margin-top: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	color: black;
+	width: 40px;
+	height: 40px;
+	margin-left: 10px;
+	float: left;
+}
+
+.buttons:hover{
+	border: 1px solid #353535;
+	color: #353535;
+}
+
+.buttons #edit_event_button {
+	background: none;
+	position: absolute;
+	border: none;
+	width: 40px;
+	height: 40px;
+	margin-top: -11px;
+	margin-left: -13px;
+	border-radius: 40px;
+	z-index: 5;
+	outline: 0;
+}
+
+#container_back-button{
+	margin-top: 8px;
+	margin-left: 20px;
+}
+
+#container_buttons {
+	position: absolute;
+	width: calc(100% - 350px);
+	height: 70px;
+}
+
+#event {
+	position: relative;
+	margin-top: 40px;
+	margin-left: 30px;
+	width: calc(100% - 390px);
+	float: left;
+	overflow-y: scroll;
+	height: calc(100% - 100px);
+}
+
+#event::-webkit-scrollbar {
+    width: 6px;
+}
+
+#event::-webkit-scrollbar-thumb { 
+	background: #c2c2c2;
+}
+
+#event_description{
+	border-top: 1px solid #cdcdcd;
+	width: calc(100% - 20px);
+	padding-top: 20px;
+}
+
+#container_datetime .datetime{
+	float: left;
+}
+
+#container_datetime .time input{
+	width: 80px;
+}
+
+#container_datetime .date {
+	margin-right: 6px;
+}
+
+#container_datetime .date input{
+	width: 100px;
+}
+
+#event_name_input input{
+	font-size: 18px;
+	height: 30px;
+	width: 400px;
+	margin-bottom: 10px;
+}
+
+#az_text{
+	margin: 2px 5px 0px 5px;
+}
+
+#az_text .text{
+	font-size: 16px;
+}
+
+.description{
+	float: left;
+	width: 70px;
+	margin-left: 30px;
+	margin-top: 5px;
+}
+
+#event_textarea textarea {
+	width: 500px;
+	min-height: 75px;
+	resize: vertical;
+	overflow: hidden;
+	outline: none;
+	padding: 5px 10px 5px 10px;
+}
+
+#event_place input {
+	width: 500px;
+}
+
+.event_cell{
+	margin-top: 20px;
+}
+
+#share{
+	border-top: 1px solid #cdcdcd;
+	padding-top: 30px;
+	width: calc(100% - 20px);
+	padding-bottom: 100px;
+}
+
+#share #groups{
+	list-style-type: none;
+	float: left;
+	margin-left: -35px;
+	margin-top: -10px;
+}
+
+#share #groups .group {
+	padding: 10px 5px 10px 5px;
+	width: 500px;
+	border-bottom: 1px solid #cdcdcd;
+}
+
+#share #groups .group .icon{
+	font-size: 17px;
+}
+
+#share #groups .group .name{
+	padding-left: 20px;
+}
+
+#share #groups .group .remove:hover{
+	float: right;
+	color: #afafaf;
+}
+
+#share #groups .group .remove{
+	float: right;
+	color: #acacac;
+}
+
+#labelsForm{
+	position: absolute;
+	margin-left: 300px;
+	margin-top: 18px;
+}
+
+#labelsForm #tag_icon{
+	float: left;
+	margin-top: 1px;
+	margin-right: 20px;
+}
+
+#labelsForm #labels{
+	float: left;
+}
+
+#labelsForm #labels select {
+	outline: none;
+}
+
+#labelsForm #tag_icon .glyphicon{
+	font-size: 18px;
+}
+
+#eventsLabelsChooser{
+	font-size: 14px;
+	width: 100px;
+}
+
+#event_detail{
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+
+#event_detail .text{
+	font-size: 15px;
+}
+
+#event .input:disabled{
+	background: none;
+	border: none;
+	color: #3d3d3d;
+}
+
+
+#event textarea:disabled{
+	resize: none;
 }

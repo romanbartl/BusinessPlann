@@ -40,7 +40,7 @@ class RegistrationPresenter extends BasePresenter
      */
 	protected function createComponentRegForm() {
         $form = new Form;
-        $form->getElementPrototype()->class('ajax');
+        //$form->getElementPrototype()->class('ajax');
 
         $form->addText('name')
                  ->setAttribute('class', 'input')
@@ -77,7 +77,7 @@ class RegistrationPresenter extends BasePresenter
      * @param Array $values - sent values from form
      */
     public function regFormSucceeded($form, $values) {
-        if($this->isAjax()) {
+        if(!$this->isAjax()) {
             if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['name'])) {
                 if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['surname'])){
                     if(preg_match('!^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[a-z]{1,4}$!', $values['email'])) {

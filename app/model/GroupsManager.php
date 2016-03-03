@@ -86,8 +86,7 @@ class GroupsManager extends BaseManager
 
 		$this->database->table(self::USER_GROUP_TABLE_NAME)->insert(array(
 				self::USER_GROUP_COLUMN_USER_ID => $userId,
-				self::USER_GROUP_COLUMN_GROUP_ID => $groupId,
-				self::USER_GROUP_COLUMN_CONFIRM => false
+				self::USER_GROUP_COLUMN_GROUP_ID => $groupId
 		));
 	}
 
@@ -108,8 +107,7 @@ class GroupsManager extends BaseManager
 
 		$this->database->table(self::USER_GROUP_TABLE_NAME)->insert(array(
 				self::USER_GROUP_COLUMN_USER_ID => $this->user->identity->id,
-				self::USER_GROUP_COLUMN_GROUP_ID => $group_id,
-				self::USER_GROUP_COLUMN_CONFIRM => true
+				self::USER_GROUP_COLUMN_GROUP_ID => $group_id
 		));
 
 		foreach ($users as $user) {
@@ -118,8 +116,7 @@ class GroupsManager extends BaseManager
 
 			$this->database->table(self::USER_GROUP_TABLE_NAME)->insert(array(
 				self::USER_GROUP_COLUMN_USER_ID => $user_id,
-				self::USER_GROUP_COLUMN_GROUP_ID => $group_id,
-				self::USER_GROUP_COLUMN_CONFIRM => false
+				self::USER_GROUP_COLUMN_GROUP_ID => $group_id
 			));
 	}
 		}

@@ -1,3 +1,21 @@
+function textAreaAdjust(o) {
+    o.style.height = '1px';
+    o.style.height = (25 + o.scrollHeight) + 'px';
+
+    if(o.value == "") {
+		o.style.height = '75px';
+	}
+}
+
+function textAreaCommentAdjust(o) {
+	o.style.height = '1px';
+    o.style.height = (1 + o.scrollHeight) + 'px';
+
+    if(o.value == "") {
+		o.style.height = '25px';
+	}
+}
+
 $(function() {
 	$('.datepicker').datetimepicker({
     	format: 'DD.MM.YYYY',
@@ -9,6 +27,10 @@ $(function() {
 	$('.timepicker').datetimepicker({
    		format: 'HH:mm'
     });
+});
+
+$(function() {
+	$("#comments").scrollTop($("#comments")[0].scrollHeight);
 });
 
 $("#search-div-icon").click(function() { 
@@ -38,4 +60,26 @@ $('#dark').click(function() {
 $('#share_event').click(function() {
 	$("#dark").fadeToggle(120);
 	$("#share_dialog").fadeToggle(120);
+});
+
+$('#comment_submit').click(function() {
+	$('#textarea_comment').value = "";
+});
+
+$.nette.ext('#eventsLabelsChooser', {
+    load: function() {
+        $('select').change(function (e) {
+            $(this).closest('form').submit();
+            return false;
+        });
+    }
+});
+
+$.nette.ext('#event_submit_button', {
+    load: function() {
+        $('#event_submit_button').click(function (e) {
+            $('#event_name_input').closest('form').submit();
+            return false;
+        });
+    }
 });
