@@ -995,10 +995,6 @@ main{
 	width: 250px;
 }
 
-.change_data_tab #storno_name_but, .change_data_tab #change_name_but_save{
-	width: 120px;
-}
-
 .change_data_tab .save{
 	margin-right: 6px;
 }

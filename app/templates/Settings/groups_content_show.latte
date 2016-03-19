@@ -4,6 +4,7 @@
 
 <div id="labels_list_edit">
 	<div id="labels">
+		{snippet groups}
 		{foreach $groups as $key => $group}
 			
 			{if $groups == null}
@@ -23,16 +24,22 @@
 							<a id='edit' n:href="changeGroupsView! edit, $group['id']" class="ajax" onclick="editGroup({$group['id']})">		
 								<span id="{$group['id']}" class="glyphicon glyphicon-pencil label_button label_icon groups_edit"></span>
 							</a>
+						{else}
+							<a id='edit' n:href="leaveGroup! $group['id']" class="ajax">		
+								<span id="{$group['id']}" class="glyphicon glyphicon-log-out label_button label_icon groups_edit"></span>
+							</a>
 						{/if}
+
 						<div>
-						{foreach $group['users'] as $userInGroup}
-							{$userInGroup['name']} - {$userInGroup['email']}
-						{/foreach}
+							{foreach $group['users'] as $userInGroup}
+								{$userInGroup['name']} - {$userInGroup['email']}
+							{/foreach}
 						</div>
 					</div>
 				{/if}
 						
 		{/foreach}
+		{/snippet}
 
 		<a id='add' n:href="changeGroupsView! add" class="ajax" onclick="addGroup()">
 			<div id="add_group_button">

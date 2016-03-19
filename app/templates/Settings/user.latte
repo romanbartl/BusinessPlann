@@ -65,6 +65,14 @@
 							{input surname_storno style=>'display:none;'}
 						</td>
 					</tr>
+
+					<tr n:if="$form->hasErrors()">
+						<td>&nbsp;</td>
+						
+						<td n:foreach="$form->errors as $error">
+	        				<div class="formErrors">{$error}</div>
+						</td>
+					</tr>
 				</table>
 			{/form}
 		{/snippet}
@@ -81,6 +89,14 @@
 						</td>
 						<td class="button_td">
 							{input email_storno style=>'display:none;'}
+						</td>
+					</tr>
+
+					<tr n:if="$form->hasErrors()">
+						<td>&nbsp;</td>
+						
+						<td n:foreach="$form->errors as $error">
+	        				<div class="formErrors">{$error}</div>
 						</td>
 					</tr>
 				</table>
@@ -110,6 +126,7 @@
 							<td>&nbsp;</td>
 							<td>{input new_passwd_again}</td>
 						</tr>
+					
 						<tr n:if="$form->hasErrors()">
 							<td>&nbsp;</td>
 							

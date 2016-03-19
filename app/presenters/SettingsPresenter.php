@@ -55,19 +55,27 @@ class SettingsPresenter extends BasePresenter
             	throw new Nette\Application\BadRequestException('Špatný pohled');
         }
 
-        if($id != ''){
-        	if($group = $this->groupsManager->getGroups($id)) {
-        		$this->group = $group;
-        	} else {
-        		$this->template->groupError = 'Zdá se, že skupina neexistuje, nebo nemáte práva na upravování';
-        	}
+        if(($view != '' && $view != 'add') && $id == '') {
+        	throw new Nette\Application\BadRequestException('Tato skupina neexistuje');
         }
+         
+        if($group = $this->groupsManager->getGroups($id))
+        	$this->group = $group; 
+        else
+        	throw new Nette\Application\BadRequestException('Tato skupina neexistuje');
 	}
 
 	public function handleChangeGroupsView($view, $id = null) {
 		if($this->isAjax()) {
 			$this->groupsView = $view;
 			$this->redrawControl('groupsView');
+		}
+	}
+
+	public function handleLeaveGroup($groupId) {
+		if($this->isAjax()) {
+			$this->groupsManager->leaveGroup($groupId);
+			$this->redrawControl('groups');
 		}
 	}
 
@@ -122,7 +130,7 @@ class SettingsPresenter extends BasePresenter
 	 */
 	protected function createComponentNameForm() {
 		$form = New Form();
-		$form->getElementPrototype()->class('ajax');
+		//$form->getElementPrototype()->class('ajax');
 		
 		$form->addText('name')
 			 	->setAttribute('id', 'name_input')
@@ -146,7 +154,7 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	public function nameFormSucceeded($form, $values) {
-		if($this->isAjax()) {
+		if(!$this->isAjax()) {
 			if(preg_match('!^([A-ZĚŠČŘŽÝÁÍÉŤŇĎÓ]|[a-zěščřžýáíéťňďó]){1,}$!', $values['name'])) {
         		$this->userManager->updateUserData('name', $values['name']);
         		$this->redrawFormSnippets();

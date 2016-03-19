@@ -66,6 +66,12 @@ class GroupsManager extends BaseManager
 		return $users;
 	}
 
+	public function leaveGroup($groupId){
+		$this->database->table(self::USER_GROUP_TABLE_NAME)->where(self::USER_GROUP_COLUMN_GROUP_ID, $groupId)
+													->where(self::USER_GROUP_COLUMN_USER_ID, $this->user->identity->id)
+													->delete();
+	}
+
 	public function userIsAlreadyInGroup($groupId, $email) {
 		$userId = $this->database->table(self::USER_TABLE_NAME)->where(self::USER_COLUMN_EMAIL, $email)
 														            ->select(self::USER_COLUMN_ID)->fetch();
