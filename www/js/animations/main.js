@@ -55,6 +55,10 @@ $('#dark').click(function() {
 	$("#dark").fadeToggle(120);
 	$('#add_event').fadeToggle(120);
 	$("#share_dialog").fadeToggle(120);
+	$('#eventStartDate').val('');
+	$('#eventEndDate').val('');
+	$('#eventStartTime').val('');
+	$('#eventEndTime').val('');
 });
 
 $('#share_event').click(function() {

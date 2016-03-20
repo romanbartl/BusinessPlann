@@ -16,7 +16,7 @@ class AppManager extends BaseManager
 		$this->groupsManager = $groupsManager;
 	}
 
-	public function getEvents($format, $viewDate) {
+	public function getEvents() {
 		$eventsIds = array();
 
 		$query = 'SELECT `id` AS id 
@@ -44,11 +44,9 @@ class AppManager extends BaseManager
 		$events = array();
 
 		$query = 'SELECT e.id AS id,
-				  e.name AS name, 
-				  DATE_FORMAT(e.start, "%d.%m.%Y") AS startDay,
-				  DATE_FORMAT(e.start, "%H:%i") AS startTime,
-				  DATE_FORMAT(e.end, "%d.%m.%Y") AS endDay,
-				  DATE_FORMAT(e.end, "%H:%i") AS endTime
+				  e.name AS text, 
+				  DATE_FORMAT(e.start, "%Y-%m-%d %H-%i") AS start_date,
+				  DATE_FORMAT(e.end, "%Y-%m-%d %H-%i") AS end_date
 
 				  FROM `event` AS e ';
 
@@ -68,54 +66,25 @@ class AppManager extends BaseManager
 		$result = $this->database->query($query)->fetchAll();
 
 		foreach ($result as $key => $event) {
-			$label = $this->database->query('SELECT l.id AS id, l.name AS name, c.color AS label_color
+			$label = $this->database->query('SELECT c.color AS label_color
 							  FROM `color` AS c, `label` AS l
 							  LEFT JOIN `event_has_label` AS ehl ON l.id = ehl.label_id
 							  WHERE (c.id = l.user_color_id) AND l.user_id = ' . $this->user->identity->id . ' AND ehl.event_id = ' . $event['id'])->fetch();
-			
-			$result[$key]['labelId'] = $label['id'];
-			$result[$key]['label'] = $label['name'];
-			$result[$key]['label_color'] = $label['label_color'];
+			if($label['label_color'])
+				$result[$key]['color'] = '#' . $label['label_color'];
+			else
+				$result[$key]['color'] = '#B3B3B3';
+
+			$result[$key]['textColor'] = 'white';
 		}
 
-		switch ($format) {
-			case 'day':
-				foreach ($result as $key => $event) {
-					$end = new \DateTime($event['endDay']);
-					$end = $end->modify('+1 day');
-					$daterange = new \DatePeriod(new \DateTime($event['startDay']), new \DateInterval('P1D'), $end);
-					
-					foreach ($daterange as $date) {
-						if($date->format('Y-m-d') == $viewDate->format('Y-m-d'))
-							$events[$event['id']] = $event;
-					}
-				}
-				return $events;
+		$events = array();
 
-			default:
-				foreach ($result as $key => $event) {
-					$end = new \DateTime($event['endDay']);
-					$end = $end->modify('+1 day');
-					$daterange = new \DatePeriod(new \DateTime($event['startDay']), new \DateInterval('P1D'), $end);
-				
-					foreach ($daterange as $date) {
-						switch ($format) {
-							case 'week':
-								$condition = $date->format('Y-W') == $viewDate->format('Y-W');
-								break;
-							case 'month':
-								$condition = $date->format('Y-m') == $viewDate->format('Y-m');
-								break;
-							case 'agenda':
-								$condition = $date->format('Y-m-d') >= $viewDate->format('Y-m-d');
-								break;
-						}
-						if($condition)
-							$events[$date->format('Y-m-d')][$event['id']] = $event;	
-					}			 
-				}
-				return $events;
+		foreach ($result as $key => $event) {
+			$events[] = $event;
 		}
+
+		return json_encode($events);
 	}
 
 	public function getEventById($eventId) {

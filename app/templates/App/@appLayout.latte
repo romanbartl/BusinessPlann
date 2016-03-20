@@ -1,6 +1,12 @@
 {layout '../@layout.latte'}
 
 {block head}
+	<script type="text/javascript" src="{$basePath}/js/calendar/dhtmlxscheduler.js"></script>
+	<link rel="stylesheet" href="{$basePath}/js/calendar/dhtmlxscheduler.css" type="text/css" title="no title" charset="utf-8">
+	
+	<link rel="stylesheet" type="text/css" href="{$basePath}/bootstrap/datetimepicker/css/bootstrap-datetimepicker.min.css">
+	<script src="{$basePath}/js/calendar/locale/locale_cs.js" type="text/javascript" charset="utf-8"></script>
+	
 	<style>
 		#header_main {
 			background: #{$user->identity->color};
@@ -10,14 +16,42 @@
 		}
 		#choose_view_day_buttons .button, .viewButton {
 			border: 1px solid #{$user->identity->color};
-		}	
-	</style>
-
-	<link rel="stylesheet" type="text/css" href="{$basePath}/bootstrap/datetimepicker/css/bootstrap-datetimepicker.min.css">
-	
+		}
+	</style>	
 {/block}
 
 {define #includeScripts}
+	{if $viewFormat != 'event'}
+	<script type="text/javascript" charset="utf-8">
+		function init() {
+			scheduler.config.xml_date = "%Y-%m-%d %H-%i";
+			scheduler.config.dblclick_create = false;
+			scheduler.config.drag_move = false;
+			scheduler.config.drag_resize= false;
+			scheduler.config.drag_create = false;
+			scheduler.attachEvent("onClick", 
+				function (id, e){
+					var url = window.location.pathname;
+					url = url.substring(0, url.indexOf('/app') + 4);
+	   				window.location= url + "/event/" + id;
+		  		});
+
+		  	scheduler.attachEvent("onEmptyClick", 
+		  		function (date, e) {
+					$('#eventStartDate').val(addZero(date.getDate()) + "." + addZero((date.getMonth()+1)) + "." + date.getFullYear());
+					$('#eventEndDate').val(addZero(date.getDate()) + "." + addZero((date.getMonth()+1)) + "." + date.getFullYear());
+					$('#eventStartTime').val(addZero(date.getHours()) + ":" + addZero(date.getMinutes()));
+					$('#eventEndTime').val(addZero(date.getHours()) + ":" + addZero(date.getMinutes()));
+					$('#dark').fadeToggle(120);
+					$('#add_event').fadeToggle(120);
+			});
+
+			scheduler.init('scheduler_here', new Date({if $date != ''}{$date}{/if}), {$viewFormat});
+
+			scheduler.parse({$events},"json");
+		}
+	</script>
+	{/if}
 	<script type="text/javascript" src="{$basePath}/js/animations/main.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/url-main.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/moment.js"></script>

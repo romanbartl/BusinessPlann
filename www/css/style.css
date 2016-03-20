@@ -171,6 +171,7 @@ input[type=text].search-input{
 }
 
 #user-preferences{
+	z-index: 20;
 	display: none;
 	position: absolute;
 	right: 0;
@@ -270,11 +271,6 @@ nav{
 	font-size: 15px;
 }
 
-.heading:hover{
-	transition-duration: 0.1s;
-	background: rgba(0,0,0,0.1);
-}
-
 .big_button{
 	padding: 10px 0px 10px 20px;
 	position: relative;
@@ -319,7 +315,11 @@ nav{
 	cursor: pointer;
 }
 
-#menu .item:hover{
+#menu .list .settings_tab{
+	background-color: rgba(0,0,0,0.05);
+}
+
+#menu .item:hover, #menu .list .settings_tab:hover{
 	background: rgba(0,0,0,0.1);
 }
 
@@ -421,8 +421,7 @@ main{
 }
 
 #main_body{
-	margin-left: 285px;
-	margin-top: 25px;
+	margin-left: 252px;
 }
 
 #add_event{
@@ -490,14 +489,9 @@ main{
 }
 
 #viewDiv{
-	padding-top: 90px;
-	z-index: -1;
-}
-
-#viewContent{
-	overflow-y: scroll;
-	width: calc(100% - 20px);
-	height: calc(100vh - 170px);
+	position: absolute;
+	height: calc(100% - 50px);
+	width: calc(100% - 252px);
 }
 
 #choose_view_day_buttons{
@@ -1433,7 +1427,7 @@ input.edit_label_name:disabled{
 #container_comments .comment{
 	width: 280px;
 	margin-bottom: 20px;
-	padding: 20px;
+	padding: 10px 20px 10px 20px;
 }
 
 #container_comments .right {
@@ -1441,7 +1435,7 @@ input.edit_label_name:disabled{
 }
 
 #container_comments .comment .header{
-	height: 40px;
+	height: 30px;
 }
 
 #container_comments .left .header .photo {
@@ -1459,22 +1453,22 @@ input.edit_label_name:disabled{
 }
 
 #container_comments .comment .header .name{
-	margin-top: 3px;
+	margin-top: 5px;
 }
 
 #container_comments .left .header .name{
-	margin-left: 20px;
+	margin-left: 15px;
 	float: left;
 }
 
 #container_comments .right .header .name{
-	margin-right: 20px;
+	margin-right: 15px;
 	float: right;
 }
 
 
 #container_comments .comment .header .name .text{
-	font-size: 17px;
+	font-size: 15px;
 }
 
 #container_comments .comment .content{
@@ -1693,7 +1687,16 @@ input.edit_label_name:disabled{
 	color: #3d3d3d;
 }
 
-
 #event textarea:disabled{
 	resize: none;
+}
+
+.dhx_button{
+	transition-duration: 0.1s;
+	cursor: pointer;
+}
+
+.dhx_button:hover{
+	transition-duration: 0.1s;
+	background-color: rgba(0,0,0,0.05);
 }

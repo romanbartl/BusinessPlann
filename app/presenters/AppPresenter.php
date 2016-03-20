@@ -44,59 +44,29 @@ class AppPresenter extends BasePresenter
         if($view == 'out'){
             $this->user->logout();
             $this->redirect('Home:default');
-        }    
+        } 
         if(!$this->appManager->checkViewCorrect($view))
             if($view == '')
-                $this->redirect('default', 'day');
+                $this->redirect('default', 'week');
             else
                 throw new Nette\Application\BadRequestException('Objekt nebyl nalezen');
 
         if($date != '' && !$this->appManager->checkDateCorrect($date))
             throw new Nette\Application\BadRequestException('Objekt nebyl nalezen');
 
+        $this->template->date = $date;
         $this->template->viewFromDate = $this->appManager->getNewDate($date);
         $this->template->viewFormat = $view;
     }
 
-    public function handleChangeView($view, $date){
-        if($this->isAjax()) {
-            $this->template->viewFormat = $view;
-            $this->redrawControl('eventsView');
-        }
-    }
-    
-    public function handleChangeViewDate($date){
-        if($this->isAjax()) {
-            $this->template->viewFromDate = $this->appManager->getNewDate($date);
-            $this->redrawControl('eventsView');
-        }
-    }
-
-    public function handleEditEvent($id){
-        if($this->isAjax()) {
-            $this->redrawControl('eventsView');
-        }
-    }
-
     public function renderDefault() {
-    	$this->template->events = $this->appManager->getEvents($this->template->viewFormat, $this->template->viewFromDate); 
+    	$this->template->events = $this->appManager->getEvents(); 
         $this->template->labels = $this->labelsManager->getLabels();
         $this->template->groups = $this->groupsManager->getGroups();
-
-        $this->template->viewFromDateFormated = $this->appManager->getFormatedDate($this->template->viewFromDate, $this->template->viewFormat);     
-        $this->template->viewDatePlus = $this->appManager->getModifiedDate($this->template->viewFromDate, $this->template->viewFormat, '+1 ');
-        $this->template->viewDateMinus = $this->appManager->getModifiedDate($this->template->viewFromDate, $this->template->viewFormat, '-2 ');       
-    }
-
-
-    public function getFormatedDate($date) {
-        return $this->appManager->getFormatedDate($this->appManager->getNewDate($date), 'agendaLink');
     }
 
     protected function createComponentAddEventForm() {
         $form = new Form();
-        //$form->getElementPrototype()->class('ajax');
-
         $form->addText('eventName')
                  ->setAttribute('class', 'input')
                  ->setAttribute('placeholder', 'Zadejte název události')
@@ -140,23 +110,20 @@ class AppPresenter extends BasePresenter
         return $form;
     }
 
-    public function addEventFormSucceeded($form, $values) {
-        if(!$this->isAjax()) {
-            $eventId = $this->appManager->addNewEvent($values['eventName'],
+    public function addEventFormSucceeded($form, $values) {    
+        $eventId = $this->appManager->addNewEvent($values['eventName'],
                                                $values['eventStartDate'],
                                                $values['eventEndDate'],
                                                $values['eventStartTime'],
                                                $values['eventEndTime'],
                                                $values['eventsLabels']);
             
-            $this->redirect('App:event', array('id' => $eventId));
-        }
+        $this->redirect('App:event', array('id' => $eventId));
     }
 
     public function actionEvent($id) {
         if(!$this->appManager->userHasPermition($id))
             throw new Nette\Application\BadRequestException('Tato událost nebyla nalezena');
-
         $this->eventId = $id;
     }
 
@@ -174,6 +141,7 @@ class AppPresenter extends BasePresenter
     }
 
     public function renderEvent() {
+        $this->template->viewFormat = 'event';
         $this->template->event = $this->appManager->getEventById($this->eventId);
         $this->eventLabelId = $this->template->event['labelId'];
         $this->template->eventInGroups = $this->appManager->eventInGroups($this->eventId);

@@ -32,7 +32,7 @@
 					{/foreach}
 					
 					<a n:href="Settings:labels">
-						<li class="item">
+						<li class="item settings_tab">
 							<span class="glyphicon glyphicon-cog"></span>
 							<span>Nastavení štítků</span>
 						</li>
@@ -58,7 +58,7 @@
 					{/foreach}
 
 					<a n:href="Settings:groups">
-						<li class="item">
+						<li class="item settings_tab">
 							<span class="glyphicon glyphicon-cog"></span>
 							<span>Nastavení skupin</span>
 						</li>
@@ -82,63 +82,8 @@
 
 <div id="main_body">
 	{snippet eventsView}
-		<div id="choose_view_buttons">
-			<a n:href="changeView! 'day'" class='ajax'>
-				<button id="day" type="button" class="viewButton" onclick="viewChange(this)">Dnes</button>
-			</a>
-				
-			<a n:href="changeView! 'week'" class='ajax'>
-				<button id="week" type="button" class="viewButton" onclick="viewChange(this)">Týden</button>
-			</a>	
-			
-			<a n:href="changeView! 'month'" class="ajax">
-				<button id="month" type="button" class="viewButton" onclick="viewChange(this)">Měsíc</button>
-			</a>
-				
-			<a n:href="changeView! 'agenda'" class="ajax">
-				<button id="agenda" type="button" class="viewButton" onclick="viewChange(this)">Agenda</button>
-			</a>
-		</div>
-
-
-		<div id="including_heading">
-			<span class="text" style="color: #{$user->identity->color}">
-				{if $viewFormat == 'day'}
-					Den
-				{elseif $viewFormat == 'week'}
-					Týden
-				{elseif $viewFormat == 'month'}
-					Měsíc
-				{elseif $viewFormat == 'agenda'}
-					Agenda
-				{/if}
-			</span>
-		</div>
-		
-		<div id="choose_view_day_buttons">
-			<a n:href="changeViewDate! $viewDateMinus" class="ajax">
-				<button id="left" class="button" value="{$viewDateMinus}" onclick="viewDayChange(this)">
-					<span class="glyphicon glyphicon-menu-left"></span>
-				</button>
-			</a>
-
-			<a n:href="changeViewDate! $viewDatePlus" class="ajax">
-				<button id="right" class="button" value="{$viewDatePlus}" onclick="viewDayChange(this)">
-					<span class="glyphicon glyphicon-menu-right"></span>
-				</button>
-			</a>
-
-			<div id="date" class="div">
-				<span class="text">
-					{$viewFromDateFormated}
-				</span>
-			</div>
-		</div>
-
 		<div id="viewDiv">
-			<div id="viewContent">
-				{include 'content_' . $viewFormat . '.latte'}
-			</div>
+			{include 'calendar.latte'}
 		</div>
 	{/snippet}
 
